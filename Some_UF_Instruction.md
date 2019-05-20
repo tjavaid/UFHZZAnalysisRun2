@@ -16,17 +16,17 @@ ssh -X -Y lucien@newberry.ihepa.ufl.edu
 
 #### Copy files from UF Tier 2 storage
 ```
-gfal-copy gsiftp://cmsio.rc.ufl.edu//cms/data/store/user/klo/<PATH_TO_FILE> file://<PATH_TO_COPY_TO>
+gfal-copy gsiftp://cmsio.rc.ufl.edu//cms/data/store/user/ferrico/<PATH_TO_FILE> file://<PATH_TO_COPY_TO>
 tar xzvf heppyOutput_3.tgz
 
 # Copy content in a folder to a existing folder on UF Tier 2
-gfal-copy -r <PATH_TO_FOLDER> gsiftp://cmsio.rc.ufl.edu//cms/data/store/user/klo/<PATH_TO_FOLDER>
+gfal-copy -r <PATH_TO_FOLDER> gsiftp://cmsio.rc.ufl.edu//cms/data/store/user/ferrico/<PATH_TO_FOLDER>
 ```
 --------------
 
 #### Interact with UF Tier 2 storage directly
 ```
-uberftp cmsio.rc.ufl.edu "ls /cms/data/store/user/klo/"
+uberftp cmsio.rc.ufl.edu "ls /cms/data/store/user/ferrico/"
 uberftp cmsio.rc.ufl.edu "help" # To see available commands
 ```
 
