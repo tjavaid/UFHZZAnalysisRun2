@@ -35,8 +35,9 @@ uberftp cmsio.rc.ufl.edu "help" # To see available commands
 sh -X -Y ferrico@hpg2.rc.ufl.edu
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd /cvmfs/cms.cern.ch/slc6_amd64_gcc630/cms/cmssw/CMSSW_9_4_4/src/
-cmsenv
-hadd -f /cms/data/store/user/t2/users/ferrico/new_path /cms/data/store/user/ferrico/crab_path
+cmsenv 
+cd /cms/data/store/user/t2/users/ferrico/
+hadd -f new_path /cms/data/store/user/ferrico/crab_path
 ```
 
 
