@@ -9,7 +9,8 @@
 archer, alachua, melrose, newberry, or gainesville.ihepa.ufl.edu
 
 ```
-ssh -X -Y lucien@newberry.ihepa.ufl.edu
+ssh -X -Y ferrico@melrose.ihepa.ufl.edu
+newberry.ihepa.ufl.edu
 ```
 
 --------------
@@ -32,7 +33,7 @@ uberftp cmsio.rc.ufl.edu "help" # To see available commands
 
 #### To hadd files:
 ```
-sh -X -Y ferrico@hpg2.rc.ufl.edu
+ssh -X -Y ferrico@hpg2.rc.ufl.edu
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd /cvmfs/cms.cern.ch/slc6_amd64_gcc630/cms/cmssw/CMSSW_9_4_4/src/
 cmsenv 
