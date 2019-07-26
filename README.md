@@ -12,7 +12,7 @@ cmsenv
 
 git cms-init
 
-git clone -b 2018_L https://github.com/ferrico/UFHZZAnalysisRun2.git
+git clone -b FullRunII_103X https://github.com/ferrico/UFHZZAnalysisRun2.git
 
 cp UFHZZAnalysisRun2/install.sh .
 
