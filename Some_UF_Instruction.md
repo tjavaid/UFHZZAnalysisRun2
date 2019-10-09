@@ -18,6 +18,7 @@ newberry.ihepa.ufl.edu
 #### Copy files from UF Tier 2 storage
 ```
 gfal-copy gsiftp://cmsio.rc.ufl.edu//cms/data/store/user/ferrico/<PATH_TO_FILE> file://<PATH_TO_COPY_TO>
+gfal-copy gsiftp://cmsio.rc.ufl.edu//cms/data/store/user/t2/users/ferrico/Full_RunII/ggH/GluGluHToZZTo4L_M125_2017.root ./
 tar xzvf heppyOutput_3.tgz
 
 # Copy content in a folder to a existing folder on UF Tier 2
