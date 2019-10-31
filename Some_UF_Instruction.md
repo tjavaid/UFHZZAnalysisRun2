@@ -39,7 +39,7 @@ source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd /cvmfs/cms.cern.ch/slc6_amd64_gcc630/cms/cmssw/CMSSW_9_4_4/src/
 cmsenv 
 cd /cms/data/store/user/t2/users/ferrico/
-hadd -f new_path /cms/data/store/user/ferrico/crab_path
+hadd -f new_path /cms/data/store/user/ferrico/2018data/UFHZZAnalysisRun2/ #the second is the crab_path
 ```
 
 
