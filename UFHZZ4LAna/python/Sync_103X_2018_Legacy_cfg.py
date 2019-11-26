@@ -19,7 +19,7 @@ process.Timing = cms.Service("Timing",
                              )
 
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
 
@@ -43,7 +43,7 @@ process.TFileService = cms.Service("TFileService",
 #                                   fileName = cms.string("Sync_102X.root")
 #                                   fileName = cms.string("Sync_1031_ttH_test2_2.root")##
 #                                   fileName = cms.string("Sync_1031_ttH_test3.root")##
-                                   fileName = cms.string("Sync_1031_2018_ttH_newMuWP_add.root")##
+                                   fileName = cms.string("Sync_1031_2018_ttH_newMuWP.root")##
 )
 
 # clean muons by segments 
