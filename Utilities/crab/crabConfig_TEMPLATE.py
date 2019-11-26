@@ -10,7 +10,7 @@ config.General.workArea = 'resultsAna_JOBTAG/'
 config.General.requestName = 'OUTFILENAME'
 config.General.transferOutputs = True
 config.General.transferLogs=True
-config.General.failureLimit=1
+#config.General.failureLimit=1
 
 import os
 config.section_('JobType')
@@ -37,7 +37,8 @@ elif ('Run2017' in 'DATASETNAME'):
   config.Data.splitting = 'EventAwareLumiBased'
   config.Data.unitsPerJob = 100000
 elif ('Run2016' in 'DATASETNAME'):
-  config.Data.lumiMask = 'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'###Legacy 16
+  #config.Data.lumiMask = 'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'###Legacy 16
+  config.Data.lumiMask = 'Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt'###Legacy 16 changed
   config.Data.splitting = 'EventAwareLumiBased'
   config.Data.unitsPerJob = 100000
 else:
