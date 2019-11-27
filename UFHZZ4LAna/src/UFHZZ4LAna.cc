@@ -256,7 +256,7 @@ private:
     float pdfRMSup, pdfRMSdown, pdfENVup, pdfENVdown;
     // lepton variables
     vector<double> lep_pt; vector<double> lep_pterr; vector<double> lep_pterrold; 
-    vector<double> lep_p; vector<double> lep_ecalEnergy; vector<int> lep_isEB; vector<int> lep_isEE;    
+    vector<double> lep_p; vector<double> lep_ecalEnergy; vector<int> lep_isEB; vector<int> lep_isEE;
     vector<double> lep_eta; vector<double> lep_phi; vector<double> lep_mass;
     vector<double> lepFSR_pt; vector<double> lepFSR_eta; vector<double> lepFSR_phi; vector<double> lepFSR_mass;
 
@@ -264,9 +264,9 @@ private:
     float pTL1, pTL2, pTL3, pTL4;
     float etaL1, etaL2, etaL3, etaL4;
     int idL1, idL2, idL3, idL4;
-    float mL1, mL2, mL3, mL4;                
+    float mL1, mL2, mL3, mL4;
     float pTErrL1, pTErrL2, pTErrL3, pTErrL4;
-    float phiL1, phiL2, phiL3, phiL4;        
+    float phiL1, phiL2, phiL3, phiL4;
     float pTL1FSR, pTL2FSR, pTL3FSR, pTL4FSR;
     vector<float> lep_d0BS;
     vector<float> lep_dataMC; vector<float> lep_dataMCErr;
@@ -733,12 +733,13 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
     mela = new Mela(13.0, 125.0, TVar::SILENT);
     mela->setCandidateDecayMode(TVar::CandidateDecay_ZZ); 
 	}
+	    
     //string elec_scalefac_Cracks_name_161718[3] = {"egammaEffi.txt_EGM2D_cracks.root", "egammaEffi.txt_EGM2D_Moriond2018v1_gap.root", "egammaEffi.txt_EGM2D_Moriond2019_v1_gap.root"};
     string elec_scalefac_Cracks_name_161718[3] = {"ElectronSF_Legacy_2016_Gap.root", "ElectronSF_Legacy_2017_Gap.root", "ElectronSF_Legacy_2018_Gap.root"};
     edm::FileInPath elec_scalefacFileInPathCracks(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+elec_scalefac_Cracks_name_161718[year-2016]).c_str());
     TFile *fElecScalFacCracks = TFile::Open(elec_scalefacFileInPathCracks.fullPath().c_str());
     hElecScaleFac_Cracks = (TH2F*)fElecScalFacCracks->Get("EGamma_SF2D");    
-    
+	    
     //string elec_scalefac_name_161718[3] = {"egammaEffi.txt_EGM2D.root", "egammaEffi.txt_EGM2D_Moriond2018v1.root", "egammaEffi.txt_EGM2D_Moriond2019_v1.root"};
     string elec_scalefac_name_161718[3] = {"ElectronSF_Legacy_2016_NoGap.root", "ElectronSF_Legacy_2017_NoGap.root", "ElectronSF_Legacy_2018_NoGap.root"};
     edm::FileInPath elec_scalefacFileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+elec_scalefac_name_161718[year-2016]).c_str());
