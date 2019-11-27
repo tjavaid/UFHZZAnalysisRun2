@@ -255,7 +255,7 @@ private:
     int posNNPDF;
     float pdfRMSup, pdfRMSdown, pdfENVup, pdfENVdown;
     // lepton variables
-    vector<double> lep_pt; vector<double> lep_pterr; vector<double> lep_pterrold;                   
+    vector<double> lep_pt; vector<double> lep_pterr; vector<double> lep_pterrold; 
     vector<double> lep_p; vector<double> lep_ecalEnergy; vector<int> lep_isEB; vector<int> lep_isEE;    
     vector<double> lep_eta; vector<double> lep_phi; vector<double> lep_mass;
     vector<double> lepFSR_pt; vector<double> lepFSR_eta; vector<double> lepFSR_phi; vector<double> lepFSR_mass;
