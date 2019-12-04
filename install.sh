@@ -46,6 +46,6 @@ pushd ${CMSSW_BASE}/src/ZZMatrixElement/MELA/fortran/
   mv libjhugenmela.so ../data/${SCRAM_ARCH}/
 popd
 popd
-git clone https://github.com/VBF-HZZ/KinZfitter.git
+git clone https://github.com/ferrico/KinZfitter.git #https://github.com/VBF-HZZ/KinZfitter.git
 scram b -j 8
 
