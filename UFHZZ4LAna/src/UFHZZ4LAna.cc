@@ -269,6 +269,7 @@ private:
     float phiL1, phiL2, phiL3, phiL4;
     float pTL1FSR, pTL2FSR, pTL3FSR, pTL4FSR;
     vector<float> lep_d0BS;
+    vector<float> lep_d0PV;
     vector<float> lep_dataMC; vector<float> lep_dataMCErr;
     vector<int> lep_genindex; //position of lepton in GENlep_p4 (if gen matched, -1 if not gen matched)
     vector<int> lep_matchedR03_PdgId, lep_matchedR03_MomId, lep_matchedR03_MomMomId; // gen matching even if not in GENlep_p4
@@ -488,6 +489,7 @@ private:
 
     // a vector<float> for each vector<double>
     vector<float> lep_d0BS_float;
+    vector<float> lep_d0PV_float;
     vector<float> lep_pt_float, lep_pterr_float, lep_pterrold_float;
     vector<float> lep_p_float, lep_ecalEnergy_float;
     vector<float> lep_eta_float, lep_phi_float, lep_mass_float;
@@ -991,6 +993,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     //lepton variables
     lep_d0BS.clear();
+    lep_d0PV.clear();
     lep_pt.clear(); lep_pterr.clear(); lep_pterrold.clear(); 
     lep_p.clear(); lep_ecalEnergy.clear(); lep_isEB.clear(); lep_isEE.clear();
     lep_eta.clear(); lep_phi.clear(); lep_mass.clear(); 
@@ -1211,6 +1214,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     // Float vectors
     lep_d0BS_float.clear();
+    lep_d0PV_float.clear();
     lep_pt_float.clear(); lep_pterr_float.clear(); lep_pterrold_float.clear(); 
     lep_p_float.clear(); lep_ecalEnergy_float.clear();  
     lep_eta_float.clear(); lep_phi_float.clear(); lep_mass_float.clear();
@@ -1482,7 +1486,8 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 if (verbose) cout<<"sorted lepton "<<i<<" pt "<<lep_ptreco[i]<<" id "<<lep_ptid[i]<<" index "<<lep_ptindex[i]<<endl;
                 
                 if (abs(lep_ptid[i])==11) {
-                    lep_d0BS.push_back(recoElectrons[lep_ptindex[i]].dB(pat::Electron::BS2D));//2 stands for BS
+                    lep_d0BS.push_back(recoElectrons[lep_ptindex[i]].dB(pat::Electron::BS2D));
+                    lep_d0PV.push_back(recoElectrons[lep_ptindex[i]].dB(pat::Electron::PV2D));
 					lep_isEB.push_back(recoElectrons[lep_ptindex[i]].isEB());
 					lep_isEE.push_back(recoElectrons[lep_ptindex[i]].isEE());
 					lep_p.push_back(recoElectrons[lep_ptindex[i]].p());
@@ -1554,7 +1559,8 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     lep_genindex.push_back(-1.0);
                 }
                 if (abs(lep_ptid[i])==13) {            
-                    lep_d0BS.push_back(recoMuons[lep_ptindex[i]].dB(pat::Muon::BS2D));//2 stands for BS
+                    lep_d0BS.push_back(recoMuons[lep_ptindex[i]].dB(pat::Muon::BS2D));
+                    lep_d0PV.push_back(recoMuons[lep_ptindex[i]].dB(pat::Muon::PV2D));
 					lep_isEB.push_back(0);
 					lep_isEE.push_back(0);
 					lep_p.push_back(recoMuons[lep_ptindex[i]].p());
@@ -2569,6 +2575,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     
                 // fill the vector<float>
                 lep_d0BS_float.assign(lep_d0BS.begin(),lep_d0BS.end());
+                lep_d0PV_float.assign(lep_d0PV.begin(),lep_d0PV.end());
                 lep_pt_float.assign(lep_pt.begin(),lep_pt.end());
                 lep_p_float.assign(lep_p.begin(),lep_p.end());
                 lep_ecalEnergy_float.assign(lep_ecalEnergy.begin(),lep_ecalEnergy.end());                
@@ -3388,7 +3395,8 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("crossSection",&crossSection,"crossSection/F");
 
     // Lepton variables
-    tree->Branch("lep_d0BS",&lep_d0BS);
+    tree->Branch("lep_d0BS",&lep_d0BS_float);
+    tree->Branch("lep_d0PV",&lep_d0PV_float);
     tree->Branch("lep_p",&lep_p_float);
     tree->Branch("lep_ecalEnergy",&lep_ecalEnergy_float);
     tree->Branch("lep_isEB",&lep_isEB);
