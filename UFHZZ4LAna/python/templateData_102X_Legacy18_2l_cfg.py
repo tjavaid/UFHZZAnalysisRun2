@@ -23,6 +23,7 @@ process.Timing = cms.Service("Timing",
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
+  '/store/data/Run2018A/SingleMuon/MINIAOD/17Sep2018-v2/60000/FF5D961D-4587-494F-B2D0-D1FE3A025B83.root',
         '/store/data/Run2018A/SingleMuon/MINIAOD/17Sep2018-v2/90000/6FEE6A9B-E03C-A14F-AD01-914C76D0A721.root',
         #DUMMYFILELIST
         )
