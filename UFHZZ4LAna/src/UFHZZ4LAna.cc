@@ -165,7 +165,6 @@
 // KalmanVertexFitter  
 #include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
 #include "RecoVertex/VertexTools/interface/InvariantMassFromVertex.h"
-#include "UFHZZAnalysisRun2/UFHZZ4LAna/interface/ToConcrete.h"
 #include "UFHZZAnalysisRun2/UFHZZ4LAna/interface/DileptonUtilities.h"
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
