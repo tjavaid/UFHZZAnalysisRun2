@@ -22,7 +22,15 @@ process.Timing = cms.Service("Timing",
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
-myfilelist = cms.untracked.vstring(DUMMYFILELIST)
+myfilelist = cms.untracked.vstring(
+        '/store/mc/RunIIFall17MiniAODv2/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/AE1F7138-E8BF-E811-837B-28924A33B9AA.root',
+        '/store/mc/RunIIFall17MiniAODv2/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/E201223A-E8BF-E811-9C4A-44A842CF0571.root',
+        '/store/mc/RunIIFall17MiniAODv2/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/E2FA8091-E8BF-E811-9CDE-0242AC1C0501.root',
+        '/store/mc/RunIIFall17MiniAODv2/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/E4C870AA-E7BF-E811-9053-E0071B7AC750.root',
+        '/store/mc/RunIIFall17MiniAODv2/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/260BD039-E8BF-E811-B18F-AC1F6B8DD22E.root',
+        #'/store/mc/RunIIFall17MiniAODv2/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/3450B123-E8BF-E811-B895-FA163E9604CF.root'
+        #DUMMYFILELIST
+        )
 
 process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
@@ -133,7 +141,7 @@ from CondCore.DBCommon.CondDBSetup_cfi import *
 #era = "Fall17_17Nov2017_V6_MC"
 era = "Fall17_17Nov2017_V32_94X_MC"
 # for HPC
-#dBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
+dBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 # for crab
 dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 process.jec = cms.ESSource("PoolDBESSource",
@@ -233,7 +241,7 @@ process.es_prefer_jer = cms.ESPrefer('PoolDBESSource', 'jer')
 process.load("CondCore.CondDB.CondDB_cfi")
 qgDatabaseVersion = 'cmssw8020_v2'
 # for hpc
-#QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
+QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 # for crab
 QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 process.QGPoolDBESSource = cms.ESSource("PoolDBESSource",
@@ -313,7 +321,7 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               isSignal     = cms.untracked.bool(True),
                               #isSignal     = cms.untracked.bool(False),
                               mH           = cms.untracked.double(125.0),
-                              CrossSection = cms.untracked.double(DUMMYCROSSSECTION),
+                              CrossSection = cms.untracked.double(1),#DUMMYCROSSSECTION),
                               FilterEff    = cms.untracked.double(1),
                               weightEvents = cms.untracked.bool(True),
                               elRhoSrc     = cms.untracked.InputTag("fixedGridRhoFastjetAll"),

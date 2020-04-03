@@ -20,7 +20,7 @@ process.Timing = cms.Service("Timing",
                              )
 
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(50000) )
 
 myfilelist = cms.untracked.vstring(
             #DUMMYFILELIST
@@ -32,7 +32,7 @@ process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             )
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("DUMMYFILENAME.root")
+                                   fileName = cms.string("DUMMYFILENAME_2l.root")
 )
 
 # clean muons by segments 
@@ -114,7 +114,7 @@ era = "Fall17_17Nov2017_V32_94X_DATA"
 # for HPC
 dBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 # for crab
-dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
+#dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 process.jec = cms.ESSource("PoolDBESSource",
                            CondDBSetup,
                            connect = cms.string("sqlite_file:"+dBFile),
@@ -219,7 +219,7 @@ qgDatabaseVersion = 'cmssw8020_v2'
 # for hpc
 QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 # for crab
-QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
+#QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 process.QGPoolDBESSource = cms.ESSource("PoolDBESSource",
       DBParameters = cms.PSet(messageLevel = cms.untracked.int32(1)),
       timetype = cms.string('runnumber'),
@@ -337,9 +337,10 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               ),
                               verbose = cms.untracked.bool(False),              
                               skimLooseLeptons = cms.untracked.int32(2),              
-                              skimTightLeptons = cms.untracked.int32(2),              
+                              skimTightLeptons = cms.untracked.int32(2),
                               #bestCandMela = cms.untracked.bool(False),
                               year = cms.untracked.int32(2017),
+                              isCode4l = cms.untracked.bool(False),
                              )
 
 

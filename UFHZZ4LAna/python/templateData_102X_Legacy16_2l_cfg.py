@@ -353,9 +353,10 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               ),
                               verbose = cms.untracked.bool(False),              
                               skimLooseLeptons = cms.untracked.int32(2),              
-                              skimTightLeptons = cms.untracked.int32(2),              
+                              skimTightLeptons = cms.untracked.int32(2),
                               #bestCandMela = cms.untracked.bool(False),
                               year = cms.untracked.int32(2016),
+                              isCode4l = cms.untracked.bool(False),
                              )
 
 

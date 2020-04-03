@@ -5,7 +5,7 @@ from FWCore.ParameterSet.VarParsing import VarParsing
 process = cms.Process("UFHZZ4LAnalysis")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 1
 process.MessageLogger.categories.append('UFHZZ4LAna')
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
@@ -20,9 +20,18 @@ process.Timing = cms.Service("Timing",
                              )
 
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
 
-myfilelist = cms.untracked.vstring(DUMMYFILELIST)
+myfilelist = cms.untracked.vstring(
+        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/FBC570F1-EF01-674F-8A44-081A9481EF84.root',
+        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/F36E6483-C42E-9645-A0FB-E88F5707DB2F.root',
+        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/135CA2F1-2F60-364B-8E32-495982753E59.root',
+        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/40483F05-74DE-F143-A833-64C1AD8016E3.root',
+        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/3E16C789-AD09-A84C-BCCB-77B7B7C2390B.root',
+        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/DCB7927B-269F-3B4B-9DA3-EFE07A37FC9E.root',
+       
+        #DUMMYFILELIST
+        )
 
 process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
@@ -322,9 +331,9 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               beamSpotSrc  = cms.untracked.InputTag("offlineBeamSpot"),
                               conversionSrc  = cms.untracked.InputTag("reducedEgamma","reducedConversions"),
                               isMC         = cms.untracked.bool(True),
-                              isSignal     = cms.untracked.bool(False),
+                              isSignal     = cms.untracked.bool(True),
                               mH           = cms.untracked.double(125.0),
-                              CrossSection = cms.untracked.double(DUMMYCROSSSECTION),
+                              CrossSection = cms.untracked.double(1),#DUMMYCROSSSECTION),
                               FilterEff    = cms.untracked.double(1),
                               weightEvents = cms.untracked.bool(True),
                               elRhoSrc     = cms.untracked.InputTag("fixedGridRhoFastjetAll"),

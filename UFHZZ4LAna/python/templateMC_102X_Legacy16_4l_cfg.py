@@ -22,7 +22,11 @@ process.Timing = cms.Service("Timing",
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
-myfilelist = cms.untracked.vstring(DUMMYFILELIST)
+myfilelist = cms.untracked.vstring(
+        #'/store/mc/RunIISummer16MiniAODv2/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV709_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/20000/1A5C54BE-BED3-E711-B0A4-44A84224053C.root'
+'/store/mc/RunIISummer16MiniAODv3/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUgenV6_pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/40000/F2F9B69C-5A20-E911-A5D7-0CC47A7EEE32.root'
+        #DUMMYFILELIST
+        )
 
 process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
@@ -232,7 +236,7 @@ process.es_prefer_jer = cms.ESPrefer('PoolDBESSource', 'jer')
 process.load("CondCore.CondDB.CondDB_cfi")
 qgDatabaseVersion = 'cmssw8020_v2'
 # for hpc
-#QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
+QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 # for crab
 QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 process.QGPoolDBESSource = cms.ESSource("PoolDBESSource",
@@ -313,7 +317,7 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               isSignal     = cms.untracked.bool(True),
                               #isSignal     = cms.untracked.bool(False),
                               mH           = cms.untracked.double(125.0),
-                              CrossSection = cms.untracked.double(DUMMYCROSSSECTION),
+                              CrossSection = cms.untracked.double(1),#DUMMYCROSSSECTION),
                               FilterEff    = cms.untracked.double(1),
                               weightEvents = cms.untracked.bool(True),
                               elRhoSrc     = cms.untracked.InputTag("fixedGridRhoFastjetAll"),

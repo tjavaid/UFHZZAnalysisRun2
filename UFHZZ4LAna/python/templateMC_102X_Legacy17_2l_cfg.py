@@ -23,7 +23,9 @@ process.Timing = cms.Service("Timing",
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
-       '/store/mc/RunIIFall17MiniAODv2/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/3450B123-E8BF-E811-B895-FA163E9604CF.root',
+       #'/store/mc/RunIIFall17MiniAODv2/UpsilonMuMu_UpsilonPt6_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PU2017RECOSIMstep_12Apr2018_94X_mc2017_realistic_v14-v1/40000/3E5BF5A7-EF85-E811-B9CC-7CD30AD08C4A.root'
+        '/store/mc/RunIIFall17MiniAODv2/JpsiToMuMu_JpsiPt8_TuneCP5_13TeV-pythia8/MINIAODSIM/PU2017RECOSIMstep_12Apr2018_94X_mc2017_realistic_v14-v1/90000/FCF4A753-3544-E811-9A83-0025904C66F2.root'
+        #'/store/mc/RunIIFall17MiniAODv2/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/3450B123-E8BF-E811-B895-FA163E9604CF.root',
         )
 
 process.source = cms.Source("PoolSource",fileNames = myfilelist,
@@ -305,10 +307,11 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               ),
                               verbose = cms.untracked.bool(False),              
                               skimLooseLeptons = cms.untracked.int32(2),              
-                              skimTightLeptons = cms.untracked.int32(2),              
+                              skimTightLeptons = cms.untracked.int32(2),
                               #bestCandMela = cms.untracked.bool(False),
 #                              verbose = cms.untracked.bool(True),
-                              year = cms.untracked.int32(2017)              
+                              year = cms.untracked.int32(2017),
+                              isCode4l = cms.untracked.bool(False),
                              )
 
 process.p = cms.Path(process.fsrPhotonSequence*
