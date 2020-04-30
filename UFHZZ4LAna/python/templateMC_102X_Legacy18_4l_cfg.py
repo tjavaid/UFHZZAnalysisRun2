@@ -5,7 +5,7 @@ from FWCore.ParameterSet.VarParsing import VarParsing
 process = cms.Process("UFHZZ4LAnalysis")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = 1
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 process.MessageLogger.categories.append('UFHZZ4LAna')
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
@@ -20,25 +20,33 @@ process.Timing = cms.Service("Timing",
                              )
 
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
-        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/FBC570F1-EF01-674F-8A44-081A9481EF84.root',
-        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/F36E6483-C42E-9645-A0FB-E88F5707DB2F.root',
-        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/135CA2F1-2F60-364B-8E32-495982753E59.root',
-        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/40483F05-74DE-F143-A833-64C1AD8016E3.root',
-        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/3E16C789-AD09-A84C-BCCB-77B7B7C2390B.root',
-        '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/DCB7927B-269F-3B4B-9DA3-EFE07A37FC9E.root',
+ '/store/mc/RunIIAutumn18MiniAOD/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/270000/E5E2F122-AA57-5248-8177-594EC87DD494.root',
+  '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/19B6ADC2-4F62-AA4D-9488-F53CE2936856.root',
+ '/store/mc/RunIIAutumn18MiniAOD/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/90000/96A5F68D-DCB8-3D4E-8615-919D86D1534F.root',
+  
+ 
+ 
+ 
+ #       '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/FBC570F1-EF01-674F-8A44-081A9481EF84.root',
+  #      '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/F36E6483-C42E-9645-A0FB-E88F5707DB2F.root',
+   #     '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/135CA2F1-2F60-364B-8E32-495982753E59.root',
+    #    '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/40483F05-74DE-F143-A833-64C1AD8016E3.root',
+     #   '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/3E16C789-AD09-A84C-BCCB-77B7B7C2390B.root',
+      #  '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/DCB7927B-269F-3B4B-9DA3-EFE07A37FC9E.root',
        
         #DUMMYFILELIST
         )
 
 process.source = cms.Source("PoolSource",fileNames = myfilelist,
-                            duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
+           #                 duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
+           #eventsToProcess = cms.untracked.VEventRange('1:12:66017')
                             )
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("DUMMYFILENAME.root")
+                                   fileName = cms.string("DUMMYFILENAME_2018.root")
 )
 
 # clean muons by segments 
@@ -149,11 +157,11 @@ process.load('UFHZZAnalysisRun2.FSRPhotons.fsrPhotons_cff')
 import os
 # Jet Energy Corrections
 from CondCore.DBCommon.CondDBSetup_cfi import *
-era = "Autumn18_V8_MC"
+era = "Autumn18_V19_MC"
 # for HPC
 dBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 # for crab
-dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
+#dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 process.jec = cms.ESSource("PoolDBESSource",
                            CondDBSetup,
                            connect = cms.string("sqlite_file:"+dBFile),
@@ -219,26 +227,26 @@ process.slimmedJetsJEC.userData.userInts.src += ['pileupJetIdUpdated:fullId']
 # JER
 process.load("JetMETCorrections.Modules.JetResolutionESProducer_cfi")
 # for hpc
-dBJERFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/Autumn18_V1_MC.db"
+dBJERFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/Autumn18_V7_MC.db"   
 # for crab
-dBJERFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/Autumn18_V1_MC.db"
+#dBJERFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/Autumn18_V7_MC.db"
 process.jer = cms.ESSource("PoolDBESSource",
         CondDBSetup,
         connect = cms.string("sqlite_file:"+dBJERFile),
         toGet = cms.VPSet(
             cms.PSet(
                 record = cms.string('JetResolutionRcd'),
-                tag    = cms.string('JR_Autumn18_V1_MC_PtResolution_AK4PFchs'),
+                tag    = cms.string('JR_Autumn18_V7_MC_PtResolution_AK4PFchs'),
                 label  = cms.untracked.string('AK4PFchs_pt')
                 ),
             cms.PSet(
                 record = cms.string('JetResolutionRcd'),
-                tag    = cms.string('JR_Autumn18_V1_MC_PhiResolution_AK4PFchs'),
+                tag    = cms.string('JR_Autumn18_V7_MC_PhiResolution_AK4PFchs'),
                 label  = cms.untracked.string('AK4PFchs_phi')
                 ),
             cms.PSet(
                 record = cms.string('JetResolutionScaleFactorRcd'),
-                tag    = cms.string('JR_Autumn18_V1_MC_SF_AK4PFchs'),
+                tag    = cms.string('JR_Autumn18_V7_MC_SF_AK4PFchs'),
                 label  = cms.untracked.string('AK4PFchs')
                 )
             )
@@ -252,7 +260,7 @@ qgDatabaseVersion = 'cmssw8020_v2'
 # for hpc
 QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 # for crab
-QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
+#QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 process.QGPoolDBESSource = cms.ESSource("PoolDBESSource",
       DBParameters = cms.PSet(messageLevel = cms.untracked.int32(1)),
       timetype = cms.string('runnumber'),
@@ -349,10 +357,10 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               lheInfoSrc = cms.untracked.InputTag("externalLHEProducer"),
                               reweightForPU = cms.untracked.bool(True),
                               triggerSrc = cms.InputTag("TriggerResults","","HLT"),
-                              triggerObjects = cms.InputTag("slimmedPatTrigger"),
+                              triggerObjects = cms.InputTag("selectedPatTrigger"),
                               doJER = cms.untracked.bool(True),
                               doJEC = cms.untracked.bool(True),
-                              doTriggerMatching = cms.untracked.bool(True),
+                              doTriggerMatching = cms.untracked.bool(False),
                               triggerList = cms.untracked.vstring(
                                   # Toni
                                   'HLT_Ele32_WPTight_Gsf_v', 
@@ -365,10 +373,10 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                                   'HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v',
                                   'HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v',
                                   'HLT_DiMu9_Ele9_CaloIdL_TrackIdL_DZ_v',
-                                  'HLT_Mu8_DiEle12_CaloIdL_TrackIdL_v', ## not in new list above!
-                                  'HLT_Mu8_DiEle12_CaloIdL_TrackIdL_DZ_v', ## not in new list above!
-                                  'HLT_TripleMu_10_5_5_DZ_v',
-                                  'HLT_TripleMu_12_10_5_v',
+                                  'HLT_TripleMu_10_5_5_DZ_v',             
+                                  'HLT_TripleMu_12_10_5_v',               
+                                  'HLT_Mu8_DiEle12_CaloIdL_TrackIdL_v',   
+                                  'HLT_Mu8_DiEle12_CaloIdL_TrackIdL_DZ_v',
                                   # OLD
 #                                  'HLT_Ele32_WPTight_Gsf_v',
 #                                  'HLT_IsoMu24_v',

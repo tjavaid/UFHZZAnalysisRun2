@@ -78,7 +78,7 @@
 #include "CommonTools/CandUtils/interface/Booster.h"
 
 //Muon MVA
-#include "MuonMVAReader/Reader/interface/MuonGBRForestReader.hpp"
+//#include "MuonMVAReader/Reader/interface/MuonGBRForestReader.hpp"
 //class MuonGBRForestReader;
 class HZZ4LHelper
 {
@@ -126,8 +126,8 @@ public:
     bool passTight_Id_SUS(pat::Electron electron, std::string elecID, const reco::Vertex *&vertex, const reco::BeamSpot BS, edm::Handle< std::vector<reco::Conversion> > theConversions, int year);
     
     bool isTrackerHighPt(pat::Muon muon, const reco::Vertex *&vertex);
-    float get_Muon_MVA_Value(pat::Muon muon, edm::Handle<reco::VertexCollection> vertices, double rho, int year, const reco::Vertex *&vertex);
-    bool passTight_BDT_Id(pat::Muon muon, edm::Handle<reco::VertexCollection> vertices, double rho, int year, const reco::Vertex *&vertex);
+    //float get_Muon_MVA_Value(pat::Muon muon, edm::Handle<reco::VertexCollection> vertices, double rho, int year, const reco::Vertex *&vertex);
+    //bool passTight_BDT_Id(pat::Muon muon, edm::Handle<reco::VertexCollection> vertices, double rho, int year, const reco::Vertex *&vertex);
     //float get_Muon_MVA_Value(pat::Muon muon, const reco::Vertex *&vertices, double rho, int year);
     //bool passTight_BDT_Id(pat::Muon muon, const reco::Vertex *&vertices, double rho, int year);
 
@@ -139,6 +139,8 @@ public:
     float dataMCErr(pat::Electron electron, TH2F* hElecScaleFac, TH2F* hElecScalFacUnc_Cracks);
     float dataMC(pat::Muon muon, TH2F* hMuScaleFac);
     float dataMCErr(pat::Muon muon, TH2F* hMuScaleFac);
+    
+    float get_bTagEffi(float _pt_jet, float _eta_jet, TH2F* hbTagEffi);
     
     float getDVBF2jetsConstant(float ZZMass);
     float getDVBF1jetConstant(float ZZMass);
@@ -407,7 +409,7 @@ std::vector<pat::Muon> HZZ4LHelper::goodMuons2015_noIso_noPf(std::vector<pat::Mu
     using namespace std;
     vector<pat::Muon> bestMuons;
     /********** M U O N  C U T S **********/
-    sip3dCut = 99999;
+    //sip3dCut = 99999;
     double muEtaCut = 2.4;
     double dxyCut = 0.5;
     double dzCut = 1;
@@ -760,91 +762,9 @@ bool HZZ4LHelper::isTrackerHighPt(pat::Muon muon, const reco::Vertex *&vertex){
               && muon.innerTrack()->hitPattern().trackerLayersWithMeasurement() > 5 );
 }
 
-float HZZ4LHelper::get_Muon_MVA_Value(pat::Muon muon, edm::Handle<reco::VertexCollection> vertices, double rho, int year, const reco::Vertex *&vertex){
-    //MVA Reader
-    MuonGBRForestReader *r;
-    r = new MuonGBRForestReader(year); //for year put 2016,2017, or 2018 to select correct training
-
-    float pt  = muon.pt();
-    float eta = muon.eta();
-    float PFChargedHadIso   = muon.pfIsolationR03().sumChargedHadronPt;
-    float PFNeutralHadIso   = muon.pfIsolationR03().sumNeutralHadronEt;
-    float PFPhotonIso       = muon.pfIsolationR03().sumPhotonEt;
-    float SIP               = getSIP3D(muon);
-
-    float dxy = 999.;
-    float dz  = 999.;
-    //const reco::Vertex* vertex = 0;
-    //if (vertices->size()>0) 
-    //{
-    //    vertex = &(vertices->front());
-    //    dxy = fabs(muon.muonBestTrack()->dxy(vertex->position()));
-    //    dz  = fabs(muon.muonBestTrack()->dz(vertex->position()));
-    //}
-    dxy = fabs(muon.muonBestTrack()->dxy(vertex->position()));
-    dz  = fabs(muon.muonBestTrack()->dz(vertex->position()));
-
-    float mu_N_hits_, mu_chi_square_, mu_N_pixel_hits_, mu_N_tracker_hits_;
-    bool is_global_mu_  = muon.isGlobalMuon();
-    if ( is_global_mu_ )
-    {
-        // Number of muon chamber hits included in the the global muon track fit
-        mu_N_hits_ = (muon.globalTrack()->hitPattern().numberOfValidMuonHits());
-        // Chi2 of the global track fit
-        mu_chi_square_ = (muon.globalTrack()->normalizedChi2());
-    }
-    else
-    {
-        mu_N_hits_     = -1;
-        mu_chi_square_ = -1;
-    }
-
-    // Number of hits in the pixel detector
-    bool valid_KF = false;
-    reco::TrackRef myTrackRef = muon.innerTrack();
-    valid_KF = (myTrackRef.isAvailable());
-    valid_KF = (myTrackRef.isNonnull());  
-      
-    if ( valid_KF )
-    {
-        // Number of pixel hits
-        mu_N_pixel_hits_ = muon.innerTrack()->hitPattern().numberOfValidPixelHits();
-
-        // Number of hits in the tracker layers
-        mu_N_tracker_hits_ = muon.innerTrack()->hitPattern().trackerLayersWithMeasurement();
-    }
-    else
-    {
-        mu_N_pixel_hits_ = -1;
-        mu_N_tracker_hits_ = -1;
-    }
-
-    float BDT = r->Get_MVA_value(pt, eta, mu_N_hits_, mu_N_pixel_hits_, mu_N_tracker_hits_, mu_chi_square_, PFPhotonIso, PFChargedHadIso, PFNeutralHadIso, rho, SIP, dxy, dz);
-    delete r;
-    return BDT;
-}
-
-bool HZZ4LHelper::passTight_BDT_Id(pat::Muon muon, edm::Handle<reco::VertexCollection> vertices, double rho, int year, const reco::Vertex *&vertex){
-    float BDT = get_Muon_MVA_Value(muon, vertices, rho, year, vertex);
-    bool isBDT;
-    if(year==2018)
-        isBDT = ((muon.pt() <= 10 && BDT > 0.9506129026412962) || (muon.pt() > 10  && BDT > -0.3629065185785282));///new WP
-        //isBDT = ((muon.pt() <= 10 && BDT > 2.5212153674837317) || (muon.pt() > 10  && BDT > 1.496530520574132));
-    if(year==2017)
-        isBDT = ((muon.pt() <= 10 && BDT > 0.883555161952972) || (muon.pt() > 10  && BDT > -0.3830992293357821));
-        //isBDT = ((muon.pt() <= 10 && BDT > 2.2993430596975) || (muon.pt() > 10  && BDT > 1.4943015903718289));
-    if(year==2016)
-        isBDT = ((muon.pt() <= 10 && BDT > 0.8847169876098633) || (muon.pt() > 10  && BDT > -0.19389629721641488));
-        //isBDT = ((muon.pt() <= 10 && BDT > 2.1081259567775534) || (muon.pt() > 10  && BDT > 1.3359052488630339));
-    if(isBDT)    return true;
-    else
-        return {isTrackerHighPt(muon, vertex)&&(muon.pt()>200)};
-
-}
-
 bool HZZ4LHelper::passTight_Id_SUS(pat::Muon muon, const reco::Vertex *&vertex) {
     if (muon.isPFMuon() != 1) return false;
-    if (muon.isMediumMuon() != 1) return false;
+        if (muon.isMediumMuon() != 1) return false;
     double dxyCut = 0.05;
     double dzCut = 0.1;
     if( fabs(muon.muonBestTrack()->dxy(vertex->position())) >= dxyCut ) return false;
@@ -1929,6 +1849,14 @@ float HZZ4LHelper::dataMCErr(pat::Muon muon, TH2F* hMuScaleFacUnc)
     return hMuScaleFacUnc->GetBinContent(hMuScaleFacUnc->FindBin(eta,pt)); 
 }
 
+float HZZ4LHelper::get_bTagEffi(float _pt_jet, float _eta_jet, TH2F* hbTagEffi)
+{
+    //float = pt = std::min(jet.pt(), 599.0);
+    //float eta = jet.eta();
+    float pt = std::min(_pt_jet, (float)599.0);
+    float aeta = abs(_eta_jet);
+    return hbTagEffi->GetBinContent(hbTagEffi->FindBin(pt,aeta));
+}
 
 float HZZ4LHelper::getDVBF2jetsConstant(float ZZMass){
     return DjjVBFSpline->Eval(ZZMass);
