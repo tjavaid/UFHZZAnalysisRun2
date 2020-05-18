@@ -323,6 +323,7 @@ private:
 	vector<TLorentzVector> vtxLep;
 	vector<TLorentzVector> vtxRecoLep_BS;
 	vector<TLorentzVector> vtxRecoLep;
+
 	vector<double> vtxLep_BS_pt; 	vector<double> vtxLep_BS_ptError; 	vector<double> vtxLep_BS_eta; 	vector<double> vtxLep_BS_phi; 	vector<double> vtxLep_BS_mass;
 	vector<double> vtxLep_pt; 	vector<double> vtxLep_ptError;	vector<double> vtxLep_eta; 	vector<double> vtxLep_phi; 	vector<double> vtxLep_mass;
 	vector<double> vtxLepFSR_BS_pt; 	vector<double> vtxLepFSR_BS_eta; 	vector<double> vtxLepFSR_BS_phi; 	vector<double> vtxLepFSR_BS_mass;
@@ -344,6 +345,7 @@ private:
     float mass4lREFIT, massZ1REFIT, massZ2REFIT, mass4lErr, mass4lErrREFIT;
     float mass4l_vtx_BS, mass4l_vtxFSR_BS, mass4lREFIT_vtx_BS, mass4lErr_vtx_BS, mass4lErrREFIT_vtx_BS;
     float mass4l_vtx, mass4l_vtxFSR, mass4lREFIT_vtx, mass4lErr_vtx, mass4lErrREFIT_vtx;
+    float massZ1REFIT_vtx_BS, massZ2REFIT_vtx_BS;
 
     // Z candidate variables
     float mass2l_vtx_BS;
@@ -497,6 +499,7 @@ private:
 
     float me_0plus_JHU, me_qqZZ_MCFM, p0plus_m4l, bkg_m4l;
     float D_bkg_kin, D_bkg, D_g4, D_g1g4;
+    float D_bkg_kin_vtx_BS;
 
     float p0minus_VAJHU, Dgg10_VAMCFM, pg1g4_VAJHU;
 
@@ -817,7 +820,7 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
     kinZfitter = new KinZfitter(!isMC, year);
     kinZfitter_vtx = new KinZfitter(!isMC, year);
     kinZfitter_vtx_BS = new KinZfitter(!isMC, year);
-    
+
     if(isCode4l && doMela){
 //     if(doMela){
 	    mela = new Mela(13.0, 125.0, TVar::SILENT);
@@ -1194,7 +1197,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	vtxLep_eta.clear();
 	vtxLep_phi.clear();
 	vtxLep_mass.clear();
-	
+
 	vtxLep_BS_pt.clear();
 	vtxLep_BS_ptError.clear();
 	vtxLep_BS_eta.clear();
@@ -1232,8 +1235,8 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     mass4lREFIT = -999.0; massZ1REFIT = -999.0; massZ2REFIT = -999.0; mass4lErr = -999.0; mass4lErrREFIT = -999.0;
     mass4l_vtx_BS=-1; mass4l_vtxFSR_BS=-1; mass4lREFIT_vtx_BS = -999.0; mass4lErr_vtx_BS = -999.0; mass4lErrREFIT_vtx_BS = -999.0;
     mass4l_vtx=-1; mass4l_vtxFSR=-1; mass4lREFIT_vtx = -999.0; mass4lErr_vtx = -999.0; mass4lErrREFIT_vtx = -999.0;
+	massZ1REFIT_vtx_BS = -999.0; massZ2REFIT_vtx_BS = -999.0;
 	
-
     // Z candidate variables
     Z_pt.clear(); Z_eta.clear(); Z_phi.clear(); Z_mass.clear(); 
     Z_noFSR_pt.clear(); Z_noFSR_eta.clear(); Z_noFSR_phi.clear(); Z_noFSR_mass.clear(); 
@@ -1363,6 +1366,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     // ME
     me_0plus_JHU=999.0; me_qqZZ_MCFM=999.0; p0plus_m4l=999.0; bkg_m4l=999.0; D_bkg_kin=999.0; D_bkg=999.0;   
+    D_bkg_kin_vtx_BS=999.0;
 
     p0minus_VAJHU=999.0; pg1g4_VAJHU=999.0; Dgg10_VAMCFM=999.0, D_g4=999.0; D_g1g4=999.0;
     // OLD but working
@@ -1428,7 +1432,6 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	lep_numberOfValidPixelHits_float.clear();
 	lep_trackerLayersWithMeasurement_float.clear();
-
 
 	vtxLep_BS_pt_float.clear(); 	
 	vtxLep_BS_ptError_float.clear(); 	
@@ -1754,13 +1757,23 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
             }
             
             std::vector<reco::TransientTrack> ttv_recoLepton;
-            int n_lep = 0;  
+            int n_lep_e = 0;  
+            int n_lep_mu = 0;  
               
             for(unsigned int i = 0; i < lep_ptreco.size(); i++) {
                 
                 if (verbose) cout<<"sorted lepton "<<i<<" pt "<<lep_ptreco[i]<<" id "<<lep_ptid[i]<<" index "<<lep_ptindex[i]<<endl;
                 
                 if (abs(lep_ptid[i])==11) {
+
+                	if(n_lep_e < 2 && !isCode4l){
+                		if(helper.passTight_BDT_Id(recoElectronsUnS[lep_ptindex[i]],year)){
+							if(helper.pfIso03(recoElectrons[lep_ptindex[i]],elRho) < isoCutEl){
+		                		ttv_recoLepton.push_back(ttkb_recoLepton->build(recoElectrons[lep_ptindex[i]].gsfTrack()));
+           			    		n_lep_e++;
+           			    	}
+                		}
+                	}
 
                     lep_d0BS.push_back(recoElectrons[lep_ptindex[i]].gsfTrack()->dxy(beamSpot->position()));
                     lep_d0PV.push_back(recoElectrons[lep_ptindex[i]].gsfTrack()->dxy(PV->position()));
@@ -1854,11 +1867,11 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 //                		if(!isCode4l && helper.getSIP3D(recoMuons[lep_ptindex[i]]) > 4) continue;
 //                 	if(!isCode4l && helper.pfIso03(recoMuons[lep_ptindex[i]],muRho) > 0.35) continue;
 
-                	if(n_lep < 2 && !isCode4l){
+                	if(n_lep_mu < 2 && !isCode4l){
                 		if(helper.passTight_Id(recoMuons[lep_ptindex[i]],PV)){
-							if(helper.pfIso03(recoMuons[lep_ptindex[i]],muRho) < 0.35){
+							if(helper.pfIso03(recoMuons[lep_ptindex[i]],muRho) < isoCutMu){
 		                		ttv_recoLepton.push_back(ttkb_recoLepton->build(recoMuons[lep_ptindex[i]].muonBestTrack()));
-           			    		n_lep++;
+           			    		n_lep_mu++;
            			    	}
                 		}
                 	}
@@ -2446,10 +2459,10 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     kinZfitter->Setup(selectedLeptons, selectedFsrMap, year);
                     mass4lErr = (float)kinZfitter->GetM4lErr();
 
-                    kinZfitter_vtx_BS->Setup(vtxLep_BS, selectedLeptons, selectedFsrMap, year);
+                    kinZfitter_vtx_BS->Setup(vtxLep_BS, vtxLep_BS_ptError, selectedLeptons, selectedFsrMap, year);
                     mass4lErr_vtx_BS = (float)kinZfitter_vtx_BS->GetM4lErr();
 
-                    kinZfitter_vtx->Setup(vtxLep, selectedLeptons, selectedFsrMap, year);
+                    kinZfitter_vtx->Setup(vtxLep, vtxLep_ptError, selectedLeptons, selectedFsrMap, year);
                     mass4lErr_vtx = (float)kinZfitter_vtx->GetM4lErr();
 
                     if (doRefit) {
@@ -2459,17 +2472,17 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                         massZ1REFIT = (float)kinZfitter->GetRefitMZ1(); 
                         massZ2REFIT = (float)kinZfitter->GetRefitMZ2(); 
 
-
                         //// vtx contraint at BS
                         kinZfitter_vtx_BS->KinRefitZ();
                         mass4lREFIT_vtx_BS = (float)kinZfitter_vtx_BS->GetRefitM4l();
                         mass4lErrREFIT_vtx_BS = (float)kinZfitter_vtx_BS->GetRefitM4lErrFullCov();
+                        massZ1REFIT_vtx_BS = (float)kinZfitter_vtx_BS->GetRefitMZ1(); 
+                        massZ2REFIT_vtx_BS = (float)kinZfitter_vtx_BS->GetRefitMZ2(); 
 
                         //// vtx contraint
                         kinZfitter_vtx->KinRefitZ();
                         mass4lREFIT_vtx = (float)kinZfitter_vtx->GetRefitM4l();
                         mass4lErrREFIT_vtx = (float)kinZfitter_vtx->GetRefitM4lErrFullCov();
-
                     }
 
                     if (verbose) cout<<"mass4l "<<mass4l<<" mass4lREFIT "<<mass4lREFIT<<" massErr "<<mass4lErr<<" massErrREFIT "<<mass4lErrREFIT<<" massZ1REFIT "<<massZ1REFIT<<endl;
@@ -2504,7 +2517,6 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                         daughters.push_back(SimpleParticle_t(lep_id[2], Lep3));
                         daughters.push_back(SimpleParticle_t(lep_id[3], Lep4));
                     }
-                    
                     
                     SimpleParticleCollection_t associated;               
                     if (njets_pt30_eta4p7 > 0) {
@@ -2546,6 +2558,8 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                     
                     D_bkg_kin = me_0plus_JHU/(me_0plus_JHU+me_qqZZ_MCFM*helper.getDbkgkinConstant(idL1*idL2*idL3*idL3,mass4l)); 
+                    D_bkg_kin_vtx_BS = me_0plus_JHU/(me_0plus_JHU+me_qqZZ_MCFM*helper.getDbkgkinConstant(idL1*idL2*idL3*idL3,mass4l_vtxFSR_BS)); 
+
                     D_bkg = me_0plus_JHU*p0plus_m4l/(me_0plus_JHU*p0plus_m4l+me_qqZZ_MCFM*bkg_m4l*helper.getDbkgConstant(idL1*idL2*idL3*idL4,mass4l)); // superMELA 
                     D_g4 = me_0plus_JHU/(me_0plus_JHU+pow(2.521, 2)*p0minus_VAJHU); // D_0-                
                     D_g1g4 = pg1g4_VAJHU*2.521/(me_0plus_JHU+pow(2.521, 2)*p0minus_VAJHU); // D_CP, 2.521 since g1=1 and g4=1 is used
@@ -2553,7 +2567,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     TUtil::computeAngles(cosThetaStar,cosTheta1,cosTheta2,Phi,Phi1, \
                                          Lep1, lep_id[lep_Hindex[0]], Lep2, lep_id[lep_Hindex[1]], \
                                          Lep3, lep_id[lep_Hindex[2]], Lep4, lep_id[lep_Hindex[3]]);
-                    
+                  
                     if (njets_pt30_eta4p7>=2){
 
                         mela->setProcess(TVar::HSMHiggs, TVar::MCFM, TVar::JJVBF_S);
@@ -2720,7 +2734,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     else {
                         D_VBF = -1.0; D_HadWH = -1.0; D_HadZH = -1.0;  D_bkg_VBFdec=-1.0; D_bkg_VHdec=-1.0;
                     }
-                    
+   	                                    
                     if (njets_pt30_eta4p7==1) {
                         
                         mela->setProcess(TVar::HSMHiggs, TVar::JHUGen, TVar::JJVBF);
@@ -2747,7 +2761,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     else {
                         D_VBF1j = -1.0;
                     }
-                    
+                  
                     if (njets_pt30_eta4p7>=2) {                    
                         float jetqgl0 =jet_QGTagger[jet1index]; 
                         float jetqgl1 =jet_QGTagger[jet2index]; 
@@ -2785,7 +2799,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     else {
                         D_VBF1j_QG = -1.0;
                     }
-                    
+                   
                     if (verbose) cout<<"D_bkg_kin: "<<D_bkg_kin<< ", D_bkg: " << D_bkg << ", Dgg: " << Dgg10_VAMCFM << " ,D0-: " << D_g4 << endl;               
                     if (verbose) cout<<"D_VBF : "<<D_VBF<< ", D_VBF1j : "<< D_VBF1j<<", WH: " << D_HadWH << ", ZH: " << D_HadZH <<endl;
                     if (verbose) cout<<"cosThetaStar: "<<cosThetaStar<<", cosTheta1: "<<cosTheta1<<", cosTheta2: "<<cosTheta2<<", Phi: "<<Phi<<" , Phi1: "<<Phi1<<endl;
@@ -2819,7 +2833,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                             if (mass > 60 && mass < 120) nvjets_pt40_eta2p4++;            
                         }
                     }
-                    
+                  
                     int sumplus=0; int summinus=0;
                     int sumflavor=0;
                     int noverlapping=0;
@@ -2883,7 +2897,11 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     
                 }
                 
-				if(n_lep > 1){
+				if((n_lep_e > 1 || n_lep_mu > 1) && !isCode4l){
+					
+					float massLepton;
+					if(n_lep_e > 1) massLepton =  0.00051100;
+					if(n_lep_mu > 1) massLepton = 0.10565837;
 					TLorentzVector Z_Vtx_BS, Z_Vtx; 
 					KalmanVertexFitter KVfitter_recoLepton(true);
 
@@ -2894,9 +2912,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 						std::vector <reco::TransientTrack> ttrks_BS = KVertex_recoLepton_BS.refittedTracks();                  
 						TLorentzVector tmp;
-						tmp.SetPxPyPzE( KalmanRefMu(ttrks_BS.at(0), 0.10565837).at(3), KalmanRefMu(ttrks_BS.at(0), 0.10565837).at(4), KalmanRefMu(ttrks_BS.at(0), 0.10565837).at(5), KalmanRefMu(ttrks_BS.at(0), 0.10565837).at(6));
+						tmp.SetPxPyPzE( KalmanRefMu(ttrks_BS.at(0), massLepton).at(3), KalmanRefMu(ttrks_BS.at(0), massLepton).at(4), KalmanRefMu(ttrks_BS.at(0), massLepton).at(5), KalmanRefMu(ttrks_BS.at(0), massLepton).at(6));
 					    vtxRecoLep_BS.push_back(tmp);		                
-				        tmp.SetPxPyPzE( KalmanRefMu(ttrks_BS.at(1), 0.10565837).at(3), KalmanRefMu(ttrks_BS.at(1), 0.10565837).at(4), KalmanRefMu(ttrks_BS.at(1), 0.10565837).at(5), KalmanRefMu(ttrks_BS.at(1), 0.10565837).at(6)); 
+				        tmp.SetPxPyPzE( KalmanRefMu(ttrks_BS.at(1), massLepton).at(3), KalmanRefMu(ttrks_BS.at(1), massLepton).at(4), KalmanRefMu(ttrks_BS.at(1), massLepton).at(5), KalmanRefMu(ttrks_BS.at(1), massLepton).at(6)); 
 					    vtxRecoLep_BS.push_back(tmp);	    
 
 					    for(int i = 0; i < 2; i ++){
@@ -2910,9 +2928,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 							Z_Vtx_BS += vtxRecoLep_BS.at(i);
 		    	    				    	
 		    		    	if(!isCode4l){
-			    		    	commonBS_x.push_back(KalmanRefMu(ttrks_BS.at(i), 0.10565837).at(0));
-			    		    	commonBS_y.push_back(KalmanRefMu(ttrks_BS.at(i), 0.10565837).at(1));
-			    		    	commonBS_z.push_back(KalmanRefMu(ttrks_BS.at(i), 0.10565837).at(2));
+			    		    	commonBS_x.push_back(KalmanRefMu(ttrks_BS.at(i), massLepton).at(0));
+			    		    	commonBS_y.push_back(KalmanRefMu(ttrks_BS.at(i), massLepton).at(1));
+			    		    	commonBS_z.push_back(KalmanRefMu(ttrks_BS.at(i), massLepton).at(2));
 			    		    }
 		    			}
     		    		mass2l_vtx_BS = Z_Vtx_BS.M();
@@ -2943,9 +2961,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 				
 						std::vector <reco::TransientTrack> ttrks = KVertex_recoLepton.refittedTracks();                  
 						TLorentzVector tmp;
-						tmp.SetPxPyPzE(KalmanRefMu(ttrks.at(0), 0.10565837).at(3), KalmanRefMu(ttrks.at(0), 0.10565837).at(4), KalmanRefMu(ttrks.at(0), 0.10565837).at(5), KalmanRefMu(ttrks.at(0), 0.10565837).at(6));
+						tmp.SetPxPyPzE(KalmanRefMu(ttrks.at(0), massLepton).at(3), KalmanRefMu(ttrks.at(0), massLepton).at(4), KalmanRefMu(ttrks.at(0), massLepton).at(5), KalmanRefMu(ttrks.at(0), massLepton).at(6));
 					    vtxRecoLep.push_back(tmp);		                
-				        tmp.SetPxPyPzE(KalmanRefMu(ttrks.at(1), 0.10565837).at(3), KalmanRefMu(ttrks.at(1), 0.10565837).at(4), KalmanRefMu(ttrks.at(1), 0.10565837).at(5), KalmanRefMu(ttrks.at(1), 0.10565837).at(6)); 
+				        tmp.SetPxPyPzE(KalmanRefMu(ttrks.at(1), massLepton).at(3), KalmanRefMu(ttrks.at(1), massLepton).at(4), KalmanRefMu(ttrks.at(1), massLepton).at(5), KalmanRefMu(ttrks.at(1), massLepton).at(6)); 
 					    vtxRecoLep.push_back(tmp);
 				    					    
 					    for(int i = 0; i < 2; i++){
@@ -2959,9 +2977,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 							Z_Vtx += vtxRecoLep.at(i);
 
 		    		    	if(!isCode4l){
-			    		    	commonPV_x.push_back(KalmanRefMu(ttrks.at(i), 0.10565837).at(0));
-			    		    	commonPV_y.push_back(KalmanRefMu(ttrks.at(i), 0.10565837).at(1));
-		    			    	commonPV_z.push_back(KalmanRefMu(ttrks.at(i), 0.10565837).at(2));
+			    		    	commonPV_x.push_back(KalmanRefMu(ttrks.at(i), massLepton).at(0));
+			    		    	commonPV_y.push_back(KalmanRefMu(ttrks.at(i), massLepton).at(1));
+		    			    	commonPV_z.push_back(KalmanRefMu(ttrks.at(i), massLepton).at(2));
 		    			    }
 	    				}
 
@@ -3014,14 +3032,15 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	    			    	commonPV_z.push_back(-999);
 	    			    }
     				}
-				}                                    
+				}  
+				                                  
                 // fill the vector<float>
                 lep_d0BS_float.assign(lep_d0BS.begin(),lep_d0BS.end());
                 lep_d0PV_float.assign(lep_d0PV.begin(),lep_d0PV.end());
 				
 				lep_numberOfValidPixelHits_float.assign(lep_numberOfValidPixelHits.begin(),lep_numberOfValidPixelHits.end());
 				lep_trackerLayersWithMeasurement_float.assign(lep_trackerLayersWithMeasurement.begin(),lep_trackerLayersWithMeasurement.end());
-                
+
                 vtxLep_BS_pt_float.assign(vtxLep_BS_pt.begin(),vtxLep_BS_pt.end());
                 vtxLep_BS_ptError_float.assign(vtxLep_BS_ptError.begin(),vtxLep_BS_ptError.end());
                 vtxLep_BS_eta_float.assign(vtxLep_BS_eta.begin(),vtxLep_BS_eta.end()); 
@@ -3158,11 +3177,11 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     GENjet_eta_float.clear(); GENjet_eta_float.assign(GENjet_eta.begin(),GENjet_eta.end());
     GENjet_phi_float.clear(); GENjet_phi_float.assign(GENjet_phi.begin(),GENjet_phi.end());
     GENjet_mass_float.clear(); GENjet_mass_float.assign(GENjet_mass.begin(),GENjet_mass.end());
-    
+ 
     if (isMC) passedEventsTree_All->Fill();
     
     if (nEventsTotal==1000.0) passedEventsTree_All->OptimizeBaskets();
-
+    
 }
 
 
@@ -3670,7 +3689,7 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
 
         std::vector<reco::TransientTrack> ttv;
         std::vector<float> mass;
-        
+                
         if ( abs(lep_id[lep_Hindex[0]])==13 && abs(lep_id[lep_Hindex[2]])==13 ) {
             RecoFourMuEvent = true;
             selectedMuons.push_back(recoMuons[lep_ptindex[lep_Hindex[0]]]);
@@ -3702,7 +3721,6 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
 			mass.push_back(recoMuons[lep_ptindex[lep_Hindex[1]]].mass());     
 			mass.push_back(recoElectrons[lep_ptindex[lep_Hindex[2]]].mass());     
 			mass.push_back(recoElectrons[lep_ptindex[lep_Hindex[3]]].mass());     
-
         }
         else if ( abs(lep_id[lep_Hindex[0]])==11 && abs(lep_id[lep_Hindex[2]])==13 ) {
             RecoTwoETwoMuEvent = true;
@@ -3720,7 +3738,6 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
 			mass.push_back(recoElectrons[lep_ptindex[lep_Hindex[1]]].mass());     
 			mass.push_back(recoMuons[lep_ptindex[lep_Hindex[2]]].mass());     
 			mass.push_back(recoMuons[lep_ptindex[lep_Hindex[3]]].mass());     
-
         }
         else if ( abs(lep_id[lep_Hindex[0]])==11 && abs(lep_id[lep_Hindex[2]])==11 ) {
             RecoFourEEvent = true;
@@ -3738,8 +3755,8 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
 				mass.push_back(recoElectrons[lep_ptindex[lep_Hindex[i]]].mass());     
         }
 
-		KalmanVertexFitter KVfitter(true);
 
+		KalmanVertexFitter KVfitter(true);
 		TransientVertex KVertex_BS = KVfitter.vertex(ttv, BS);
 		if(KVertex_BS.hasRefittedTracks()){
 		
@@ -3747,28 +3764,98 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
 
 			std::vector <reco::TransientTrack> ttrks_BS = KVertex_BS.refittedTracks();                  			
 			TLorentzVector tmp;
-			for(int i = 0; i < 4; i++){
-				reco::Track track_vtx_BS = ttrks_BS.at(i).track();
-// 				tmp.SetPxPyPzE( KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(3), KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(4), KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(5), KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(6));
-				tmp.SetPxPyPzE(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), KalmanEnergy(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), mass.at(i)));
-// 				std::cout<<fabs(ciao.px()-KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(3))/KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(3)<<"\t"<<fabs(ciao.py()-KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(4))/KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(4)<<"\t"<<fabs(ciao.pz()-KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(5))/KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(5)<<"\t"<<std::endl;
-// 				std::cout<<ciao.ptError()<<std::endl;
-				vtxLep_BS_ptError.push_back(track_vtx_BS.ptError());
+			if(RecoTwoMuTwoEEvent){
+				std::vector <reco::TransientTrack> ttrks_BS = KVertex_BS.refittedTracks();  
+				TLorentzVector tmp;
+				reco::Track track_vtx_BS = ttrks_BS.at(0).track();
+				tmp.SetPxPyPzE(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), KalmanEnergy(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), selectedMuons.at(0).mass()));
 			    vtxLep_BS.push_back(tmp);
+				vtxLep_BS_ptError.push_back(track_vtx_BS.ptError());
+				track_vtx_BS = ttrks_BS.at(1).track();
+				tmp.SetPxPyPzE(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), KalmanEnergy(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), selectedMuons.at(1).mass()));
+			    vtxLep_BS.push_back(tmp);
+				vtxLep_BS_ptError.push_back(track_vtx_BS.ptError());
+				tmp.SetPtEtaPhiM(selectedElectrons.at(0).pt(), selectedElectrons.at(0).eta(), selectedElectrons.at(0).phi(), selectedElectrons.at(0).mass());
+			    vtxLep_BS.push_back(tmp);
+				vtxLep_BS_ptError.push_back(lep_pterr[lep_Hindex[2]]);
+				tmp.SetPtEtaPhiM(selectedElectrons.at(1).pt(), selectedElectrons.at(1).eta(), selectedElectrons.at(1).phi(), selectedElectrons.at(1).mass());
+			    vtxLep_BS.push_back(tmp);
+				vtxLep_BS_ptError.push_back(lep_pterr[lep_Hindex[3]]);
+				for(int i = 0; i < 2; i ++){
+					commonBS_x.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(0));
+					commonBS_y.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(1));
+					commonBS_z.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(2));
+				}
+				for(int i = 0; i < 2; i ++){
+					commonBS_x.push_back(-999);
+					commonBS_y.push_back(-999);
+					commonBS_z.push_back(-999);
+				}
+
 			}
-		    
-			for(int i = 0; i < 4; i ++){
-				commonBS_x.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(0));
-				commonBS_y.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(1));
-				commonBS_z.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(2));
-			}        
+			else if(RecoTwoETwoMuEvent){
+				std::vector <reco::TransientTrack> ttrks_BS = KVertex_BS.refittedTracks();  
+				TLorentzVector tmp;
+				tmp.SetPtEtaPhiM(selectedElectrons.at(0).pt(), selectedElectrons.at(0).eta(), selectedElectrons.at(0).phi(), selectedElectrons.at(0).mass());
+			    vtxLep_BS.push_back(tmp);
+				vtxLep_BS_ptError.push_back(lep_pterr[lep_Hindex[0]]);
+				tmp.SetPtEtaPhiM(selectedElectrons.at(1).pt(), selectedElectrons.at(1).eta(), selectedElectrons.at(1).phi(), selectedElectrons.at(1).mass());
+			    vtxLep_BS.push_back(tmp);
+				vtxLep_BS_ptError.push_back(lep_pterr[lep_Hindex[1]]);							
+				reco::Track track_vtx_BS = ttrks_BS.at(2).track();
+				tmp.SetPxPyPzE(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), KalmanEnergy(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), selectedMuons.at(0).mass()));
+			    vtxLep_BS.push_back(tmp);
+				vtxLep_BS_ptError.push_back(track_vtx_BS.ptError());
+				track_vtx_BS = ttrks_BS.at(3).track();
+				tmp.SetPxPyPzE(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), KalmanEnergy(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), selectedMuons.at(1).mass()));
+			    vtxLep_BS.push_back(tmp);
+				vtxLep_BS_ptError.push_back(track_vtx_BS.ptError());
+				for(int i = 2; i < 4; i ++){
+					commonBS_x.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(0));
+					commonBS_y.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(1));
+					commonBS_z.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(2));
+				}
+				for(int i = 0; i < 2; i ++){
+					commonBS_x.push_back(-999);
+					commonBS_y.push_back(-999);
+					commonBS_z.push_back(-999);
+				}			
+			}
+			else if(RecoFourEEvent){
+				for(int i = 0; i < 4; i++){
+					tmp.SetPtEtaPhiM(selectedElectrons.at(i).pt(), selectedElectrons.at(i).eta(), selectedElectrons.at(i).phi(), selectedElectrons.at(i).mass());
+				    vtxLep_BS.push_back(tmp);
+					vtxLep_BS_ptError.push_back(lep_pterr[lep_Hindex[i]]);
+					commonBS_x.push_back(-999);
+					commonBS_y.push_back(-999);
+					commonBS_z.push_back(-999);
+				
+				}
+			}
+			else{
+				for(int i = 0; i < 4; i++){
+					reco::Track track_vtx_BS = ttrks_BS.at(i).track();
+// 					tmp.SetPxPyPzE( KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(3), KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(4), KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(5), KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(6));
+					tmp.SetPxPyPzE(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), KalmanEnergy(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), mass.at(i)));
+//	 				std::cout<<fabs(ciao.px()-KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(3))/KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(3)<<"\t"<<fabs(ciao.py()-KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(4))/KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(4)<<"\t"<<fabs(ciao.pz()-KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(5))/KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(5)<<"\t"<<std::endl;
+// 					std::cout<<ciao.ptError()<<std::endl;
+					vtxLep_BS_ptError.push_back(track_vtx_BS.ptError());
+				    vtxLep_BS.push_back(tmp);
+				}        
+				for(int i = 0; i < 4; i ++){
+					commonBS_x.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(0));
+					commonBS_y.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(1));
+					commonBS_z.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(2));
+				}
+			}		    
 		}
 		else{
 			massH_vtx_chi2_BS = -999;
 			TLorentzVector tmp;
 			tmp.SetPxPyPzE(-999,-999,-999,-999);
 			for(int i = 0; i < 4; i ++){
-				vtxLep_BS.push_back(tmp);		                
+				vtxLep_BS.push_back(tmp);
+				vtxLep_BS_ptError.push_back(-999);		                
 				commonBS_x.push_back(-999);
 				commonBS_y.push_back(-999);
 				commonBS_z.push_back(-999);
@@ -3804,12 +3891,23 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
 			TLorentzVector tmp;
 			tmp.SetPxPyPzE(-999,-999,-999,-999);
 			for(int i = 0; i < 4; i ++){
-				vtxLep.push_back(tmp);		                
+				vtxLep.push_back(tmp);	
+				vtxLep_ptError.push_back(-999);	                
 				commonPV_x.push_back(-999);
 				commonPV_x.push_back(-999);
 				commonPV_x.push_back(-999);
 			}        
-		}
+		}	
+		////////// test a 2 e a 4 per 2e2mu /////////
+
+		
+		
+		
+		
+		
+		
+		
+		
 		
 /*		
 		std::cout<<"Primary vertex: "<<std::endl;
@@ -4238,6 +4336,8 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("mass4lErr_vtx_BS",&mass4lErr_vtx_BS,"mass4lErr_vtx_BS/F");
     tree->Branch("mass4lREFIT_vtx_BS",&mass4lREFIT_vtx_BS,"mass4lREFIT_vtx_BS/F");
     tree->Branch("mass4lErrREFIT_vtx_BS",&mass4lErrREFIT_vtx_BS,"mass4lErrREFIT_vtx_BS/F");
+    tree->Branch("massZ1REFIT_vtx_BS",&massZ1REFIT_vtx_BS,"massZ1REFIT_vtx_BS/F");
+    tree->Branch("massZ2REFIT_vtx_BS",&massZ2REFIT_vtx_BS,"massZ2REFIT_vtx_BS/F");
 
     tree->Branch("mass4l_vtx",&mass4l_vtx,"mass4l_vtx/F");
     tree->Branch("mass4l_vtxFSR",&mass4l_vtxFSR,"mass4l_vtxFSR/F");
@@ -4521,6 +4621,7 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("p0plus_m4l", &p0plus_m4l, "p0plus_m4l/F");
     tree->Branch("bkg_m4l", &bkg_m4l, "bkg_m4l/F");
     tree->Branch("D_bkg_kin", &D_bkg_kin, "D_bkg_kin/F");
+    tree->Branch("D_bkg_kin_vtx_BS", &D_bkg_kin_vtx_BS, "D_bkg_kin_vtx_BS/F");
     tree->Branch("D_bkg", &D_bkg, "D_bkg/F");
     tree->Branch("Dgg10_VAMCFM", &Dgg10_VAMCFM, "Dgg10_VAMCFM/F");
     tree->Branch("D_g4", &D_g4, "D_g4/F");
@@ -5012,12 +5113,12 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
 
 //    	    std::cout<<fsrPhotons_pt.size()<<"\t"<<lep_phi.size()<<std::endl;
 
-   	    std::vector<uint> already_selected;
-   	    std::vector<uint> already_selected_BX;
+//    	    if(RecoTwoETwoMuEvent || RecoTwoMuTwoEEvent)
+// 	   	    std::cout<<" +++++++ "<<RecoFourMuEvent<<RecoFourEEvent<<RecoTwoETwoMuEvent<<RecoTwoMuTwoEEvent<<std::endl;   	   	    
 	    for(uint i = 0; i < 4; i ++){
 	    
-           //std::cout<<"Selected lepton = \t"<<lep_eta[lep_Hindex[i]]<<"\t"<<lep_phi[lep_Hindex[i]]<<"\t"<<lep_pt[lep_Hindex[i]]<<"\t"<<lep_id[lep_Hindex[i]]<<std::endl;                                                                                                                     
-           //std::cout<<"selected lepton FSR = \t"<<lepFSR_eta[lep_Hindex[i]]<<"\t"<<lepFSR_phi[lep_Hindex[i]]<<"\t"<<lepFSR_pt[lep_Hindex[i]]<<"\t"<<lep_id[lep_Hindex[i]]<<std::endl;                                                                                                        
+// 	           std::cout<<"Selected lepton = \t"<<lep_eta[lep_Hindex[i]]<<"\t"<<lep_phi[lep_Hindex[i]]<<"\t"<<lep_pt[lep_Hindex[i]]<<"\t"<<lep_id[lep_Hindex[i]]<<std::endl;                                                                                                                     
+//     	       std::cout<<"selected lepton FSR = \t"<<lepFSR_eta[lep_Hindex[i]]<<"\t"<<lepFSR_phi[lep_Hindex[i]]<<"\t"<<lepFSR_pt[lep_Hindex[i]]<<"\t"<<lep_id[lep_Hindex[i]]<<std::endl;                                                                                                        
 	    	
     	    int index = 999;
     	    TLorentzVector ph_tmp, lep_tmp, Lep_ph_tmp;
@@ -5063,7 +5164,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
 		    vtxLep_BS_eta.push_back(vtxLep_BS.at(i).Eta());
 		    vtxLep_BS_phi.push_back(vtxLep_BS.at(i).Phi());
 		    vtxLep_BS_mass.push_back(vtxLep_BS.at(i).M());
-			//std::cout<<vtxLep_BS.at(i).Eta()<<"\t"<<vtxLep_BS.at(i).Phi()<<"\t"<<vtxLep_BS.at(i).M()<<"\t"<<vtxLep_BS.at(i).Pt()<<std::endl;
+// 			std::cout<<vtxLep_BS.at(i).Eta()<<"\t"<<vtxLep_BS.at(i).Phi()<<"\t"<<vtxLep_BS.at(i).M()<<"\t"<<vtxLep_BS.at(i).Pt()<<std::endl;
             H_Vtx_BS += vtxLep_BS.at(i);  // without FSR
    	    
     	    lep_tmp.SetPtEtaPhiM(vtxLep_BS.at(i).Pt(), vtxLep_BS.at(i).Eta(), vtxLep_BS.at(i).Phi(), vtxLep_BS.at(i).M());
@@ -5079,7 +5180,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
    	    	    vtxLepFSR_BS_eta.push_back(Lep_ph_tmp.Eta());
    	    	    vtxLepFSR_BS_phi.push_back(Lep_ph_tmp.Phi());
    	    	    vtxLepFSR_BS_mass.push_back(Lep_ph_tmp.M());
-                //std::cout<<"VX+BX FSR\t="<<vtxLepFSR_BS_eta.at(i)<<"\t"<<vtxLepFSR_BS_phi.at(i)<<"\t"<<vtxLepFSR_BS_mass.at(i)<<"\t"<<vtxLepFSR_BS_pt.at(i)<<"\t"<<selectedFsrMap[index].Pt()<<std::endl;                                                                                     
+//                 std::cout<<"VX+BX FSR\t="<<vtxLepFSR_BS_eta.at(i)<<"\t"<<vtxLepFSR_BS_phi.at(i)<<"\t"<<vtxLepFSR_BS_mass.at(i)<<"\t"<<vtxLepFSR_BS_pt.at(i)<<"\t"<<selectedFsrMap[index].Pt()<<std::endl;                                                                                     
    	    	 }   	    		    	    	
    	    	else{
    	    	    Lep_ph_tmp = lep_tmp;
@@ -5087,7 +5188,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                 vtxLepFSR_BS_eta.push_back(Lep_ph_tmp.Eta());
                 vtxLepFSR_BS_phi.push_back(Lep_ph_tmp.Phi());
                 vtxLepFSR_BS_mass.push_back(Lep_ph_tmp.M());
-                //std::cout<<"VX+BX FSR\t="<<vtxLepFSR_BS_eta.at(i)<<"\t"<<vtxLepFSR_BS_phi.at(i)<<"\t"<<vtxLepFSR_BS_mass.at(i)<<"\t"<<vtxLepFSR_BS_pt.at(i)<<std::endl;                                                                                                                   
+//                 std::cout<<"VX+BX FSR\t="<<vtxLepFSR_BS_eta.at(i)<<"\t"<<vtxLepFSR_BS_phi.at(i)<<"\t"<<vtxLepFSR_BS_mass.at(i)<<"\t"<<vtxLepFSR_BS_pt.at(i)<<std::endl;                                                                                                                   
    	    	 }
     
 			H_VtxFSR_BS += Lep_ph_tmp; // with FSR
@@ -5097,6 +5198,9 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
    	    mass4l_vtx_BS = H_Vtx_BS.M(); // without FSR
    	    mass4l_vtxFSR = H_VtxFSR.M(); 
    	    mass4l_vtxFSR_BS = H_VtxFSR_BS.M();    	
+
+// 	    std::cout<<" ------------ "<<std::endl;
+
     }
 
 
