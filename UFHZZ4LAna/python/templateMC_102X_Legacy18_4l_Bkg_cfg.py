@@ -23,10 +23,17 @@ process.Timing = cms.Service("Timing",
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
- '/store/mc/RunIIAutumn18MiniAOD/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/270000/E5E2F122-AA57-5248-8177-594EC87DD494.root',
-  '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/19B6ADC2-4F62-AA4D-9488-F53CE2936856.root',
- '/store/mc/RunIIAutumn18MiniAOD/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/90000/96A5F68D-DCB8-3D4E-8615-919D86D1534F.root',
-  
+        '/store/mc/RunIIAutumn18MiniAOD/GluGluToContinToZZTo2e2tau_13TeV_MCFM701_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v3/260000/F82D86C0-17CB-164F-A1A5-2BF309636E74.root'
+        
+        
+        #'/store/mc/RunIIAutumn18MiniAOD/GluGluToContinToZZTo2e2mu_13TeV_MCFM701_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v3/130000/8A25152B-D130-7141-8090-06294F2560D9.root',
+        #'/store/mc/RunIIAutumn18MiniAOD/GluGluToContinToZZTo2e2mu_13TeV_MCFM701_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v3/130000/82DE55FB-7A5A-6B46-B9C5-60CD92DDC3C9.root',
+        #'/store/mc/RunIIAutumn18MiniAOD/GluGluToContinToZZTo2e2mu_13TeV_MCFM701_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v3/130000/7F87014D-6536-5A44-A258-325987436451.root',
+        #'/store/mc/RunIIAutumn18MiniAOD/GluGluToContinToZZTo2e2mu_13TeV_MCFM701_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v3/130000/3F8C3110-01ED-7144-BBBE-46780BEC8D95.root',
+        #'/store/mc/RunIIAutumn18MiniAOD/GluGluToContinToZZTo2e2mu_13TeV_MCFM701_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v3/130000/783D58CF-E335-E44E-AFEA-48E794867E95.root',
+        #'/store/mc/RunIIAutumn18MiniAOD/GluGluToContinToZZTo2e2mu_13TeV_MCFM701_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v3/130000/4BCB8F25-7CCA-5D4C-979D-CD5F3546E8AB.root',
+        #'/store/mc/RunIIAutumn18MiniAOD/GluGluToContinToZZTo2e2mu_13TeV_MCFM701_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v3/130000/35295C52-4A47-CF4B-AA02-5329753FCE3B.root'
+ 
  
  
  
@@ -46,7 +53,7 @@ process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             )
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("DUMMYFILENAME_2018.root")
+                                   fileName = cms.string("DUMMYFILENAME.root")
 )
 
 # clean muons by segments 
@@ -161,7 +168,7 @@ era = "Autumn18_V19_MC"
 # for HPC
 dBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 # for crab
-#dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
+dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 process.jec = cms.ESSource("PoolDBESSource",
                            CondDBSetup,
                            connect = cms.string("sqlite_file:"+dBFile),
@@ -229,7 +236,7 @@ process.load("JetMETCorrections.Modules.JetResolutionESProducer_cfi")
 # for hpc
 dBJERFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/Autumn18_V7_MC.db"   
 # for crab
-#dBJERFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/Autumn18_V7_MC.db"
+dBJERFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/Autumn18_V7_MC.db"
 process.jer = cms.ESSource("PoolDBESSource",
         CondDBSetup,
         connect = cms.string("sqlite_file:"+dBJERFile),
@@ -260,7 +267,7 @@ qgDatabaseVersion = 'cmssw8020_v2'
 # for hpc
 QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 # for crab
-#QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
+QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 process.QGPoolDBESSource = cms.ESSource("PoolDBESSource",
       DBParameters = cms.PSet(messageLevel = cms.untracked.int32(1)),
       timetype = cms.string('runnumber'),

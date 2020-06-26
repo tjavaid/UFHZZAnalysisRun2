@@ -257,6 +257,9 @@ private:
     
     float PV_x, PV_y, PV_z; 
     float BS_x, BS_y, BS_z; 
+    float BS_xErr, BS_yErr, BS_zErr; 
+    float BeamWidth_x, BeamWidth_y;
+    float BeamWidth_xErr, BeamWidth_yErr;
 
 
     // Event Weights
@@ -1666,7 +1669,23 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         BS_x =  BS.position().X();
         BS_y =  BS.position().Y();
         BS_z =  BS.position().Z();
+        BS_xErr =  BS.x0Error();
+        BS_yErr =  BS.y0Error();
+        BS_zErr =  BS.z0Error();
+
+		BeamWidth_x = BS.BeamWidthX();
+		BeamWidth_y = BS.BeamWidthY();
+		BeamWidth_xErr = BS.BeamWidthXError();
+		BeamWidth_yErr = BS.BeamWidthYError();
         
+//         std::cout<<BS.x0()<<"\t"<<BS.x0Error()<<std::endl;
+//         std::cout<<BS.y0()<<"\t"<<BS.y0Error()<<std::endl;
+//         std::cout<<BS.z0()<<"\t"<<BS.z0Error()<<std::endl;
+// 
+//         std::cout<<BS.BeamWidthX()<<"\t"<<BS.BeamWidthXError()<<std::endl;
+//         std::cout<<BS.BeamWidthY()<<"\t"<<BS.BeamWidthYError()<<std::endl;
+// 		std::cout<< " ---- "<<std::endl;             
+
         //N Vertex 
         if (verbose) {cout<<"fill nvtx histogram"<<endl;}
         nVtx = vertex->size();
@@ -4130,6 +4149,13 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("BS_x", &BS_x, "BS_x/F");
     tree->Branch("BS_y", &BS_y, "BS_y/F");
     tree->Branch("BS_z", &BS_z, "BS_z/F");
+    tree->Branch("BS_xErr", &BS_xErr, "BS_xErr/F");
+    tree->Branch("BS_yErr", &BS_yErr, "BS_yErr/F");
+    tree->Branch("BS_zErr", &BS_zErr, "BS_zErr/F");
+    tree->Branch("BeamWidth_x", &BeamWidth_x, "BeamWidth_x/F");
+    tree->Branch("BeamWidth_y", &BeamWidth_y, "BeamWidth_y/F");
+    tree->Branch("BeamWidth_xErr", &BeamWidth_xErr, "BeamWidth_xErr/F");
+    tree->Branch("BeamWidth_yErr", &BeamWidth_yErr, "BeamWidth_yErr/F");
     tree->Branch("finalState",&finalState,"finalState/I");
     tree->Branch("triggersPassed",&triggersPassed);
     tree->Branch("passedTrig",&passedTrig,"passedTrig/O");
@@ -5297,7 +5323,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
         }
 
         
-        if (genPart->pdgId()==23 && (genPart->status()>=20 && genPart->status()<30) ) {
+        if ((genPart->pdgId()==23 || genPart->pdgId()==443 || genPart->pdgId()==553) && (genPart->status()>=20 && genPart->status()<30) ) {
             const reco::Candidate *Zdau0=genPart->daughter(0);
             int ZdauId = fabs(Zdau0->pdgId());
             if (fabs(Zdau0->pdgId())==23) {

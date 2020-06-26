@@ -4,9 +4,9 @@ HZZ Analyzer for CMS Run2
 
 To install:
 
-cmsrel CMSSW_10_2_15
+cmsrel CMSSW_10_2_1
 
-cd CMSSW_10_2_15/src
+cd CMSSW_10_2_18/src
 
 cmsenv
 

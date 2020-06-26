@@ -22,12 +22,16 @@ process.Timing = cms.Service("Timing",
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
-myfilelist = cms.untracked.vstring('/store/data/Run2017B/SingleMuon/MINIAOD/31Mar2018-v1/90000/FEC62083-1E39-E811-B2A1-0CC47A4D75F8.root'
+myfilelist = cms.untracked.vstring(
+#'/store/data/Run2017E/SingleElectron/MINIAOD/31Mar2018-v1/80000/A0D6B0A3-5937-E811-AC52-0CC47AA53D86.root',
+'/store/data/Run2017E/SingleElectron/MINIAOD/31Mar2018-v1/90000/06D3E100-6E37-E811-A4B0-0CC47AA53D5A.root',
+#'/store/data/Run2017B/SingleMuon/MINIAOD/31Mar2018-v1/90000/FEC62083-1E39-E811-B2A1-0CC47A4D75F8.root'
         #DUMMYFILELIST
         )
 
 process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
+                            eventsToProcess = cms.untracked.VEventRange('304062:1844:2257734751')
                             )
 
 process.TFileService = cms.Service("TFileService",
@@ -112,7 +116,7 @@ era = "Fall17_17Nov2017_V32_94X_DATA"
 # for HPC
 dBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 # for crab
-dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
+#dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 process.jec = cms.ESSource("PoolDBESSource",
                            CondDBSetup,
                            connect = cms.string("sqlite_file:"+dBFile),
@@ -144,8 +148,8 @@ process.jetCorrFactors = process.updatedPatJetCorrFactors.clone(
     src = cms.InputTag("slimmedJets"),
     levels = ['L1FastJet', 
               'L2Relative', 
-              'L3Absolute'
-              #'L2L3Residual'
+              'L3Absolute',
+              'L2L3Residual'
               ],
     payload = 'AK4PFchs' ) 
 
@@ -153,8 +157,8 @@ process.AK8PFJetCorrFactors = process.updatedPatJetCorrFactors.clone(
     src = cms.InputTag("slimmedJetsAK8"),
     levels = ['L1FastJet',
               'L2Relative',
-              'L3Absolute'
-              #'L2L3Residual'
+              'L3Absolute',
+              'L2L3Residual'
               ],
     payload = 'AK8PFchs' )
 
@@ -217,7 +221,7 @@ qgDatabaseVersion = 'cmssw8020_v2'
 # for hpc
 QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 # for crab
-QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
+#QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 process.QGPoolDBESSource = cms.ESSource("PoolDBESSource",
       DBParameters = cms.PSet(messageLevel = cms.untracked.int32(1)),
       timetype = cms.string('runnumber'),
@@ -242,7 +246,7 @@ process.corrJets = cms.EDProducer ( "CorrJetsProducer",
                                     vertex  = cms.InputTag( "offlineSlimmedPrimaryVertices" ), 
                                     rho     = cms.InputTag( "fixedGridRhoFastjetAll"   ),
                                     payload = cms.string  ( "AK8PFchs" ),
-                                    isData  = cms.bool    (  False ),
+                                    isData  = cms.bool    (  True ),
                                     year = cms.untracked.int32(2017))
 
 
