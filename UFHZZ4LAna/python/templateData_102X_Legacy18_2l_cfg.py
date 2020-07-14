@@ -12,8 +12,9 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load('Configuration.StandardSequences.Services_cff')
-#process.GlobalTag.globaltag='102X_dataRun2_Prompt_v11'
-process.GlobalTag.globaltag='102X_dataRun2_v4'
+
+process.GlobalTag.globaltag='102X_dataRun2_v13'
+#process.GlobalTag.globaltag='102X_dataRun2_Prompt_v16'
 
 process.Timing = cms.Service("Timing",
                              summaryOnly = cms.untracked.bool(True)
@@ -23,10 +24,11 @@ process.Timing = cms.Service("Timing",
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
-  '/store/data/Run2018A/SingleMuon/MINIAOD/17Sep2018-v2/60000/FF5D961D-4587-494F-B2D0-D1FE3A025B83.root',
-        '/store/data/Run2018A/SingleMuon/MINIAOD/17Sep2018-v2/90000/6FEE6A9B-E03C-A14F-AD01-914C76D0A721.root',
-        #DUMMYFILELIST
-        )
+
+        '/store/data/Run2018A/SingleMuon/MINIAOD/17Sep2018-v2/60000/FF5D961D-4587-494F-B2D0-D1FE3A025B83.root',
+'/store/data/Run2018A/SingleMuon/MINIAOD/17Sep2018-v2/90000/6FEE6A9B-E03C-A14F-AD01-914C76D0A721.root',
+#DUMMYFILELIST
+)
 
 process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
@@ -112,7 +114,8 @@ import os
 # Jet Energy Corrections
 from CondCore.DBCommon.CondDBSetup_cfi import *
 #era = "Autumn18_V3_MC"
-era = "Autumn18_RunABCD_V8_DATA"
+#era = "Autumn18_RunABCD_V8_DATA"
+era = "Autumn18_RunABCD_V19_DATA"
 # for HPC
 dBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 # for crab
@@ -148,8 +151,8 @@ process.jetCorrFactors = process.updatedPatJetCorrFactors.clone(
     src = cms.InputTag("slimmedJets"),
     levels = ['L1FastJet', 
               'L2Relative', 
-              'L3Absolute'
-              #'L2L3Residual'
+              'L3Absolute',
+              'L2L3Residual'
               ],
     payload = 'AK4PFchs' ) 
 
@@ -157,8 +160,8 @@ process.AK8PFJetCorrFactors = process.updatedPatJetCorrFactors.clone(
     src = cms.InputTag("slimmedJetsAK8"),
     levels = ['L1FastJet',
               'L2Relative',
-              'L3Absolute'
-              #'L2L3Residual'
+              'L3Absolute',
+              'L2L3Residual'
               ],
     payload = 'AK8PFchs' )
 
@@ -246,7 +249,7 @@ process.corrJets = cms.EDProducer ( "CorrJetsProducer",
                                     vertex  = cms.InputTag( "offlineSlimmedPrimaryVertices" ), 
                                     rho     = cms.InputTag( "fixedGridRhoFastjetAll"   ),
                                     payload = cms.string  ( "AK8PFchs" ),
-                                    isData  = cms.bool    (  False ),
+                                    isData  = cms.bool    (  True ),
                                     year = cms.untracked.int32(2018))
 
 
@@ -297,7 +300,7 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               isMC         = cms.untracked.bool(False),
                               isSignal     = cms.untracked.bool(False),
                               mH           = cms.untracked.double(125.0),
-                              CrossSection = cms.untracked.double(1),#(DUMMYCROSSSECTION),
+                              CrossSection = cms.untracked.double(1),#DUMMYCROSSSECTION),
                               FilterEff    = cms.untracked.double(1),
                               weightEvents = cms.untracked.bool(False),
                               elRhoSrc     = cms.untracked.InputTag("fixedGridRhoFastjetAll"),
@@ -336,7 +339,7 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               ),
                               verbose = cms.untracked.bool(False),              
                               skimLooseLeptons = cms.untracked.int32(2),              
-                              skimTightLeptons = cms.untracked.int32(2),
+                              skimTightLeptons = cms.untracked.int32(2),              
                               #bestCandMela = cms.untracked.bool(False),
                               year = cms.untracked.int32(2018),
                               isCode4l = cms.untracked.bool(False),
