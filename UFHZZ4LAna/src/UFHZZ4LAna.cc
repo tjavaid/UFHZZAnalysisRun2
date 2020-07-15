@@ -355,7 +355,7 @@ private:
     float mass2l_vtx;
 	float massZ_vtx_chi2;
 	float massZ_vtx_chi2_BS;
-	vector<float> vtxRecoLep_BS_pt; vector<float> vtxRecoLep_BS_ptError; vector<float> vtxRecoLep_BS_eta; 	vector<float> vtxRecoLep_BS_phi; 	vector<float> vtxRecoLep_BS_mass;
+	vector<float> vtxRecoLep_BS_pt; vector<float> vtxRecoLep_BS_ptError; vector<float> vtxRecoLep_BS_eta; 	vector<float> vtxRecoLep_BS_phi; 	vector<float> vtxRecoLep_BS_mass; vector<float> vtxRecoLep_BS_d0;
 	vector<float> vtxRecoLep_pt; 	vector<float> vtxRecoLep_ptError; vector<float> vtxRecoLep_eta; 	vector<float> vtxRecoLep_phi; 	vector<float> vtxRecoLep_mass;
     vector<double> Z_pt; vector<double> Z_eta; vector<double> Z_phi; vector<double> Z_mass;
     vector<double> Z_noFSR_pt; vector<double> Z_noFSR_eta; vector<double> Z_noFSR_phi; vector<double> Z_noFSR_mass;
@@ -563,7 +563,7 @@ private:
 	vector<double> commonPV_x_float;	vector<double> commonPV_y_float; 	vector<double> commonPV_z_float;
 	vector<double> commonBS_x_float;	vector<double> commonBS_y_float; 	vector<double> commonBS_z_float;
 	
-	vector<float> vtxRecoLep_BS_pt_float; vector<float> vtxRecoLep_BS_ptError_float;	vector<float> vtxRecoLep_BS_eta_float; 	vector<float> vtxRecoLep_BS_phi_float; 	vector<float> vtxRecoLep_BS_mass_float;
+	vector<float> vtxRecoLep_BS_pt_float; vector<float> vtxRecoLep_BS_ptError_float;	vector<float> vtxRecoLep_BS_eta_float; 	vector<float> vtxRecoLep_BS_phi_float; 	vector<float> vtxRecoLep_BS_mass_float; vector<float> vtxRecoLep_BS_d0_float;
 	vector<float> vtxRecoLep_pt_float; 	vector<float> vtxRecoLep_ptError_float; 	vector<float> vtxRecoLep_eta_float; 	vector<float> vtxRecoLep_phi_float; 	vector<float> vtxRecoLep_mass_float;
 
 
@@ -1184,6 +1184,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	vtxRecoLep_BS_eta.clear();
 	vtxRecoLep_BS_phi.clear();
 	vtxRecoLep_BS_mass.clear();
+	vtxRecoLep_BS_d0.clear();
 
 
     //tau variables
@@ -1465,6 +1466,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	vtxRecoLep_BS_eta_float.clear(); 	 
 	vtxRecoLep_BS_phi_float.clear(); 	 
 	vtxRecoLep_BS_mass_float.clear();
+	vtxRecoLep_BS_d0_float.clear();
 	vtxRecoLep_pt_float.clear(); 	 
 	vtxRecoLep_ptError_float.clear(); 	 
 	vtxRecoLep_eta_float.clear(); 	 
@@ -2948,6 +2950,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 						    vtxRecoLep_BS_eta.push_back(vtxRecoLep_BS.at(i).Eta());
 						    vtxRecoLep_BS_phi.push_back(vtxRecoLep_BS.at(i).Phi());
 						    vtxRecoLep_BS_mass.push_back(vtxRecoLep_BS.at(i).M());
+						    vtxRecoLep_BS_d0.push_back(track_vtx.dxy(BS.position()));
 							Z_Vtx_BS += vtxRecoLep_BS.at(i);
 		    	    				    	
 		    		    	if(!isCode4l){
@@ -2966,6 +2969,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 						    vtxRecoLep_BS_eta.push_back(-450);
 						    vtxRecoLep_BS_phi.push_back(-450);
 						    vtxRecoLep_BS_mass.push_back(-450);
+						    vtxRecoLep_BS_d0.push_back(-450);
 					    	massZ_vtx_chi2_BS = -450;
 		    	    		mass2l_vtx_BS = -450;
 
@@ -3042,6 +3046,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 					    vtxRecoLep_BS_eta.push_back(-999);
 					    vtxRecoLep_BS_phi.push_back(-999);
 					    vtxRecoLep_BS_mass.push_back(-999);
+					    vtxRecoLep_BS_d0.push_back(-999);
 					    massZ_vtx_chi2_BS = -999;
 	    		    	mass2l_vtx_BS = -999;	
 	    		    	
@@ -3090,6 +3095,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 vtxRecoLep_BS_eta_float.assign(vtxRecoLep_BS_eta.begin(),vtxRecoLep_BS_eta.end()); 
                 vtxRecoLep_BS_phi_float.assign(vtxRecoLep_BS_phi.begin(),vtxRecoLep_BS_phi.end()); 
                 vtxRecoLep_BS_mass_float.assign(vtxRecoLep_BS_mass.begin(),vtxRecoLep_BS_mass.end()); 
+                vtxRecoLep_BS_d0_float.assign(vtxRecoLep_BS_d0.begin(),vtxRecoLep_BS_d0.end()); 
                 vtxRecoLep_pt_float.assign(vtxRecoLep_pt.begin(),vtxRecoLep_pt.end());
                 vtxRecoLep_ptError_float.assign(vtxRecoLep_ptError.begin(),vtxRecoLep_ptError.end());
                 vtxRecoLep_eta_float.assign(vtxRecoLep_eta.begin(),vtxRecoLep_eta.end()); 
@@ -4242,6 +4248,7 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("vtxRecoLep_BS_eta",&vtxRecoLep_BS_eta_float);
     tree->Branch("vtxRecoLep_BS_phi",&vtxRecoLep_BS_phi_float);
     tree->Branch("vtxRecoLep_BS_mass",&vtxRecoLep_BS_mass_float);
+    tree->Branch("vtxRecoLep_BS_d0",&vtxRecoLep_BS_d0_float);
     tree->Branch("vtxRecoLep_pt",&vtxRecoLep_pt_float);
     tree->Branch("vtxRecoLep_ptError",&vtxRecoLep_ptError_float);
     tree->Branch("vtxRecoLep_eta",&vtxRecoLep_eta_float);
