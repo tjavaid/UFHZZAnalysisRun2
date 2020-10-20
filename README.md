@@ -14,9 +14,9 @@ git cms-init
 
 git clone -b tmp_Ferrico https://github.com/VBF-HZZ/UFHZZAnalysisRun2.git
 
-cp UFHZZAnalysisRun2/install.sh .
+cp UFHZZAnalysisRun2/install*.sh .
 
-./install.sh
+./install_2.sh
 
 cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2018_Legacy_cfg.py
 cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2017_Legacy_cfg.py
