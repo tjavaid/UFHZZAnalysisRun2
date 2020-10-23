@@ -4,15 +4,17 @@ HZZ Analyzer for CMS Run2
 
 To install:
 
-cmsrel CMSSW_10_2_18
+export SCRAM_ARCH=slc7_amd64_gcc700
 
-cd CMSSW_10_2_18/src
+cmsrel CMSSW_10_6_12
+
+cd CMSSW_10_6_12/src
 
 cmsenv
 
 git cms-init
 
-git clone -b tmp_Ferrico https://github.com/VBF-HZZ/UFHZZAnalysisRun2.git
+git clone -b 10_6_12 https://ferrico@github.com/VBF-HZZ/UFHZZAnalysisRun2.git
 
 cp UFHZZAnalysisRun2/install*.sh .
 
