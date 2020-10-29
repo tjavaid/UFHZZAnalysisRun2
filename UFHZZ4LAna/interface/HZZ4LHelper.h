@@ -123,7 +123,7 @@ public:
     bool passTight_Id_SUS(pat::Muon muon, const reco::Vertex *&vertex);
     //bool passTight_BDT_Id(pat::Electron electron, float mvavalue, int year);
     bool passTight_BDT_Id(pat::Electron electron, int year);
-    bool passTight_Id_SUS(pat::Electron electron, std::string elecID, const reco::Vertex *&vertex, const reco::BeamSpot BS, edm::Handle< std::vector<reco::Conversion> > theConversions, int year);
+    bool passTight_Id_SUS(pat::Electron electron, std::string elecID, const reco::Vertex *&vertex, const reco::BeamSpot BS, std::vector<reco::Conversion> theConversions, int year);
     
     bool isTrackerHighPt(pat::Muon muon, const reco::Vertex *&vertex);
     //float get_Muon_MVA_Value(pat::Muon muon, edm::Handle<reco::VertexCollection> vertices, double rho, int year, const reco::Vertex *&vertex);
@@ -772,7 +772,7 @@ bool HZZ4LHelper::passTight_Id_SUS(pat::Muon muon, const reco::Vertex *&vertex) 
     return true;
 }
 
-bool HZZ4LHelper::passTight_Id_SUS(pat::Electron electron, std::string elecID, const reco::Vertex *&vertex, const reco::BeamSpot BS, edm::Handle< std::vector<reco::Conversion> > theConversions, int year) {
+bool HZZ4LHelper::passTight_Id_SUS(pat::Electron electron, std::string elecID, const reco::Vertex *&vertex, const reco::BeamSpot BS, std::vector<reco::Conversion>  theConversions, int year) {
 
     double dxyCut = 0.05;
     double dzCut = 0.1;
