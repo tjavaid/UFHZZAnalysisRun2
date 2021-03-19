@@ -139,6 +139,8 @@ public:
     float dataMCErr(pat::Electron electron, TH2F* hElecScaleFac, TH2F* hElecScalFacUnc_Cracks);
     float dataMC(pat::Muon muon, TH2F* hMuScaleFac);
     float dataMCErr(pat::Muon muon, TH2F* hMuScaleFac);
+    float dataMC(double pt, float eta, TH2F* hMuScaleFac);
+	float dataMCErr(double pt, float eta, TH2F* hMuScaleFac);
     
     float get_bTagEffi(float _pt_jet, float _eta_jet, TH2F* hbTagEffi);
     
@@ -722,7 +724,7 @@ bool HZZ4LHelper::passTight_BDT_Id(pat::Electron electron, int year) {
         }
         mvaVal = electron.userFloat("ElectronMVAEstimatorRun2Fall17IsoV2Values");
     }
-    if(year==2016)
+    if(year==20165 || year==20160)  //post and pre VFP
     {
         if(electron.pt()<=10){
             if(fSCeta < 0.8) cutVal = 0.95034841889;
@@ -811,7 +813,7 @@ bool HZZ4LHelper::passTight_Id_SUS(pat::Electron electron, std::string elecID, c
         }
         mvaVal = electron.userFloat("ElectronMVAEstimatorRun2Fall17IsoV2Values");
     }
-    if(year==2016)
+    if(year==20165 || year==20160)  //post and pre VFP
     {
         if(electron.pt()<=10){
             if(fSCeta < 0.8) cutVal = 0.95034841889;
@@ -1848,6 +1850,21 @@ float HZZ4LHelper::dataMCErr(pat::Muon muon, TH2F* hMuScaleFacUnc)
     float eta = muon.eta();
     return hMuScaleFacUnc->GetBinContent(hMuScaleFacUnc->FindBin(eta,pt)); 
 }
+
+float HZZ4LHelper::dataMC(double pt, float eta, TH2F* hMuScaleFac)
+{
+    float PT = std::min(pt,199.0);
+    return hMuScaleFac->GetBinContent(hMuScaleFac->FindBin(eta,PT)); 
+}
+
+float HZZ4LHelper::dataMCErr(double pt, float eta, TH2F* hMuScaleFacUnc)
+{
+    float PT = std::min(pt,199.0);
+    return hMuScaleFacUnc->GetBinContent(hMuScaleFacUnc->FindBin(eta,PT)); 
+}
+
+
+
 
 float HZZ4LHelper::get_bTagEffi(float _pt_jet, float _eta_jet, TH2F* hbTagEffi)
 {

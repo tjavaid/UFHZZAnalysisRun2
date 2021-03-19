@@ -168,6 +168,8 @@
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
 #include "TrackingTools/TransientTrack/interface/TransientTrack.h"
+// Rochester Corrections
+#include "UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/src/RoccoR.cc"
 
 #include "RecoVertex/KalmanVertexFit/interface/SingleTrackVertexConstraint.h"
 
@@ -196,6 +198,9 @@ private:
   
     void findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vector< pat::Electron > &selectedElectrons, const edm::Event& iEvent, const edm::EventSetup& iSetup);
     void findZ1LCandidate(const edm::Event& iEvent);
+    
+   	RoccoR  *calibrator;
+	float ApplyRoccoR(int Y, bool isMC, int charge, float pt, float eta, float phi, float genPt, float nLayers);
 
     //Helper Class
     HZZ4LHelper helper;
@@ -274,6 +279,9 @@ private:
     int posNNPDF;
     float pdfRMSup, pdfRMSdown, pdfENVup, pdfENVdown;
     // lepton variables
+    vector<double> lep_pt_FromMuonBestTrack, lep_eta_FromMuonBestTrack, lep_phi_FromMuonBestTrack;
+    vector<double> lep_position_x, lep_position_y, lep_position_z;
+    vector<double> lep_pt_genFromReco;
     vector<double> lep_pt; vector<double> lep_pterr; vector<double> lep_pterrold; 
     vector<double> lep_p; vector<double> lep_ecalEnergy; vector<int> lep_isEB; vector<int> lep_isEE;
     vector<double> lep_eta; vector<double> lep_phi; vector<double> lep_mass;
@@ -302,6 +310,7 @@ private:
 
     vector<float> lep_d0PV;
     vector<float> lep_dataMC; vector<float> lep_dataMCErr;
+    vector<float> dataMC_VxBS; vector<float> dataMCErr_VxBS;
     vector<int> lep_genindex; //position of lepton in GENlep_p4 (if gen matched, -1 if not gen matched)
     vector<int> lep_matchedR03_PdgId, lep_matchedR03_MomId, lep_matchedR03_MomMomId; // gen matching even if not in GENlep_p4
     vector<int> lep_id;
@@ -331,7 +340,7 @@ private:
 	vector<TLorentzVector> vtxRecoLep;
 
 	vector<double> singleBS_Lep_pt; 	vector<double> singleBS_Lep_ptError; 	vector<double> singleBS_Lep_eta; 	vector<double> singleBS_Lep_phi; 	vector<double> singleBS_Lep_mass; vector<double> singleBS_Lep_d0;
-	vector<double> vtxLep_BS_pt; 	vector<double> vtxLep_BS_ptError; 	vector<double> vtxLep_BS_eta; 	vector<double> vtxLep_BS_phi; 	vector<double> vtxLep_BS_mass; vector<double> vtxLep_BS_d0;
+	vector<double> vtxLep_BS_pt_NoRoch;	vector<double> vtxLep_BS_pt; 	vector<double> vtxLep_BS_ptError; 	vector<double> vtxLep_BS_eta; 	vector<double> vtxLep_BS_phi; 	vector<double> vtxLep_BS_mass; vector<double> vtxLep_BS_d0;
 	vector<double> vtxLep_pt; 	vector<double> vtxLep_ptError;	vector<double> vtxLep_eta; 	vector<double> vtxLep_phi; 	vector<double> vtxLep_mass;
 	vector<double> singleBS_FSR_Lep_pt; 	vector<double> singleBS_FSR_Lep_eta; 	vector<double> singleBS_FSR_Lep_phi; 	vector<double> singleBS_FSR_Lep_mass;
 	vector<double> vtxLepFSR_BS_pt; 	vector<double> vtxLepFSR_BS_eta; 	vector<double> vtxLepFSR_BS_phi; 	vector<double> vtxLepFSR_BS_mass;
@@ -566,7 +575,7 @@ private:
 	vector<float> lep_trackerLayersWithMeasurement_float;
 
 	vector<double> singleBS_Lep_pt_float; 	vector<double> singleBS_Lep_ptError_float; 	vector<double> singleBS_Lep_eta_float; 	vector<double> singleBS_Lep_phi_float; 	vector<double> singleBS_Lep_mass_float; vector<double> singleBS_Lep_d0_float;
-	vector<double> vtxLep_BS_pt_float; 	vector<double> vtxLep_BS_ptError_float; 	vector<double> vtxLep_BS_eta_float; 	vector<double> vtxLep_BS_phi_float; 	vector<double> vtxLep_BS_mass_float; vector<double> vtxLep_BS_d0_float;
+	vector<double> vtxLep_BS_pt_NoRoch_float; 		vector<double> vtxLep_BS_pt_float; 	vector<double> vtxLep_BS_ptError_float; 	vector<double> vtxLep_BS_eta_float; 	vector<double> vtxLep_BS_phi_float; 	vector<double> vtxLep_BS_mass_float; vector<double> vtxLep_BS_d0_float;
 	vector<double> vtxLep_pt_float; 	vector<double> vtxLep_ptError_float; 	vector<double> vtxLep_eta_float; 	vector<double> vtxLep_phi_float; 	vector<double> vtxLep_mass_float;
 	vector<double> singleBS_FSR_Lep_pt_float; 	vector<double> singleBS_FSR_Lep_eta_float; 	vector<double> singleBS_FSR_Lep_phi_float; 	vector<double> singleBS_FSR_Lep_mass_float;
 	vector<double> vtxLepFSR_BS_pt_float; 	vector<double> vtxLepFSR_BS_eta_float; 	vector<double> vtxLepFSR_BS_phi_float; 	vector<double> vtxLepFSR_BS_mass_float;
@@ -579,6 +588,9 @@ private:
 	vector<float> vtxRecoLep_pt_float; 	vector<float> vtxRecoLep_ptError_float; 	vector<float> vtxRecoLep_eta_float; 	vector<float> vtxRecoLep_phi_float; 	vector<float> vtxRecoLep_mass_float;
 
 
+	vector<float> lep_pt_FromMuonBestTrack_float, lep_eta_FromMuonBestTrack_float, lep_phi_FromMuonBestTrack_float;
+	vector<float> lep_position_x_float, lep_position_y_float, lep_position_z_float;
+	vector<float> lep_pt_genFromReco_float;
     vector<double> lep_pt_UnS_float, lep_pterrold_UnS_float;
     vector<float> lep_errPre_Scale_float;
     vector<float> lep_errPost_Scale_float;
@@ -801,7 +813,13 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
     skimLooseLeptons(iConfig.getUntrackedParameter<int>("skimLooseLeptons",2)),    
     skimTightLeptons(iConfig.getUntrackedParameter<int>("skimTightLeptons",2)),    
     verbose(iConfig.getUntrackedParameter<bool>("verbose",false)),
-    year(iConfig.getUntrackedParameter<int>("year",2018)),////for year put 2016,2017, or 2018 to select correct training
+    year(iConfig.getUntrackedParameter<int>("year",2018)),
+    ////for year put 
+    // 20160 for pre VFP
+    // 20165 for post VFP
+    // 2017
+    // 2018
+    // to select correct training
     isCode4l(iConfig.getUntrackedParameter<bool>("isCode4l",true))    
 
 {
@@ -842,58 +860,59 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
 	    mela = new Mela(13.0, 125.0, TVar::SILENT);
     	mela->setCandidateDecayMode(TVar::CandidateDecay_ZZ); 
 	}
+	
+	int YEAR = year - 2016;
+	if(year == 20165 || year == 20160)	YEAR = 0;
    
     //string elec_scalefac_Cracks_name_161718[3] = {"egammaEffi.txt_EGM2D_cracks.root", "egammaEffi.txt_EGM2D_Moriond2018v1_gap.root", "egammaEffi.txt_EGM2D_Moriond2019_v1_gap.root"};
     string elec_scalefac_Cracks_name_161718[3] = {"ElectronSF_Legacy_2016_Gap.root", "ElectronSF_Legacy_2017_Gap.root", "ElectronSF_Legacy_2018_Gap.root"};
-    edm::FileInPath elec_scalefacFileInPathCracks(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+elec_scalefac_Cracks_name_161718[year-2016]).c_str());
+    edm::FileInPath elec_scalefacFileInPathCracks(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+elec_scalefac_Cracks_name_161718[YEAR]).c_str());
     TFile *fElecScalFacCracks = TFile::Open(elec_scalefacFileInPathCracks.fullPath().c_str());
     hElecScaleFac_Cracks = (TH2F*)fElecScalFacCracks->Get("EGamma_SF2D");    
-    
     //string elec_scalefac_name_161718[3] = {"egammaEffi.txt_EGM2D.root", "egammaEffi.txt_EGM2D_Moriond2018v1.root", "egammaEffi.txt_EGM2D_Moriond2019_v1.root"};
     string elec_scalefac_name_161718[3] = {"ElectronSF_Legacy_2016_NoGap.root", "ElectronSF_Legacy_2017_NoGap.root", "ElectronSF_Legacy_2018_NoGap.root"};
-    edm::FileInPath elec_scalefacFileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+elec_scalefac_name_161718[year-2016]).c_str());
+    edm::FileInPath elec_scalefacFileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+elec_scalefac_name_161718[YEAR]).c_str());
     TFile *fElecScalFac = TFile::Open(elec_scalefacFileInPath.fullPath().c_str());
     hElecScaleFac = (TH2F*)fElecScalFac->Get("EGamma_SF2D");    
 
     //string elec_Gsfscalefac_name_161718[3] = {"egammaEffi.txt_EGM2D_GSF.root", "egammaEffi.txt_EGM2D_Moriond2018v1_runBCDEF_passingRECO.root", "Ele_Reco_2018.root"};//was previous;
     string elec_Gsfscalefac_name_161718[3] = {"Ele_Reco_2016.root", "Ele_Reco_2017.root", "Ele_Reco_2018.root"};
-    edm::FileInPath elec_GsfscalefacFileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+elec_Gsfscalefac_name_161718[year-2016]).c_str());
+    edm::FileInPath elec_GsfscalefacFileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+elec_Gsfscalefac_name_161718[YEAR]).c_str());
     TFile *fElecScalFacGsf = TFile::Open(elec_GsfscalefacFileInPath.fullPath().c_str());
     hElecScaleFacGsf = (TH2F*)fElecScalFacGsf->Get("EGamma_SF2D");
 
     //string elec_GsfLowETscalefac_name_161718[3]= {"", "egammaEffi.txt_EGM2D_Moriond2018v1_runBCDEF_passingRECO_lowEt.root", "Ele_Reco_LowEt_2018.root"};//was previous
     string elec_GsfLowETscalefac_name_161718[3]= {"Ele_Reco_LowEt_2016.root", "Ele_Reco_LowEt_2017.root", "Ele_Reco_LowEt_2018.root"};
-    edm::FileInPath elec_GsfLowETscalefacFileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+elec_GsfLowETscalefac_name_161718[year-2016]).c_str());
+    edm::FileInPath elec_GsfLowETscalefacFileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+elec_GsfLowETscalefac_name_161718[YEAR]).c_str());
     TFile *fElecScalFacGsfLowET = TFile::Open(elec_GsfLowETscalefacFileInPath.fullPath().c_str());
     hElecScaleFacGsfLowET = (TH2F*)fElecScalFacGsfLowET->Get("EGamma_SF2D");
 
     //string mu_scalefac_name_161718[3] = {"final_HZZ_Moriond17Preliminary_v4.root", "ScaleFactors_mu_Moriond2018_final.root", "final_HZZ_muon_SF_2018RunA2D_ER_2702.root"};//was previous; 
 //         string mu_scalefac_name_161718[3] = {"final_HZZ_SF_2016_legacy_mupogsysts.root", "final_HZZ_SF_2017_rereco_mupogsysts_3010.root", "final_HZZ_SF_2018_rereco_mupogsysts_3010.root"};
         string mu_scalefac_name_161718[3] = {"final_HZZ_muon_SF_2016RunB2H_legacy_newLoose_newIso_paper.root", "final_HZZ_muon_SF_2017_newLooseIso_mupogSysts_paper.root", "final_HZZ_muon_SF_2018RunA2D_ER_newLoose_newIso_paper.root"};
-    edm::FileInPath mu_scalefacFileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+mu_scalefac_name_161718[year-2016]).c_str());
+    edm::FileInPath mu_scalefacFileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+mu_scalefac_name_161718[YEAR]).c_str());
     TFile *fMuScalFac = TFile::Open(mu_scalefacFileInPath.fullPath().c_str());
     hMuScaleFac = (TH2F*)fMuScalFac->Get("FINAL");
     hMuScaleFacUnc = (TH2F*)fMuScalFac->Get("ERROR");
 
     //string pileup_name_161718[3] = {"puWeightsMoriond17_v2.root", "puWeightsMoriond18.root", "pu_weights_2018.root"};///was previous
     string pileup_name_161718[3] = {"pu_weights_2016.root", "pu_weights_2017.root", "pu_weights_2018.root"};
-    edm::FileInPath pileup_FileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+pileup_name_161718[year-2016]).c_str());
+    edm::FileInPath pileup_FileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+pileup_name_161718[YEAR]).c_str());
     TFile *f_pileup = TFile::Open(pileup_FileInPath.fullPath().c_str());
     h_pileup = (TH1D*)f_pileup->Get("weights");
     h_pileupUp = (TH1D*)f_pileup->Get("weights_varUp");
     h_pileupDn = (TH1D*)f_pileup->Get("weights_varDn");
 
     string bTagEffi_name_161718[3] = {"bTagEfficiencies_2016.root", "bTagEfficiencies_2017.root", "bTagEfficiencies_2018.root"};
-    edm::FileInPath BTagEffiInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+bTagEffi_name_161718[year-2016]).c_str());
+    edm::FileInPath BTagEffiInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+bTagEffi_name_161718[YEAR]).c_str());
     TFile *fbTagEffi = TFile::Open(BTagEffiInPath.fullPath().c_str());
     hbTagEffi = (TH2F*)fbTagEffi->Get("eff_b_M_ALL");
     hcTagEffi = (TH2F*)fbTagEffi->Get("eff_c_M_ALL");
     hudsgTagEffi = (TH2F*)fbTagEffi->Get("eff_udsg_M_ALL");
 
-
     //BTag calibration
     string csv_name_161718[3] = {"DeepCSV_2016LegacySF_V1.csv", "DeepCSV_94XSF_V4_B_F.csv", "DeepCSV_102XSF_V1.csv"};
-    edm::FileInPath btagfileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+csv_name_161718[year-2016]).c_str());
+    edm::FileInPath btagfileInPath(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+csv_name_161718[YEAR]).c_str());
 
     BTagCalibration calib("DeepCSV", btagfileInPath.fullPath().c_str());
     reader = new BTagCalibrationReader(BTagEntry::OP_MEDIUM,  // operating point
@@ -907,7 +926,15 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
 
     if(year==2018)    {EleBDT_name_161718 = "ElectronMVAEstimatorRun2Autumn18IdIsoValues"; BTagCut=0.4184; heepID_name_161718 = "heepElectronID-HEEPV70";}
     if(year==2017)    {EleBDT_name_161718 = "ElectronMVAEstimatorRun2Fall17IsoV2Values"; BTagCut=0.4941; heepID_name_161718 = "heepElectronID-HEEPV70";}
-    if(year==2016)    {EleBDT_name_161718 = "ElectronMVAEstimatorRun2Summer16IdIsoValues"; BTagCut=0.6321; heepID_name_161718 = "heepElectronID-HEEPV70";}
+    if(year==20165 || year==20160)    {EleBDT_name_161718 = "ElectronMVAEstimatorRun2Summer16IdIsoValues"; BTagCut=0.6321; heepID_name_161718 = "heepElectronID-HEEPV70";}
+
+
+	std::string DATAPATH = std::getenv( "CMSSW_BASE" );
+	if(year == 2018)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v5/RoccoR2018UL.txt";
+	if(year == 2017)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v5/RoccoR2017UL.txt";
+	if(year == 20165)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v5/RoccoR2016bUL.txt"; // for post VFP
+	if(year == 20160)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v5/RoccoR2016aUL.txt"; // for pre VFP
+	calibrator = new RoccoR(DATAPATH);
 
 }
 
@@ -918,6 +945,32 @@ UFHZZ4LAna::~UFHZZ4LAna()
     //destructor --- don't do anything here  
 }
 
+
+
+
+float UFHZZ4LAna::ApplyRoccoR(int Y, bool isMC, int charge, float pt, float eta, float phi, float genPt, float nLayers){
+
+
+	float scale_factor;
+	if(isMC && nLayers > 5)
+	{
+		if(genPt > 0)
+			scale_factor = calibrator->kSpreadMC(charge, pt, eta, phi, genPt);
+		else{
+			   TRandom3 rand;                                                                                                                                                                                                             
+			   rand.SetSeed(abs(static_cast<int>(sin(phi)*100000)));                                                                                          
+
+			   double u1;
+			   u1 = rand.Uniform(1.);
+			   scale_factor = calibrator->kSmearMC(charge, pt, eta, phi, nLayers, u1);
+		}
+	}
+	else
+		scale_factor = calibrator->kScaleDT(charge, pt, eta, phi);
+
+	return scale_factor;
+
+}
 
 std::vector<float> KalmanRefMu(auto TrTack, float lep_mass){
   std::vector<float> MyKalRefit;
@@ -1117,7 +1170,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     if (isMC) {    
         edm::Handle< double > theprefweight;
             iEvent.getByToken(prefweight_token_, theprefweight ) ;
-            if (year == 2016 || year == 2017)
+            if (year == 20165 || year == 20160 || year == 2017)
                 prefiringWeight =(*theprefweight);
             else if (year == 2018)
                 prefiringWeight =1.0;
@@ -1150,6 +1203,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	lep_numberOfValidPixelHits.clear();
 	lep_trackerLayersWithMeasurement.clear();
 
+	lep_pt_FromMuonBestTrack.clear(); lep_eta_FromMuonBestTrack.clear(); lep_phi_FromMuonBestTrack.clear();
+	lep_position_x.clear();	lep_position_y.clear();	lep_position_z.clear();
+	lep_pt_genFromReco.clear();
     lep_pt_UnS.clear(); lep_pterrold_UnS.clear();
     lep_pt.clear(); lep_pterr.clear(); lep_pterrold.clear(); 
     lep_p.clear(); lep_ecalEnergy.clear(); lep_isEB.clear(); lep_isEE.clear();
@@ -1172,6 +1228,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     pTErrL1FSR=-1.0; pTErrL2FSR=-1.0; pTErrL3FSR=-1.0; pTErrL4FSR=-1.0;
 
     lep_genindex.clear(); lep_id.clear(); lep_dataMC.clear(); lep_dataMCErr.clear();
+	dataMC_VxBS.clear(); dataMCErr_VxBS.clear();
     lep_matchedR03_PdgId.clear(); lep_matchedR03_MomId.clear(); lep_matchedR03_MomMomId.clear();
     lep_mva.clear(); lep_ecalDriven.clear(); 
     lep_tightId.clear(); lep_tightIdSUS.clear(); lep_tightIdHiPt.clear(); //lep_tightId_old.clear();
@@ -1232,6 +1289,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	vtxLep_phi.clear();
 	vtxLep_mass.clear();
 
+	vtxLep_BS_pt_NoRoch.clear();
 	vtxLep_BS_pt.clear();
 	vtxLep_BS_ptError.clear();
 	vtxLep_BS_eta.clear();
@@ -1483,6 +1541,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	singleBS_Lep_d0_float.clear();
 
 	vtxLep_BS_pt_float.clear(); 	
+	vtxLep_BS_pt_NoRoch_float.clear(); 	
 	vtxLep_BS_ptError_float.clear(); 	
 	vtxLep_BS_eta_float.clear(); 	 
 	vtxLep_BS_phi_float.clear(); 	 
@@ -1535,6 +1594,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	commonBS_y_float.clear(); 	
 	commonBS_z_float.clear();
 
+	lep_pt_FromMuonBestTrack_float.clear();	lep_eta_FromMuonBestTrack_float.clear();	lep_phi_FromMuonBestTrack_float.clear();
+	lep_position_x_float.clear();	lep_position_y_float.clear();	lep_position_z_float.clear();
+	lep_pt_genFromReco_float.clear();
 
     lep_pt_UnS_float.clear(); lep_pterrold_UnS_float.clear();
     lep_errPre_Scale_float.clear();
@@ -1702,9 +1764,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
     
     bool passedOnlySingle=((passedSingleEl && !passedAnyOther) || (passedSingleMu && !passedSingleEl && !passedAnyOther));
-    //bool trigConditionData = ( passedTrig && (!checkOnlySingle || (checkOnlySingle && passedOnlySingle)) );
+//     bool trigConditionData = ( passedTrig && (!checkOnlySingle || (checkOnlySingle && passedOnlySingle)) );
     bool trigConditionData = true;
-    
+        
     if (verbose) cout<<"checking PV"<<endl;       
     const reco::Vertex *PV = 0;
     int theVertex = -1;
@@ -1798,6 +1860,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	    edm::ESHandle<TransientTrackBuilder> ttkb_recoLepton; 
 		iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", ttkb_recoLepton);
 
+
         if( (recoMuons.size() + recoElectrons.size()) >= (uint)skimLooseLeptons ) {
 
             if (verbose) cout<<"found two leptons"<<endl;
@@ -1865,7 +1928,13 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     lep_id.push_back(recoElectrons[lep_ptindex[i]].pdgId());
                     lep_pt.push_back(recoElectrons[lep_ptindex[i]].pt());
                     lep_pterrold.push_back(recoElectrons[lep_ptindex[i]].p4Error(reco::GsfElectron::P4_COMBINATION));
-
+					lep_pt_FromMuonBestTrack.push_back(-999);
+					lep_eta_FromMuonBestTrack.push_back(-999);
+					lep_phi_FromMuonBestTrack.push_back(-999);
+					lep_position_x.push_back(-999);
+					lep_position_y.push_back(-999);
+					lep_position_z.push_back(-999);
+					lep_pt_genFromReco.push_back(-999);
 // 				    lep_pt_UnS.push_back(recoElectronsUnS[lep_ptindex[i]].pt());
 // 				    lep_pterrold_UnS.push_back(recoElectronsUnS[lep_ptindex[i]].p4Error(reco::GsfElectron::P4_COMBINATION));
 //                     lep_errPre_Scale.push_back(recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPreCorr"));
@@ -1951,19 +2020,17 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 					singleBS_RecoLep_phi.push_back(tmp.Phi());			
 					singleBS_RecoLep_d0.push_back(single_trk_BS.dxy(BS.position()));
 				    singleBS_RecoLep_mass.push_back(recoMuons[lep_ptindex[i]].mass());
+/*
+				    vtxRecoLep_BS_mass.push_back(vtxRecoLep_BS.at(i).M());
+				    vtxRecoLep_BS_d0.push_back(track_vtx.dxy(BS.position()));
 
-// 
-// 						    vtxRecoLep_BS_mass.push_back(vtxRecoLep_BS.at(i).M());
-// 						    vtxRecoLep_BS_d0.push_back(track_vtx.dxy(BS.position()));
-
-
-//                		if(!helper.passTight_BDT_Id(recoMuons[lep_ptindex[i]],vertex,muRho,year,PV)) continue;
-//                		if(helper.getSIP3D(recoMuons[lep_ptindex[i]]) > 4) continue;
-//                 	if(helper.pfIso03(recoMuons[lep_ptindex[i]],muRho) > 0.35) continue;
-//                		if(!isCode4l && !helper.passTight_BDT_Id(recoMuons[lep_ptindex[i]],vertex,muRho,year,PV)) continue;
-//                		if(!isCode4l && helper.getSIP3D(recoMuons[lep_ptindex[i]]) > 4) continue;
-//                 	if(!isCode4l && helper.pfIso03(recoMuons[lep_ptindex[i]],muRho) > 0.35) continue;
-
+               		if(!helper.passTight_BDT_Id(recoMuons[lep_ptindex[i]],vertex,muRho,year,PV)) continue;
+               		if(helper.getSIP3D(recoMuons[lep_ptindex[i]]) > 4) continue;
+                	if(helper.pfIso03(recoMuons[lep_ptindex[i]],muRho) > 0.35) continue;
+               		if(!isCode4l && !helper.passTight_BDT_Id(recoMuons[lep_ptindex[i]],vertex,muRho,year,PV)) continue;
+               		if(!isCode4l && helper.getSIP3D(recoMuons[lep_ptindex[i]]) > 4) continue;
+                	if(!isCode4l && helper.pfIso03(recoMuons[lep_ptindex[i]],muRho) > 0.35) continue;
+*/
                 	if(n_lep_mu < 2 && !isCode4l){
                 		if(helper.passTight_Id(recoMuons[lep_ptindex[i]],PV)){
 							if(helper.pfIso03(recoMuons[lep_ptindex[i]],muRho) < isoCutMu){
@@ -1984,6 +2051,45 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     lep_id.push_back(recoMuons[lep_ptindex[i]].pdgId());
                     lep_pt.push_back(recoMuons[lep_ptindex[i]].pt());
                     lep_pterrold.push_back(recoMuons[lep_ptindex[i]].muonBestTrack()->ptError());
+                    
+                    lep_pt_FromMuonBestTrack.push_back(recoMuons[lep_ptindex[i]].muonBestTrack()->pt());
+                    lep_eta_FromMuonBestTrack.push_back(recoMuons[lep_ptindex[i]].muonBestTrack()->eta());
+                    lep_phi_FromMuonBestTrack.push_back(recoMuons[lep_ptindex[i]].muonBestTrack()->phi());
+                    lep_position_x.push_back(recoMuons[lep_ptindex[i]].muonBestTrack()->vx());
+                    lep_position_y.push_back(recoMuons[lep_ptindex[i]].muonBestTrack()->vy());
+                    lep_position_z.push_back(recoMuons[lep_ptindex[i]].muonBestTrack()->vz());
+
+                    auto gen_lep = recoMuons[lep_ptindex[i]].genParticle();       
+                    if(gen_lep != 0)
+                    	lep_pt_genFromReco.push_back(gen_lep->pt());
+                    else
+                    	lep_pt_genFromReco.push_back(-999);
+                    	
+                    /*
+                    if(fabs(recoMuons[lep_ptindex[i]].muonBestTrack()->pt() - recoMuons[lep_ptindex[i]].pt())/recoMuons[lep_ptindex[i]].pt() > 0.000001){
+				       	std::cout<<"RECO\t"<<"muonBest\t"<<"global\t"<<"inner\t"<<"muon\t"<<"outerTrack\t"<<"track\t"<<"tunePMuonBestTrack\t"<<std::endl;
+				       	std::cout<<recoMuons[lep_ptindex[i]].pt()<<"\t"<<recoMuons[lep_ptindex[i]].muonBestTrack()->pt()<<"\t";
+				       	if(recoMuons[lep_ptindex[i]].isGlobalMuon())
+				       		std::cout<<recoMuons[lep_ptindex[i]].globalTrack()->pt()<<"\t";
+				       	else
+				       		std::cout<<"\t";
+				       	if(recoMuons[lep_ptindex[i]].isTrackerMuon())
+				       		std::cout<<recoMuons[lep_ptindex[i]].innerTrack()->pt()<<"\t";
+				       	else
+				       		std::cout<<"\t";
+			       		std::cout<<"\t";
+				       	if(recoMuons[lep_ptindex[i]].isStandAloneMuon())
+				       		std::cout<<recoMuons[lep_ptindex[i]].outerTrack()->pt()<<"\t";
+				       	else
+				       		std::cout<<"\t";
+			       		std::cout<<recoMuons[lep_ptindex[i]].track()->pt()<<"\t";
+			       		std::cout<<recoMuons[lep_ptindex[i]].tunePMuonBestTrack()->pt()<<std::endl;
+				       	
+                    	std::cout<<recoMuons[lep_ptindex[i]].eta()<<"\t"<<recoMuons[lep_ptindex[i]].muonBestTrack()->eta()<<"\t"<<recoMuons[lep_ptindex[i]].innerTrack()->eta()<<"\t"<<recoMuons[lep_ptindex[i]].globalTrack()->eta()<<std::endl;
+                    	std::cout<<recoMuons[lep_ptindex[i]].phi()<<"\t"<<recoMuons[lep_ptindex[i]].muonBestTrack()->phi()<<"\t"<<recoMuons[lep_ptindex[i]].innerTrack()->phi()<<"\t"<<recoMuons[lep_ptindex[i]].globalTrack()->phi()<<std::endl;
+                    }
+                    */
+
                     if (recoMuons[lep_ptindex[i]].hasUserFloat("correctedPtError")) {
                         lep_pterr.push_back(recoMuons[lep_ptindex[i]].userFloat("correctedPtError"));
                     } else {
@@ -3159,6 +3265,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 singleBS_Lep_d0_float.assign(singleBS_Lep_d0.begin(),singleBS_Lep_d0.end());
 
                 vtxLep_BS_pt_float.assign(vtxLep_BS_pt.begin(),vtxLep_BS_pt.end());
+                vtxLep_BS_pt_NoRoch_float.assign(vtxLep_BS_pt_NoRoch.begin(),vtxLep_BS_pt_NoRoch.end());
                 vtxLep_BS_ptError_float.assign(vtxLep_BS_ptError.begin(),vtxLep_BS_ptError.end());
                 vtxLep_BS_eta_float.assign(vtxLep_BS_eta.begin(),vtxLep_BS_eta.end()); 
                 vtxLep_BS_phi_float.assign(vtxLep_BS_phi.begin(),vtxLep_BS_phi.end()); 
@@ -3209,6 +3316,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 				commonBS_y_float.assign(commonBS_y.begin(),commonBS_y.end());
 				commonBS_z_float.assign(commonBS_z.begin(),commonBS_z.end());
 
+
                 lep_pt_UnS_float.assign(lep_pt_UnS.begin(),lep_pt_UnS.end());
                 lep_pterrold_UnS_float.assign(lep_pterrold_UnS.begin(),lep_pterrold_UnS.end());
                 lep_errPre_Scale_float.assign(lep_errPre_Scale.begin(),lep_errPre_Scale.end());
@@ -3216,6 +3324,13 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 lep_errPre_noScale_float.assign(lep_errPre_noScale.begin(),lep_errPre_noScale.end());
                 lep_errPost_noScale_float.assign(lep_errPost_noScale.begin(),lep_errPost_noScale.end());
 
+                lep_pt_FromMuonBestTrack_float.assign(lep_pt_FromMuonBestTrack.begin(),lep_pt_FromMuonBestTrack.end());
+                lep_eta_FromMuonBestTrack_float.assign(lep_eta_FromMuonBestTrack.begin(),lep_eta_FromMuonBestTrack.end());
+                lep_phi_FromMuonBestTrack_float.assign(lep_phi_FromMuonBestTrack.begin(),lep_phi_FromMuonBestTrack.end());
+                lep_position_x_float.assign(lep_position_x.begin(),lep_position_x.end());
+                lep_position_y_float.assign(lep_position_y.begin(),lep_position_y.end());
+                lep_position_z_float.assign(lep_position_z.begin(),lep_position_z.end());
+                lep_pt_genFromReco_float.assign(lep_pt_genFromReco.begin(),lep_pt_genFromReco.end());
                 lep_pt_float.assign(lep_pt.begin(),lep_pt.end());
                 lep_p_float.assign(lep_p.begin(),lep_p.end());
                 lep_ecalEnergy_float.assign(lep_ecalEnergy.begin(),lep_ecalEnergy.end());                
@@ -3712,7 +3827,7 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
             daughters.push_back(SimpleParticle_t(tmpIDs[3],P4s[3]));
 
             SimpleParticleCollection_t associated;
-		    float D_bkg_kin_tmp; 
+		    float D_bkg_kin_tmp=-999; 
 			if(isCode4l && doMela){
 // 			if(doMela){
 	            mela->setInputEvent(&daughters, &associated, 0, 0);
@@ -3967,28 +4082,51 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
 			massH_vtx_chi2_BS = KVertex_BS.totalChiSquared()/KVertex_BS.degreesOfFreedom();     
 
 			std::vector <reco::TransientTrack> ttrks_BS = KVertex_BS.refittedTracks();                  			
-			if(RecoTwoMuTwoEEvent){
-			
+			if(RecoTwoMuTwoEEvent){						
 				TLorentzVector tmp;
 				std::vector <reco::TransientTrack> ttrks_BS = KVertex_BS.refittedTracks();  
+
 				reco::Track track_vtx_BS = ttrks_BS.at(0).track();
 				tmp.SetPxPyPzE(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), KalmanEnergy(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), selectedMuons.at(0).mass()));
 			    vtxLep_BS.push_back(tmp);
+			    vtxLep_BS_pt_NoRoch.push_back(vtxLep_BS.at(0).Pt());
+			    float nl = lep_trackerLayersWithMeasurement[lep_Hindex[0]];
+				float scaleFactor = ApplyRoccoR(year, isMC, selectedMuons.at(0).charge(), vtxLep_BS.at(0).Pt(), vtxLep_BS.at(0).Eta(), vtxLep_BS.at(0).Phi(), lep_pt_genFromReco[lep_Hindex[0]], nl);
+				float ciao = vtxLep_BS.at(0).Pt() * scaleFactor;
+				vtxLep_BS.at(0).SetPtEtaPhiM(ciao, vtxLep_BS.at(0).Eta(), vtxLep_BS.at(0).Phi(), vtxLep_BS.at(0).M());
 				vtxLep_BS_ptError.push_back(track_vtx_BS.ptError());
 				vtxLep_BS_d0.push_back(track_vtx_BS.dxy(BS.position()));
+				dataMC_VxBS.push_back(helper.dataMC(ciao, vtxLep_BS.at(0).Eta(), hMuScaleFac));
+				dataMCErr_VxBS.push_back(helper.dataMCErr(ciao, vtxLep_BS.at(0).Eta(), hMuScaleFacUnc));
+
 				track_vtx_BS = ttrks_BS.at(1).track();
 				tmp.SetPxPyPzE(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), KalmanEnergy(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), selectedMuons.at(1).mass()));
 			    vtxLep_BS.push_back(tmp);
+			    vtxLep_BS_pt_NoRoch.push_back(vtxLep_BS.at(1).Pt());
+			    nl = lep_trackerLayersWithMeasurement[lep_Hindex[1]];
+				scaleFactor = ApplyRoccoR(year, isMC, selectedMuons.at(1).charge(), vtxLep_BS.at(1).Pt(), vtxLep_BS.at(1).Eta(), vtxLep_BS.at(1).Phi(), lep_pt_genFromReco[lep_Hindex[1]], nl);
+				ciao = vtxLep_BS.at(1).Pt() * scaleFactor;
+				vtxLep_BS.at(1).SetPtEtaPhiM(ciao, vtxLep_BS.at(1).Eta(), vtxLep_BS.at(1).Phi(), vtxLep_BS.at(1).M());
 				vtxLep_BS_ptError.push_back(track_vtx_BS.ptError());
 				vtxLep_BS_d0.push_back(track_vtx_BS.dxy(BS.position()));
+				dataMC_VxBS.push_back(helper.dataMC(ciao, vtxLep_BS.at(1).Eta(), hMuScaleFac));
+				dataMCErr_VxBS.push_back(helper.dataMCErr(ciao, vtxLep_BS.at(1).Eta(), hMuScaleFacUnc));
+
 				tmp.SetPtEtaPhiM(selectedElectrons.at(0).pt(), selectedElectrons.at(0).eta(), selectedElectrons.at(0).phi(), selectedElectrons.at(0).mass());
 			    vtxLep_BS.push_back(tmp);			    
+			    vtxLep_BS_pt_NoRoch.push_back(vtxLep_BS.at(2).Pt());
 				vtxLep_BS_ptError.push_back(lep_pterr[lep_Hindex[2]]);
 				vtxLep_BS_d0.push_back(lep_d0BS[lep_Hindex[2]]);
+				dataMC_VxBS.push_back(lep_dataMC[lep_Hindex[2]]);
+				dataMCErr_VxBS.push_back(lep_dataMCErr[lep_Hindex[2]]);
+
 				tmp.SetPtEtaPhiM(selectedElectrons.at(1).pt(), selectedElectrons.at(1).eta(), selectedElectrons.at(1).phi(), selectedElectrons.at(1).mass());
 			    vtxLep_BS.push_back(tmp);
+			    vtxLep_BS_pt_NoRoch.push_back(vtxLep_BS.at(3).Pt());
 				vtxLep_BS_ptError.push_back(lep_pterr[lep_Hindex[3]]);
 				vtxLep_BS_d0.push_back(lep_d0BS[lep_Hindex[3]]);
+				dataMC_VxBS.push_back(lep_dataMC[lep_Hindex[3]]);
+				dataMCErr_VxBS.push_back(lep_dataMCErr[lep_Hindex[3]]);
 				for(int i = 0; i < 2; i ++){
 					commonBS_x.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(0));
 					commonBS_y.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(1));
@@ -4003,26 +4141,54 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
 
 			}
 			else if(RecoTwoETwoMuEvent){
+
+// 				std::cout<<"2e2mu"<<std::endl;
+
 				TLorentzVector tmp;
 				std::vector <reco::TransientTrack> ttrks_BS = KVertex_BS.refittedTracks();  
 				tmp.SetPtEtaPhiM(selectedElectrons.at(0).pt(), selectedElectrons.at(0).eta(), selectedElectrons.at(0).phi(), selectedElectrons.at(0).mass());
 			    vtxLep_BS.push_back(tmp);
+			    vtxLep_BS_pt_NoRoch.push_back(vtxLep_BS.at(0).Pt());
 				vtxLep_BS_ptError.push_back(lep_pterr[lep_Hindex[0]]);
 				vtxLep_BS_d0.push_back(lep_d0BS[lep_Hindex[0]]);
+				dataMC_VxBS.push_back(lep_dataMC[lep_Hindex[0]]);
+				dataMCErr_VxBS.push_back(lep_dataMCErr[lep_Hindex[0]]);
+
 				tmp.SetPtEtaPhiM(selectedElectrons.at(1).pt(), selectedElectrons.at(1).eta(), selectedElectrons.at(1).phi(), selectedElectrons.at(1).mass());
 			    vtxLep_BS.push_back(tmp);
+			    vtxLep_BS_pt_NoRoch.push_back(vtxLep_BS.at(1).Pt());
 				vtxLep_BS_ptError.push_back(lep_pterr[lep_Hindex[1]]);
 				vtxLep_BS_d0.push_back(lep_d0BS[lep_Hindex[1]]);							
+				dataMC_VxBS.push_back(lep_dataMC[lep_Hindex[1]]);
+				dataMCErr_VxBS.push_back(lep_dataMCErr[lep_Hindex[1]]);
+
 				reco::Track track_vtx_BS = ttrks_BS.at(2).track();
 				tmp.SetPxPyPzE(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), KalmanEnergy(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), selectedMuons.at(0).mass()));
 			    vtxLep_BS.push_back(tmp);
+			    vtxLep_BS_pt_NoRoch.push_back(vtxLep_BS.at(2).Pt());
+			    float nl = lep_trackerLayersWithMeasurement[lep_Hindex[2]];
+				float scaleFactor = ApplyRoccoR(year, isMC, selectedMuons.at(0).charge(), vtxLep_BS.at(2).Pt(), vtxLep_BS.at(2).Eta(), vtxLep_BS.at(2).Phi(), lep_pt_genFromReco[lep_Hindex[2]], nl);
+				float ciao = vtxLep_BS.at(2).Pt() * scaleFactor;
+				vtxLep_BS.at(2).SetPtEtaPhiM(ciao, vtxLep_BS.at(2).Eta(), vtxLep_BS.at(2).Phi(), vtxLep_BS.at(2).M());
 				vtxLep_BS_ptError.push_back(track_vtx_BS.ptError());
 				vtxLep_BS_d0.push_back(track_vtx_BS.dxy(BS.position()));
+				dataMC_VxBS.push_back(helper.dataMC(ciao, vtxLep_BS.at(2).Eta(), hMuScaleFac));
+				dataMCErr_VxBS.push_back(helper.dataMCErr(ciao, vtxLep_BS.at(2).Eta(), hMuScaleFacUnc));
+
 				track_vtx_BS = ttrks_BS.at(3).track();
 				tmp.SetPxPyPzE(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), KalmanEnergy(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), selectedMuons.at(1).mass()));
 			    vtxLep_BS.push_back(tmp);
+			    vtxLep_BS_pt_NoRoch.push_back(vtxLep_BS.at(3).Pt());
+			    nl = lep_trackerLayersWithMeasurement[lep_Hindex[3]];
+				scaleFactor = ApplyRoccoR(year, isMC, selectedMuons.at(1).charge(), vtxLep_BS.at(3).Pt(), vtxLep_BS.at(3).Eta(), vtxLep_BS.at(3).Phi(), lep_pt_genFromReco[lep_Hindex[3]], nl);
+				ciao = vtxLep_BS.at(3).Pt() * scaleFactor;
+				vtxLep_BS.at(3).SetPtEtaPhiM(ciao, vtxLep_BS.at(3).Eta(), vtxLep_BS.at(3).Phi(), vtxLep_BS.at(3).M());
 				vtxLep_BS_ptError.push_back(track_vtx_BS.ptError());
 				vtxLep_BS_d0.push_back(track_vtx_BS.dxy(BS.position()));
+				dataMC_VxBS.push_back(helper.dataMC(ciao, vtxLep_BS.at(3).Eta(), hMuScaleFac));
+				dataMCErr_VxBS.push_back(helper.dataMCErr(ciao, vtxLep_BS.at(3).Eta(), hMuScaleFacUnc));
+
+
 				for(int i = 2; i < 4; i ++){
 					commonBS_x.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(0));
 					commonBS_y.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(1));
@@ -4035,12 +4201,19 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
 				}	
 			}
 			else if(RecoFourEEvent){
+
+// 				std::cout<<"4e"<<std::endl;
+
 				TLorentzVector tmp;
 				for(int i = 0; i < 4; i++){
 					tmp.SetPtEtaPhiM(selectedElectrons.at(i).pt(), selectedElectrons.at(i).eta(), selectedElectrons.at(i).phi(), selectedElectrons.at(i).mass());
 				    vtxLep_BS.push_back(tmp);
+					vtxLep_BS_pt_NoRoch.push_back(vtxLep_BS.at(i).Pt());
 					vtxLep_BS_ptError.push_back(lep_pterr[lep_Hindex[i]]);
 					vtxLep_BS_d0.push_back(lep_d0BS[lep_Hindex[i]]);
+					dataMC_VxBS.push_back(lep_dataMC[lep_Hindex[i]]);
+					dataMCErr_VxBS.push_back(lep_dataMCErr[lep_Hindex[i]]);
+
 					commonBS_x.push_back(-999);
 					commonBS_y.push_back(-999);
 					commonBS_z.push_back(-999);
@@ -4048,19 +4221,25 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
 				}
 			}
 			else{
+// 				std::cout<<"4mu"<<std::endl;
 				for(int i = 0; i < 4; i++){
 					TLorentzVector tmp;
 					reco::Track singleBS_trk = ttv_single.at(i);
 					tmp.SetPxPyPzE(singleBS_trk.px(), singleBS_trk.py(), singleBS_trk.pz(), KalmanEnergy(singleBS_trk.px(), singleBS_trk.py(), singleBS_trk.pz(), selectedMuons.at(i).mass()));
 
 					reco::Track track_vtx_BS = ttrks_BS.at(i).track();
-// 					tmp.SetPxPyPzE( KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(3), KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(4), KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(5), KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(6));
 					tmp.SetPxPyPzE(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), KalmanEnergy(track_vtx_BS.px(), track_vtx_BS.py(), track_vtx_BS.pz(), mass.at(i)));
-//	 				std::cout<<fabs(ciao.px()-KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(3))/KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(3)<<"\t"<<fabs(ciao.py()-KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(4))/KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(4)<<"\t"<<fabs(ciao.pz()-KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(5))/KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(5)<<"\t"<<std::endl;
-// 					std::cout<<ciao.ptError()<<std::endl;
 					vtxLep_BS_ptError.push_back(track_vtx_BS.ptError());
 					vtxLep_BS_d0.push_back(track_vtx_BS.dxy(BS.position()));
 				    vtxLep_BS.push_back(tmp);
+					vtxLep_BS_pt_NoRoch.push_back(vtxLep_BS.at(i).Pt());
+					float nl = lep_trackerLayersWithMeasurement[lep_Hindex[i]];
+					float scaleFactor = ApplyRoccoR(year, isMC, selectedMuons.at(i).charge(), vtxLep_BS.at(i).Pt(), vtxLep_BS.at(i).Eta(), vtxLep_BS.at(i).Phi(), lep_pt_genFromReco[lep_Hindex[i]], nl);
+					float ciao = vtxLep_BS.at(i).Pt() * scaleFactor;
+					vtxLep_BS.at(i).SetPtEtaPhiM(ciao, vtxLep_BS.at(i).Eta(), vtxLep_BS.at(i).Phi(), vtxLep_BS.at(i).M());
+					dataMC_VxBS.push_back(helper.dataMC(ciao, vtxLep_BS.at(i).Eta(), hMuScaleFac));
+					dataMCErr_VxBS.push_back(helper.dataMCErr(ciao, vtxLep_BS.at(i).Eta(), hMuScaleFacUnc));
+
 				}        
 				for(int i = 0; i < 4; i ++){
 					commonBS_x.push_back(KalmanRefMu(ttrks_BS.at(i), mass.at(i)).at(0));
@@ -4513,6 +4692,7 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("singleBS_Lep_mass",&singleBS_Lep_mass_float);
     tree->Branch("singleBS_Lep_d0",&singleBS_Lep_d0_float);
     tree->Branch("vtxLep_BS_pt",&vtxLep_BS_pt_float);
+    tree->Branch("vtxLep_BS_pt_NoRoch",&vtxLep_BS_pt_NoRoch_float);
     tree->Branch("vtxLep_BS_ptError",&vtxLep_BS_ptError_float);
     tree->Branch("vtxLep_BS_eta",&vtxLep_BS_eta_float);
     tree->Branch("vtxLep_BS_phi",&vtxLep_BS_phi_float);
@@ -4571,6 +4751,16 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("lep_errPre_noScale",&lep_errPre_noScale_float);
     tree->Branch("lep_errPost_noScale",&lep_errPost_noScale_float);
 
+
+    tree->Branch("lep_pt_FromMuonBestTrack",&lep_pt_FromMuonBestTrack_float);
+    tree->Branch("lep_eta_FromMuonBestTrack",&lep_eta_FromMuonBestTrack_float);
+    tree->Branch("lep_phi_FromMuonBestTrack",&lep_phi_FromMuonBestTrack_float);
+    
+    tree->Branch("lep_position_x",&lep_position_x_float);
+    tree->Branch("lep_position_y",&lep_position_y_float);
+    tree->Branch("lep_position_z",&lep_position_z_float);
+    tree->Branch("lep_pt_genFromReco",&lep_pt_genFromReco_float);
+
     tree->Branch("lep_id",&lep_id);
     tree->Branch("lep_pt",&lep_pt_float);
     tree->Branch("lep_pterr",&lep_pterr_float);
@@ -4609,6 +4799,8 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("lep_filtersMatched",&lep_filtersMatched);
     tree->Branch("lep_dataMC",&lep_dataMC);
     tree->Branch("lep_dataMCErr",&lep_dataMCErr);
+    tree->Branch("dataMC_VxBS",&dataMC_VxBS);
+    tree->Branch("dataMCErr_VxBS",&dataMCErr_VxBS);
     tree->Branch("nisoleptons",&nisoleptons,"nisoleptons/I");
     tree->Branch("muRho",&muRho,"muRho/F");
     tree->Branch("elRho",&elRho,"elRho/F");
@@ -5009,6 +5201,14 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                                    std::vector<pat::Jet> selectedMergedJets,
                                    std::map<unsigned int, TLorentzVector> selectedFsrMap)
 {
+
+//    std::string DATAPATH = std::getenv( "CMSSW_BASE" );
+//    if(year == 2018)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v3/RoccoR2018.txt";
+//    if(year == 2017)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v3/RoccoR2017.txt";
+//    if(year == 2016)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v3/RoccoR2016.txt";
+//    RoccoR  *calibrator = new RoccoR(DATAPATH); 
+//    calibrator = new RoccoR(DATAPATH);
+   
 
     using namespace edm;
     using namespace pat;
@@ -5560,10 +5760,49 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
 		    vtxLep_BS_eta.push_back(vtxLep_BS.at(i).Eta());
 		    vtxLep_BS_phi.push_back(vtxLep_BS.at(i).Phi());
 		    vtxLep_BS_mass.push_back(vtxLep_BS.at(i).M());
+
+// 		    float vtxLep_BS_pt_BeforeRoch = vtxLep_BS.at(i).Pt();
+// 		    float vtxLep_BS_pt_AfterRoch = vtxLep_BS.at(i).Pt();
+// 		    vtxLep_BS_pt_NoRoch.push_back(vtxLep_BS_pt_BeforeRoch);
+		    
+// 		    std::cout<<lep_id[lep_Hindex[i]]<<"\t"<<vtxLep_BS_pt_BeforeRoch<<"\t";
+/*
+		    if(fabs(lep_id[lep_Hindex[i]]) == 11)
+		    	vtxLep_BS_pt_AfterRoch = vtxLep_BS_pt_BeforeRoch;
+			else{
+				float scale_factor;
+				float MU_charge;
+				if(lep_id[lep_Hindex[i]] == 13) MU_charge = -1;
+				else MU_charge = 1;
+		    	int nl = lep_trackerLayersWithMeasurement[lep_Hindex[i]];
+			    if(isMC && nl > 5)
+			    {
+					if(lep_pt_genFromReco[lep_Hindex[i]] > 0)
+						scale_factor = calibrator->kSpreadMC(MU_charge, vtxLep_BS_pt_BeforeRoch, vtxLep_BS.at(i).Eta(), vtxLep_BS.at(i).Phi(), lep_pt_genFromReco[lep_Hindex[i]]);
+					else{
+						   TRandom3 rand;                                                                                                                                                                                                             
+						   rand.SetSeed(abs(static_cast<int>(sin(vtxLep_BS.at(i).Phi())*100000)));                                                                                          
+
+						   double u1;
+						   u1 = rand.Uniform(1.);
+						   scale_factor = calibrator->kSmearMC(MU_charge, vtxLep_BS_pt_BeforeRoch, vtxLep_BS.at(i).Eta(), vtxLep_BS.at(i).Phi(), nl, u1);
+	            	}
+	            }
+	            else
+	            	scale_factor = calibrator->kScaleDT(MU_charge, vtxLep_BS_pt_BeforeRoch, vtxLep_BS.at(i).Eta(), vtxLep_BS.at(i).Phi());
+
+               vtxLep_BS_pt_AfterRoch = scale_factor * vtxLep_BS_pt_BeforeRoch;
+           }
+           vtxLep_BS_pt.push_back(vtxLep_BS_pt_AfterRoch);
+*/           
+//            if(fabs(lep_id[lep_Hindex[i]]) == 11 && vtxLep_BS_pt.at(i) != vtxLep_BS_pt_NoRoch.at(i))
+//            	std::cout<<"PORCA PALETTA"<<std::endl;
+
 // 			std::cout<<"VX+BS = "<<vtxLep_BS.at(i).Eta()<<"\t"<<vtxLep_BS.at(i).Phi()<<"\t"<<vtxLep_BS.at(i).Pt()<<"\t"<<vtxLep_BS.at(i).M()<<std::endl;
             H_Vtx_BS += vtxLep_BS.at(i);  // without FSR
+//             std::cout<<vtxLep_BS_pt.at(i)<<std::endl;
    	    
-    	    lep_tmp.SetPtEtaPhiM(vtxLep_BS.at(i).Pt(), vtxLep_BS.at(i).Eta(), vtxLep_BS.at(i).Phi(), vtxLep_BS.at(i).M());
+    	    lep_tmp.SetPtEtaPhiM(vtxLep_BS_pt.at(i), vtxLep_BS.at(i).Eta(), vtxLep_BS.at(i).Phi(), vtxLep_BS.at(i).M());
     	    for(uint ph = 0; ph < selectedFsrMap.size(); ph++){
     	    	if(selectedFsrMap[ph].Pt() != 0 && i == ph){
     	    	    index = ph;

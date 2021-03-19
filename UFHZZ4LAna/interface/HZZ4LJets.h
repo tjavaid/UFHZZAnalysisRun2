@@ -180,8 +180,8 @@ int HZZ4LJets::patjetID(const pat::Jet& jet, int year)
     
       }
   }
-
-  if(year==2016)
+  
+  if(year==20165 || year==20160)  //post and pre VFP
   {
       if (eta<=2.7) {
 
