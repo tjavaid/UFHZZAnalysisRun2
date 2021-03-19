@@ -20,5 +20,5 @@ mv UFHZZAnalysisRun2-Accessary/RecoEgamma/ElectronIdentification/python/Electron
 mv UFHZZAnalysisRun2-Accessary/RecoEgamma/ElectronIdentification/python/ElectronIDValueMapProducer_cfi.py RecoEgamma/ElectronIdentification/python/
 mv UFHZZAnalysisRun2-Accessary/RecoEgamma/ElectronIdentification/data/MVAWeightFiles RecoEgamma/ElectronIdentification/data/
 mv UFHZZAnalysisRun2-Accessary ../
-git clone -b tmp_Ferrico https://github.com/ferrico/KinZfitter.git
+git clone -b UL_19 https://github.com/ferrico/KinZfitter.git
 scram b -j 8
