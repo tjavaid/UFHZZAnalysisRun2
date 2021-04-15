@@ -1,7 +1,6 @@
 import cjson
 import json
 from WMCore.Configuration import Configuration
-from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 
 config = Configuration()
 
@@ -47,12 +46,12 @@ else:
   elif (('GluGlu' in 'DATASETNAME') and ('MCFM701' in 'DATASETNAME') and ('tau' in 'DATASETNAME')): config.Data.unitsPerJob = 1
   elif (('GluGlu' in 'DATASETNAME') and (not 'MCFM701' in 'DATASETNAME')): config.Data.unitsPerJob = 1
   elif ('HToZZ' in 'DATASETNAME'): config.Data.unitsPerJob = 1
-  elif ('ZZ' in 'DATASETNAME'): config.Data.unitsPerJob = 4
-  elif ('TT' in 'DATASETNAME'): config.Data.unitsPerJob = 5
-  else: config.Data.unitsPerJob = 5
+  elif ('ZZ' in 'DATASETNAME'): config.Data.unitsPerJob = 2
+  elif ('TT' in 'DATASETNAME'): config.Data.unitsPerJob = 2
+  else: config.Data.unitsPerJob = 2
 
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/user/%s/2018data/UFHZZAnalysisRun2/JOBTAG/' % (getUsernameFromSiteDB())
+config.Data.outLFNDirBase = '/store/user/ferrico/VxBS_withRochester/UFHZZAnalysisRun2/JOBTAG/'
 config.Data.ignoreLocality = True
 config.Data.allowNonValidInputDataset = True
 

@@ -22,6 +22,9 @@ process.Timing = cms.Service("Timing",
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
+process.options = cms.untracked.PSet(
+        numberOfThreads = cms.untracked.uint32(2) )
+
 myfilelist = cms.untracked.vstring(
     #'/store/mc/RunIIAutumn18MiniAOD/JpsiToMuMu_JpsiPt8_TuneCP5_13TeV-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/270000/FE663B04-41AE-7F42-892C-22891454BB2C.root'
      '/store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15_ext2-v1/00000/0EFEE6C9-3B71-D94C-AF6F-D75EFE5D0C31.root',
@@ -248,7 +251,7 @@ process.load("CondCore.CondDB.CondDB_cfi")
 qgDatabaseVersion = 'cmssw8020_v2'
 # for hpc
 QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
-# for crab
+# for crabu#QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 process.QGPoolDBESSource = cms.ESSource("PoolDBESSource",
       DBParameters = cms.PSet(messageLevel = cms.untracked.int32(1)),

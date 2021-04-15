@@ -139,6 +139,8 @@ public:
     float dataMCErr(pat::Electron electron, TH2F* hElecScaleFac, TH2F* hElecScalFacUnc_Cracks);
     float dataMC(pat::Muon muon, TH2F* hMuScaleFac);
     float dataMCErr(pat::Muon muon, TH2F* hMuScaleFac);
+    float dataMC(double pt, float eta, TH2F* hMuScaleFac);
+	float dataMCErr(double pt, float eta, TH2F* hMuScaleFac);
     
     float get_bTagEffi(float _pt_jet, float _eta_jet, TH2F* hbTagEffi);
     
@@ -1848,6 +1850,21 @@ float HZZ4LHelper::dataMCErr(pat::Muon muon, TH2F* hMuScaleFacUnc)
     float eta = muon.eta();
     return hMuScaleFacUnc->GetBinContent(hMuScaleFacUnc->FindBin(eta,pt)); 
 }
+
+float HZZ4LHelper::dataMC(double pt, float eta, TH2F* hMuScaleFac)
+{
+    float PT = std::min(pt,199.0);
+    return hMuScaleFac->GetBinContent(hMuScaleFac->FindBin(eta,PT)); 
+}
+
+float HZZ4LHelper::dataMCErr(double pt, float eta, TH2F* hMuScaleFacUnc)
+{
+    float PT = std::min(pt,199.0);
+    return hMuScaleFacUnc->GetBinContent(hMuScaleFacUnc->FindBin(eta,PT)); 
+}
+
+
+
 
 float HZZ4LHelper::get_bTagEffi(float _pt_jet, float _eta_jet, TH2F* hbTagEffi)
 {

@@ -24,14 +24,15 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
 #'/store/data/Run2017E/SingleElectron/MINIAOD/31Mar2018-v1/80000/A0D6B0A3-5937-E811-AC52-0CC47AA53D86.root',
-'/store/data/Run2017E/SingleElectron/MINIAOD/31Mar2018-v1/90000/06D3E100-6E37-E811-A4B0-0CC47AA53D5A.root',
-#'/store/data/Run2017B/SingleMuon/MINIAOD/31Mar2018-v1/90000/FEC62083-1E39-E811-B2A1-0CC47A4D75F8.root'
+#'/store/data/Run2017E/SingleElectron/MINIAOD/31Mar2018-v1/90000/06D3E100-6E37-E811-A4B0-0CC47AA53D5A.root',
+'/store/data/Run2017D/SingleMuon/MINIAOD/31Mar2018-v1/00000/0085FB14-BF39-E811-B81C-0CC47A4DECF8.root',
+'/store/data/Run2017B/SingleMuon/MINIAOD/32Mar2018-v1/90000/FEC62083-1E39-E811-B2A1-0CC47A4D75F8.root'
         #DUMMYFILELIST
         )
 
 process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
-                            eventsToProcess = cms.untracked.VEventRange('304062:1844:2257734751')
+#                            eventsToProcess = cms.untracked.VEventRange('304062:1844:2257734751')
                             )
 
 process.TFileService = cms.Service("TFileService",

@@ -130,8 +130,12 @@ def submitAnalyzer():
 
         filename = dataset.split('/')[1]+'_'+dataset.split('/')[2]
         if (len(filename)>99):
-          newfilename = filename.split('-PU')[0]
-          filename = newfilename
+          
+	#newfilename = filename.split('-PU')[0]
+		#newfilename = filename.split('-PUMoriond17_80X')[0]
+        	#newfilename = filename.split('-PU2017_12Apr2018_94X')[0]
+		newfilename = filename.split('_upgrade2018_')[0]
+		filename = newfilename
 
         cmd  = "sed -i 's~DUMMYFILENAME~"+filename+"~g' "+outDir+'/cfg/'+cfgfile
         output = processCmd(cmd)
