@@ -429,59 +429,62 @@ private:
     float DijetMass, DijetDEta, DijetFisher;
 
 // new nominal
-    float pTj1=-1.0; float pTj2=-1.0;
-    float pTj1_2p5=-1.0; float pTj2_2p5=-1.0;
-    float mj1j2=-1.0; float dEtaj1j2=-1.0;
+    float pTj1=-10.0; float pTj2=-10.0;
+    float pTj1_2p5=-10.0; float pTj2_2p5=-10.0;
+    float mj1j2=-999.0; float dEtaj1j2=-10.0;
     float etaj1=999.0; float etaj2=999.0;
-    float y4l=-1.0;
-    float yj1=-1.0; float yj2=-1.0;
-    float dPhiHj1=-1.0; float dyHj1=-1.0;
+    float y4l=-10.0;
+    float yj1=-10.0; float yj2=-10.0;
+    float dPhiHj1=-10.0; float dyHj1=-10.0;
 //    float mj1j2=-1.0; float dEtaj1j2=-1.0;
-    float dPhij1j2=-1.0; float dPhiHj1j2=-1.0;
-    float dPhij1j2_VBF = -1.0;
+    float dPhij1j2=-10.0; float dPhiHj1j2=-10.0;
+    float dPhij1j2_VBF = -10.0;
     float yj1_2p5=-1.0; float yj2_2p5=-1.0;
 
-    float dPhiHj1_2p5=-1.0; float dyHj1_2p5=-1.0;
-    float mj1j2_2p5=-1.0; float dEtaj1j2_2p5=-1.0;
-    float dPhij1j2_2p5=-1.0; float dPhiHj1j2_2p5=-1.0;
-    float pTj1_VBF=-1.0; float dPhiHj1j2_VBF =-1.0; //float dPhij1j2_VBF_jesdn=-1.0; float dPhiHj1j2_VBF_jesdn=-1.0;
+    float dPhiHj1_2p5=-10.0; float dyHj1_2p5=-1.0;
+    float mj1j2_2p5=-999.0; float dEtaj1j2_2p5=-10.0;
+    float dPhij1j2_2p5=-10.0; float dPhiHj1j2_2p5=-10.0;
+    float pTj1_VBF=-10.0; float dPhiHj1j2_VBF =-10.0; //float dPhij1j2_VBF_jesdn=-1.0; float dPhiHj1j2_VBF_jesdn=-1.0;
    
 
 // JES up reco
-    float pTj1_jesup=-1.0; float pTj2_jesup=-1.0;
-    float pTj1_2p5_jesup=-1.0; //float pTj2_jesup=-1.0;
-    float mj1j2_jesup=-1.0; float dEtaj1j2_jesup=-1.0;
+    float pTj1_jesup=-10.0; float pTj2_jesup=-10.0;
+    float pTj1_2p5_jesup=-10.0; //float pTj2_jesup=-1.0;
+    float mj1j2_jesup=-999.0; float dEtaj1j2_jesup=-10.0;
 
-    float yj1_jesup=-1.0; float yj2_jesup=-1.0;
-    float dPhiHj1_jesup=-1.0; float dyHj1_jesup=-1.0;
-    float dPhij1j2_jesup=-1.0; float dPhiHj1j2_jesup=-1.0;
-    float yj1_2p5_jesup=-1.0; float yj2_2p5_jesup=-1.0;
+    float yj1_jesup=-10.0; float yj2_jesup=-10.0;
+    float dPhiHj1_jesup=-10.0; float dyHj1_jesup=-10.0;
+    float dPhij1j2_jesup=-10.0; float dPhiHj1j2_jesup=-10.0;
+    float yj1_2p5_jesup=-10.0; float yj2_2p5_jesup=-10.0;
 
-    float dPhiHj1_2p5_jesup=-1.0; float dyHj1_2p5_jesup=-1.0;
-    float mj1j2_2p5_jesup=-1.0; float dEtaj1j2_2p5_jesup=-1.0;
-    float dPhij1j2_2p5_jesup=-1.0; float dPhiHj1j2_2p5_jesup=-1.0;
-    float etaj2_jesup = -1.0;
-    float pTj2_2p5_jesup=-1.0;
-    float pTj1_VBF_jesup =-1.0; float dPhij1j2_VBF_jesup=-1.0; float dPhiHj1j2_VBF_jesup=-1.0;
-    float etaj1_jesup = -999.0;
-// JES dn reco
-    float pTj1_jesdn=-1.0; float pTj2_jesdn=-1.0;
-    float pTj1_2p5_jesdn=-1.0; //float pTj2_jesdn=-1.0;
-    float mj1j2_jesdn=-1.0; float dEtaj1j2_jesdn=-1.0;
+    float dPhiHj1_2p5_jesup=-10.0; float dyHj1_2p5_jesup=-10.0;
+    float mj1j2_2p5_jesup=-999.0; float dEtaj1j2_2p5_jesup=-10.0;
+    float dPhij1j2_2p5_jesup=-10.0; float dPhiHj1j2_2p5_jesup=-10.0;
+    float etaj2_jesup = -10.0;
+    float pTj2_2p5_jesup=-10.0;
+    float pTj1_VBF_jesup =-10.0; float dPhij1j2_VBF_jesup=-10.0; float dPhiHj1j2_VBF_jesup=-10.0;
+    float etaj1_jesup = -10.0;
+    float mass4lj_jesup=-999.0; float mass4ljj_jesup=-999.0;
+    float pT4lj_jesup=-999.0; float pT4ljj_jesup=-999.0;
+    // JES dn reco
+    float pTj1_jesdn=-10.0; float pTj2_jesdn=-10.0;
+    float pTj1_2p5_jesdn=-10.0; //float pTj2_jesdn=-1.0;
+    float mj1j2_jesdn=-999.0; float dEtaj1j2_jesdn=-10.0;
 
-    float yj1_jesdn=-1.0; float yj2_jesdn=-1.0;
-    float dPhiHj1_jesdn=-1.0; float dyHj1_jesdn=-1.0;
-    float dPhij1j2_jesdn=-1.0; float dPhiHj1j2_jesdn=-1.0;
-    float yj1_2p5_jesdn=-1.0; float yj2_2p5_jesdn=-1.0;
-    float etaj1_jesdn = -1.0;
-    float etaj2_jesdn=999.0;     
+    float yj1_jesdn=-10.0; float yj2_jesdn=-10.0;
+    float dPhiHj1_jesdn=-10.0; float dyHj1_jesdn=-10.0;
+    float dPhij1j2_jesdn=-10.0; float dPhiHj1j2_jesdn=-10.0;
+    float yj1_2p5_jesdn=-10.0; float yj2_2p5_jesdn=-10.0;
+    float etaj1_jesdn =-10.0;
+    float etaj2_jesdn=-10.0;     
 
-    float dPhiHj1_2p5_jesdn=-1.0; float dyHj1_2p5_jesdn=-1.0;
-    float mj1j2_2p5_jesdn=-1.0; float dEtaj1j2_2p5_jesdn=-1.0;
-    float dPhij1j2_2p5_jesdn=-1.0; float dPhiHj1j2_2p5_jesdn=-1.0;
-    float pTj1_VBF_jesdn=-1.0; float dPhij1j2_VBF_jesdn=-1.0; float dPhiHj1j2_VBF_jesdn=-1.0;
-    float pTj2_2p5_jesdn=-1.0;
-
+    float dPhiHj1_2p5_jesdn=-10.0; float dyHj1_2p5_jesdn=-10.0;
+    float mj1j2_2p5_jesdn=-999.0; float dEtaj1j2_2p5_jesdn=-10.0;
+    float dPhij1j2_2p5_jesdn=-10.0; float dPhiHj1j2_2p5_jesdn=-10.0;
+    float pTj1_VBF_jesdn=-10.0; float dPhij1j2_VBF_jesdn=-10.0; float dPhiHj1j2_VBF_jesdn=-10.0;
+    float pTj2_2p5_jesdn=-10.0;
+    float mass4lj_jesdn=-999.0; float mass4ljj_jesdn=-999.0;
+    float pT4lj_jesdn=-999.0; float pT4ljj_jesdn=-999.0;
 
     // merged jets
     vector<int>   mergedjet_iscleanH4l;
@@ -1388,8 +1391,8 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     H_pt.clear(); H_eta.clear(); H_phi.clear(); H_mass.clear(); 
     H_noFSR_pt.clear(); H_noFSR_eta.clear(); H_noFSR_phi.clear(); H_noFSR_mass.clear(); 
-    mass4l=-1.0; mass4l_noFSR=-1.0; mass4e=-1.0; mass4mu=-1.0; mass2e2mu=-1.0; pT4l=-1.0; eta4l=9999.0; phi4l=9999.0; rapidity4l=9999.0;mass4lj=-1.0; mass4ljj=-1.0;
-    cosTheta1=9999.0; cosTheta2=9999.0; cosThetaStar=9999.0; Phi=9999.0; Phi1=9999.0;pT4lj=-1.0; pT4ljj=-1.0;
+    mass4l=-1.0; mass4l_noFSR=-1.0; mass4e=-1.0; mass4mu=-1.0; mass2e2mu=-1.0; pT4l=-1.0; eta4l=9999.0; phi4l=9999.0; rapidity4l=9999.0;mass4lj=-10.0; mass4ljj=-10.0;
+    cosTheta1=9999.0; cosTheta2=9999.0; cosThetaStar=9999.0; Phi=9999.0; Phi1=9999.0;pT4lj=-10.0; pT4ljj=-10.0;
     mass3l=-1.0;
     
 	massH_vtx_chi2=999;	
@@ -1513,7 +1516,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     // Higgs candidate variables (calculated using selected gen leptons)
     GENH_pt.clear(); GENH_eta.clear(); GENH_phi.clear(); GENH_mass.clear();
     GENmass4l=-1.0; GENmass4lj=-1.0; GENmass4ljj=-1.0; GENmassZ1=-1.0; GENmassZ2=-1.0; GENpT4l=-1.0; GENeta4l=9999.0; GENrapidity4l=9999.0; GENMH=-1.0;
-    GENcosTheta1=9999.0; GENcosTheta2=9999.0; GENcosThetaStar=9999.0; GENPhi=9999.0; GENPhi1=9999.0; GENpT4lj=-1.0; GENpT4ljj=-1.0;
+    GENcosTheta1=9999.0; GENcosTheta2=9999.0; GENcosThetaStar=9999.0; GENPhi=9999.0; GENPhi1=9999.0; GENpT4lj=-10.0; GENpT4ljj=-10.0;
 
     // Z candidate variables
     GENZ_DaughtersId.clear(); GENZ_MomId.clear();
@@ -1531,18 +1534,18 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     GENpt_leadingjet_pt30_eta2p5=-1.0; 
     lheNb=0; lheNj=0; nGenStatus2bHad=0;
     //TJ initialization 
-    GENpTj2=-1.0; GENyj2=-1.0;
+    GENpTj2=-10.0; GENyj2=-10.0;
 
-    GENdPhiHj1=-1.0; GENdyHj1=-1.0;
-    GENDijetMass=-1.0; GENdEtaj1j2=-1.0;
-    GENdPhij1j2=-1.0; GENdPhiHj1j2=-1.0;
+    GENdPhiHj1=-1000.0; GENdyHj1=-10.0;
+    GENDijetMass=-999.0; GENdEtaj1j2=-10.0;
+    GENdPhij1j2=-1000.0; GENdPhiHj1j2=-1000.0;
 
-    GENpTj1_2p5=-1.0; GENyj1_2p5=-1.0; GENyj1=-1; GENpTj1=-1.0;
-    GENpTj2_2p5=-1.0; GENyj2_2p5=-1.0;
+    GENpTj1_2p5=-10.0; GENyj1_2p5=-10.0; GENyj1=-10.0; GENpTj1=-10.0;
+    GENpTj2_2p5=-10.0; GENyj2_2p5=-10.0;
 
-    GENdPhiHj1_2p5=-1.0; GENdyHj1_2p5=-1.0;
-    GENDijetMass_2p5=-1.0; GENdEtaj1j2_2p5=-1.0;
-    GENdPhij1j2_2p5=-1.0; GENdPhiHj1j2_2p5=-1.0;
+    GENdPhiHj1_2p5=-1000.0; GENdyHj1_2p5=-10.0;
+    GENDijetMass_2p5=-10.0; GENdEtaj1j2_2p5=-10.0;
+    GENdPhij1j2_2p5=-1000.0; GENdPhiHj1j2_2p5=-1000.0;
 // TJ initialization end
     // ME
     me_0plus_JHU=999.0; me_qqZZ_MCFM=999.0; p0plus_m4l=999.0; bkg_m4l=999.0; D_bkg_kin=999.0; D_bkg=999.0;   
@@ -5344,6 +5347,10 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("dEtaj1j2_2p5_jesdn",&dEtaj1j2_2p5_jesdn,"dEtaj1j2_2p5_jesdn/F");
     tree->Branch("dPhij1j2_2p5_jesdn",&dPhij1j2_2p5_jesdn,"dPhij1j2_2p5_jesdn/F");
     tree->Branch("dPhiHj1j2_2p5_jesdn",&dPhiHj1j2_2p5_jesdn,"dPhiHj1j2_2p5_jesdn/F");
+    tree->Branch("mass4lj_jesdn",&mass4lj_jesdn,"mass4lj_jesdn/F");
+    tree->Branch("mass4ljj_jesdn",&mass4ljj_jesdn,"mass4ljj_jesdn/F");
+    tree->Branch("pT4lj_jesdn",&pT4lj_jesdn,"pT4lj_jesdn/F");
+    tree->Branch("pT4ljj_jesdn",&pT4ljj_jesdn,"pT4ljj_jesdn/F");
 
 // JES up reco
 
@@ -5376,6 +5383,10 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("dEtaj1j2_2p5_jesup",&dEtaj1j2_2p5_jesup,"dEtaj1j2_2p5_jesup/F");
     tree->Branch("dPhij1j2_2p5_jesup",&dPhij1j2_2p5_jesup,"dPhij1j2_2p5_jesup/F");
     tree->Branch("dPhiHj1j2_2p5_jesup",&dPhiHj1j2_2p5_jesup,"dPhiHj1j2_2p5_jesup/F");
+    tree->Branch("mass4lj_jesup",&mass4lj_jesup,"mass4lj_jesup/F");
+    tree->Branch("mass4ljj_jesup",&mass4ljj_jesup,"mass4ljj_jesup/F");
+    tree->Branch("pT4lj_jesup",&pT4lj_jesup,"pT4lj_jesup/F");
+    tree->Branch("pT4ljj_jesup",&pT4ljj_jesup,"pT4ljj_jesup/F");
 
 // TJ setting branches end
     //ME
@@ -6158,7 +6169,8 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                     //csvj1=(*jet_csvv2)[jet1index];
                     //csvj1=jet_csvv2[jet1index];
                     float csvj1=jet_csvv2[jet1index];
-                    dPhiHj1=TMath::Abs(HVec.Phi()-Jet1.Phi());
+                    //dPhiHj1=TMath::Abs(HVec.Phi()-Jet1.Phi());
+                    dPhiHj1=deltaPhi(HVec.Phi(),Jet1.Phi());
                     dyHj1=TMath::Abs(y4l-yj1);
                 }
                 if (njets_pt30_eta4p7 > 1) {
@@ -6176,14 +6188,17 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                     mj1j2=(Jet1+Jet2).M();
 		    mass4ljj=mass4l+mj1j2;
                     dEtaj1j2=TMath::Abs(Jet1.Eta()-Jet2.Eta());
-                    dPhij1j2=TMath::Abs(Jet1.Phi()-Jet2.Phi());
-                    dPhiHj1j2=TMath::Abs(HVec.Phi()-(Jet1+Jet2).Phi());
+                    //dPhij1j2=TMath::Abs(Jet1.Phi()-Jet2.Phi());
+                    dPhij1j2=deltaPhi(Jet1.Phi(),Jet2.Phi());
+                    //dPhiHj1j2=TMath::Abs(HVec.Phi()-(Jet1+Jet2).Phi());
+                    dPhiHj1j2=deltaPhi(HVec.Phi(),(Jet1+Jet2).Phi());
                 }
                 if (njets_pt30_eta2p5 > 0) {
                     Jet1_2p5.SetPtEtaPhiM(jet_pt[jet1index2p5],jet_eta[jet1index2p5],jet_phi[jet1index2p5],jet_mass[jet1index2p5]);
                     pTj1_2p5=Jet1_2p5.Pt();
                     yj1_2p5=Jet1_2p5.Rapidity();
-                    dPhiHj1_2p5=TMath::Abs(HVec.Phi()-Jet1_2p5.Phi());
+                    //dPhiHj1_2p5=TMath::Abs(HVec.Phi()-Jet1_2p5.Phi());
+                    dPhiHj1_2p5=deltaPhi(HVec.Phi(),Jet1_2p5.Phi());
                     dyHj1_2p5=TMath::Abs(y4l-yj1_2p5);
                 }
                 if (njets_pt30_eta2p5 > 1) {
@@ -6192,8 +6207,9 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                     yj2_2p5=Jet2_2p5.Rapidity();
                     mj1j2_2p5=(Jet1_2p5+Jet2_2p5).M();
                     dEtaj1j2_2p5=TMath::Abs(Jet1_2p5.Eta()-Jet2_2p5.Eta());
-                    dPhij1j2_2p5=TMath::Abs(Jet1_2p5.Phi()-Jet2_2p5.Phi());
-                    dPhiHj1j2_2p5=TMath::Abs(HVec.Phi()-(Jet1_2p5+Jet2_2p5).Phi());
+                    //dPhij1j2_2p5=TMath::Abs(Jet1_2p5.Phi()-Jet2_2p5.Phi());
+                    dPhij1j2_2p5=deltaPhi(Jet1_2p5.Phi(),Jet2_2p5.Phi());
+                    dPhiHj1j2_2p5=deltaPhi(HVec.Phi(),(Jet1_2p5+Jet2_2p5).Phi());
                 }
 
 // JES up
@@ -6217,9 +6233,12 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                 if (njets_pt30_eta4p7_jesup > 0) {
                     Jet1_jesup.SetPtEtaPhiM(jet_jesup_pt[jet1index_jesup],jet_jesup_eta[jet1index_jesup],jet_jesup_phi[jet1index_jesup],jet_jesup_mass[jet1index_jesup]);
                     pTj1_jesup=Jet1_jesup.Pt();
+                    pT4lj_jesup=pT4l+Jet1_jesup.Pt();
                     etaj1_jesup=Jet1_jesup.Eta();
                     yj1_jesup=Jet1_jesup.Rapidity();
-                    dPhiHj1_jesup=TMath::Abs(HVec.Phi()-Jet1_jesup.Phi());
+		    mass4lj_jesup=mass4l+Jet1_jesup.M();
+                    //dPhiHj1_jesup=TMath::Abs(HVec.Phi()-Jet1_jesup.Phi());
+                    dPhiHj1_jesup=deltaPhi(HVec.Phi(),Jet1_jesup.Phi());
                     dyHj1_jesup=TMath::Abs(y4l-yj1_jesup);
                 }
                 if (njets_pt30_eta4p7_jesup > 1) {
@@ -6227,15 +6246,21 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                     pTj2_jesup=Jet2_jesup.Pt();
                     etaj2_jesup=Jet2_jesup.Eta();
                     yj2_jesup=Jet2_jesup.Rapidity();
-                    dEtaj1j2_jesup=TMath::Abs(Jet1_jesup.Eta()-Jet2_jesup.Eta());
-                    dPhij1j2_jesup=TMath::Abs(Jet1_jesup.Phi()-Jet2_jesup.Phi());
-                    dPhiHj1j2_jesup=TMath::Abs(HVec.Phi()-(Jet1_jesup+Jet2_jesup).Phi());
+                    mj1j2_jesup=(Jet1_jesup+Jet2_jesup).M();
+		    mass4ljj_jesup=mass4l+mj1j2_jesup;
+		    pT4ljj_jesup=pT4l+(Jet1_jesup+Jet2_jesup).Pt();
+		    dEtaj1j2_jesup=TMath::Abs(Jet1_jesup.Eta()-Jet2_jesup.Eta());
+                    //dPhij1j2_jesup=TMath::Abs(Jet1_jesup.Phi()-Jet2_jesup.Phi());
+                    dPhij1j2_jesup=deltaPhi(Jet1_jesup.Phi(),Jet2_jesup.Phi());
+                    //dPhiHj1j2_jesup=TMath::Abs(HVec.Phi()-(Jet1_jesup+Jet2_jesup).Phi());
+                    dPhiHj1j2_jesup=deltaPhi(HVec.Phi(),(Jet1_jesup+Jet2_jesup).Phi());
                 }
                 if (njets_pt30_eta2p5_jesup > 0) {
                     Jet1_2p5_jesup.SetPtEtaPhiM(jet_jesup_pt[jet1index2p5_jesup],jet_jesup_eta[jet1index2p5_jesup],jet_jesup_phi[jet1index2p5_jesup],jet_jesup_mass[jet1index2p5_jesup]);
                     pTj1_2p5_jesup=Jet1_2p5_jesup.Pt();
                     yj1_2p5_jesup=Jet1_2p5.Rapidity();
-                    dPhiHj1_2p5_jesup=TMath::Abs(HVec.Phi()-Jet1_2p5_jesup.Phi());
+                    //dPhiHj1_2p5_jesup=TMath::Abs(HVec.Phi()-Jet1_2p5_jesup.Phi());
+                    dPhiHj1_2p5_jesup=deltaPhi(HVec.Phi(),Jet1_2p5_jesup.Phi());
                     dyHj1_2p5_jesup=TMath::Abs(y4l-yj1_2p5_jesup);
                 }
                 if (njets_pt30_eta2p5_jesup > 1) {
@@ -6244,8 +6269,10 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                     yj2_2p5_jesup=Jet2_2p5_jesup.Rapidity();
                     mj1j2_2p5_jesup=(Jet1_2p5_jesup+Jet2_2p5_jesup).M();
                     dEtaj1j2_2p5_jesup=TMath::Abs(Jet1_2p5_jesup.Eta()-Jet2_2p5_jesup.Eta());
-                    dPhij1j2_2p5_jesup=TMath::Abs(Jet1_2p5_jesup.Phi()-Jet2_2p5_jesup.Phi());
-                    dPhiHj1j2_2p5_jesup=TMath::Abs(HVec.Phi()-(Jet1_2p5_jesup+Jet2_2p5_jesup).Phi());
+                    //dPhij1j2_2p5_jesup=TMath::Abs(Jet1_2p5_jesup.Phi()-Jet2_2p5_jesup.Phi());
+                    dPhij1j2_2p5_jesup=deltaPhi(Jet1_2p5_jesup.Phi(),Jet2_2p5_jesup.Phi());
+                    //dPhiHj1j2_2p5_jesup=TMath::Abs(HVec.Phi()-(Jet1_2p5_jesup+Jet2_2p5_jesup).Phi());
+                    dPhiHj1j2_2p5_jesup=deltaPhi(HVec.Phi(),(Jet1_2p5_jesup+Jet2_2p5_jesup).Phi());
                 }
 
 // JES dn
@@ -6267,9 +6294,12 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                 if (njets_pt30_eta4p7_jesdn > 0) {
                     Jet1_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet1index_jesdn],jet_jesdn_eta[jet1index_jesdn],jet_jesdn_phi[jet1index_jesdn],jet_jesdn_mass[jet1index_jesdn]);
                     pTj1_jesdn=Jet1_jesdn.Pt();
-                    etaj1_jesdn=Jet1_jesdn.Eta();
+		    pT4lj_jesdn=pT4l+Jet1_jesdn.Pt();
+		    etaj1_jesdn=Jet1_jesdn.Eta();
                     yj1_jesdn=Jet1_jesdn.Rapidity();
-                    dPhiHj1_jesdn=TMath::Abs(HVec.Phi()-Jet1_jesdn.Phi());
+		    mass4lj_jesdn=mass4l+Jet1_jesdn.M();
+                    //dPhiHj1_jesdn=TMath::Abs(HVec.Phi()-Jet1_jesdn.Phi());
+                    dPhiHj1_jesdn=deltaPhi(HVec.Phi(),Jet1_jesdn.Phi());
                     dyHj1_jesdn=TMath::Abs(y4l-yj1_jesdn);
                 }
                 if (njets_pt30_eta4p7_jesdn > 1) {
@@ -6277,15 +6307,21 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                     pTj2_jesdn=Jet2_jesdn.Pt();
                     etaj2_jesdn=Jet2_jesdn.Eta();
                     yj2_jesdn=TMath::Abs(Jet2_jesdn.Rapidity());
-                    dEtaj1j2_jesdn=TMath::Abs(Jet1_jesdn.Eta()-Jet2_jesdn.Eta());
-                    dPhij1j2_jesdn=TMath::Abs(Jet1_jesdn.Phi()-Jet2_jesdn.Phi());
-                    dPhiHj1j2_jesdn=TMath::Abs(HVec.Phi()-(Jet1_jesdn+Jet2_jesdn).Phi());
+                    mj1j2_jesdn=(Jet1_jesdn+Jet2_jesdn).M();
+		    mass4ljj_jesdn=mass4l+mj1j2_jesdn;
+                    pT4ljj_jesdn=pT4l+(Jet1_jesdn+Jet2_jesdn).Pt();
+		    dEtaj1j2_jesdn=TMath::Abs(Jet1_jesdn.Eta()-Jet2_jesdn.Eta());
+                    //dPhij1j2_jesdn=TMath::Abs(Jet1_jesdn.Phi()-Jet2_jesdn.Phi());
+                    dPhij1j2_jesdn=deltaPhi(Jet1_jesdn.Phi(),Jet2_jesdn.Phi());
+                    //dPhiHj1j2_jesdn=TMath::Abs(HVec.Phi()-(Jet1_jesdn+Jet2_jesdn).Phi());
+                    dPhiHj1j2_jesdn=deltaPhi(HVec.Phi(),(Jet1_jesdn+Jet2_jesdn).Phi());
                 }
                 if (njets_pt30_eta2p5_jesdn > 0) {
                     Jet1_2p5_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet1index2p5_jesdn],jet_jesdn_eta[jet1index2p5_jesdn],jet_jesdn_phi[jet1index2p5_jesdn],jet_jesdn_mass[jet1index2p5_jesdn]);
                     pTj1_2p5_jesdn=Jet1_2p5_jesdn.Pt();
                     yj1_2p5_jesdn=TMath::Abs(Jet1_2p5.Rapidity());
-                    dPhiHj1_2p5_jesdn=TMath::Abs(HVec.Phi()-Jet1_2p5_jesdn.Phi());
+                    //dPhiHj1_2p5_jesdn=TMath::Abs(HVec.Phi()-Jet1_2p5_jesdn.Phi());
+                    dPhiHj1_2p5_jesdn=deltaPhi(HVec.Phi(),Jet1_2p5_jesdn.Phi());
                     dyHj1_2p5_jesdn=TMath::Abs(y4l-yj1_2p5_jesdn);
                 }
                 if (njets_pt30_eta2p5_jesdn > 1) {
@@ -6294,8 +6330,9 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                     yj2_2p5_jesdn=TMath::Abs(Jet2_2p5_jesdn.Rapidity());
                     mj1j2_2p5_jesdn=(Jet1_2p5_jesdn+Jet2_2p5_jesdn).M();
                     dEtaj1j2_2p5_jesdn=TMath::Abs(Jet1_2p5_jesdn.Eta()-Jet2_2p5_jesdn.Eta());
-                    dPhij1j2_2p5_jesdn=TMath::Abs(Jet1_2p5_jesdn.Phi()-Jet2_2p5_jesdn.Phi());
-                    dPhiHj1j2_2p5_jesdn=TMath::Abs(HVec.Phi()-(Jet1_2p5_jesdn+Jet2_2p5_jesdn).Phi());
+                    //dPhij1j2_2p5_jesdn=TMath::Abs(Jet1_2p5_jesdn.Phi()-Jet2_2p5_jesdn.Phi());
+                    dPhij1j2_2p5_jesdn=deltaPhi(Jet1_2p5_jesdn.Phi(),Jet2_2p5_jesdn.Phi());
+                    dPhiHj1j2_2p5_jesdn=deltaPhi(HVec.Phi(),(Jet1_2p5_jesdn+Jet2_2p5_jesdn).Phi());
                 }
 
 
@@ -6488,7 +6525,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
         unsigned int L1=99; unsigned int L2=99; unsigned int L3=99; unsigned int L4=99;
         GENmass4l = -1.0; GENmass4e = -1.0; GENmass4mu = -1.0; GENmass2e2mu = -1.0;
         GENmassZ1 = -1.0; GENmassZ2 = -1.0; GENpT4l = -1.0; GENeta4l = 999.; GENrapidity4l = 999.; GENphi4l = 999.;
-	GENpT4lj = -1.0; GENpT4ljj=-1.0; GENmass4lj = -1.0; GENmass4ljj=-1.0;
+	GENpT4lj = -10.0; GENpT4ljj=-10.0; GENmass4lj = -1.0; GENmass4ljj=-1.0;
         //cout<<"Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<endl;
         passedFiducialSelection = mZ1_mZ2(L1, L2, L3, L4, true);      
         if (verbose) cout<<"passedFiducialSelection? "<<passedFiducialSelection<<endl;
@@ -6681,7 +6718,8 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                     GENpTj1=GENJet1.Pt();
                     GENyj1=TMath::Abs(GENJet1.Rapidity());
                     //GENdPhiHj1=TMath::Abs((LS3_Z1_1+LS3_Z1_2+LS3_Z2_1+LS3_Z2_2).Phi()-GENJet1.Phi());
-                    GENdPhiHj1=TMath::Abs(GENphi4l-GENJet1.Phi());
+                    //GENdPhiHj1=TMath::Abs(GENphi4l-GENJet1.Phi());
+                    GENdPhiHj1=deltaPhi(GENphi4l,GENJet1.Phi());
                     //GENdyHj1=TMath::Abs(GENy4l-GENyj1);
                     GENdyHj1=TMath::Abs(GENrapidity4l-GENyj1);
                 }
@@ -6693,9 +6731,11 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                     GENDijetMass=(GENJet1+GENJet2).M();
 		    GENmass4ljj=GENmass4l+GENDijetMass;
                     GENdEtaj1j2=TMath::Abs(GENJet1.Eta()-GENJet2.Eta());
-                    GENdPhij1j2=TMath::Abs(GENJet1.Phi()-GENJet2.Phi());
+                    //GENdPhij1j2=TMath::Abs(GENJet1.Phi()-GENJet2.Phi());
+                    GENdPhij1j2=deltaPhi(GENJet1.Phi(),GENJet2.Phi());
                     //GENdPhiHj1j2=TMath::Abs((LS3_Z1_1+LS3_Z1_2+LS3_Z2_1+LS3_Z2_2).Phi()-(GENJet1+GENJet2).Phi());
-                    GENdPhiHj1j2=TMath::Abs(GENphi4l-(GENJet1+GENJet2).Phi());
+                    //GENdPhiHj1j2=TMath::Abs(GENphi4l-(GENJet1+GENJet2).Phi());
+                    GENdPhiHj1j2=deltaPhi(GENphi4l,(GENJet1+GENJet2).Phi());
                 }
 
 		if (GENnjets_pt30_eta2p5 > 0) {
@@ -6704,7 +6744,8 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                     GENpTj1_2p5=GENJet1_2p5.Pt();
                     GENyj1_2p5=TMath::Abs(GENJet1.Rapidity());
                     //GENdPhiHj1_2p5=TMath::Abs((LS3_Z1_1+LS3_Z1_2+LS3_Z2_1+LS3_Z2_2).Phi()-GENJet1_2p5.Phi());
-                    GENdPhiHj1_2p5=TMath::Abs(GENphi4l-GENJet1_2p5.Phi());
+                    //GENdPhiHj1_2p5=TMath::Abs(GENphi4l-GENJet1_2p5.Phi());
+                    GENdPhiHj1_2p5=deltaPhi(GENphi4l,GENJet1_2p5.Phi());
                     //GENdyHj1_2p5=TMath::Abs(GENy4l-GENyj1_2p5);
                     GENdyHj1_2p5=TMath::Abs(GENrapidity4l-GENyj1_2p5);
                 }
@@ -6715,9 +6756,11 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                     GENyj2_2p5=TMath::Abs(GENJet2.Rapidity());
                     GENDijetMass_2p5=(GENJet1_2p5+GENJet2_2p5).M();
                     GENdEtaj1j2_2p5=TMath::Abs(GENJet1_2p5.Eta()-GENJet2_2p5.Eta());
-                    GENdPhij1j2_2p5=TMath::Abs(GENJet1_2p5.Phi()-GENJet2_2p5.Phi());
+                    //GENdPhij1j2_2p5=TMath::Abs(GENJet1_2p5.Phi()-GENJet2_2p5.Phi());
+                    GENdPhij1j2_2p5=deltaPhi(GENJet1_2p5.Phi(),GENJet2_2p5.Phi());
                     //GENdPhiHj1j2_2p5=TMath::Abs((LS3_Z1_1+LS3_Z1_2+LS3_Z2_1+LS3_Z2_2).Phi()-(GENJet1_2p5+GENJet2_2p5).Phi());
-                    GENdPhiHj1j2_2p5=TMath::Abs(GENphi4l-(GENJet1_2p5+GENJet2_2p5).Phi());
+                    //GENdPhiHj1j2_2p5=TMath::Abs(GENphi4l-(GENJet1_2p5+GENJet2_2p5).Phi());
+                    GENdPhiHj1j2_2p5=deltaPhi(GENphi4l,(GENJet1_2p5+GENJet2_2p5).Phi());
                 }
 
                 GENpTj1_VBF=-1.0; GENdPhij1j2_VBF=-1.0; GENdPhiHj1j2_VBF=-1.0;
