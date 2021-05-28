@@ -6397,33 +6397,33 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
     if (verbose) cout<<"begin looping on gen particles"<<endl;
     for(genPart = prunedgenParticles->begin(); genPart != prunedgenParticles->end(); genPart++) {
         j++;
-        //        if (genPart->status() == 21) {
-        // cout<<"found a gen incoming particle: id "<<genPart->pdgId()<<" pt: "<<genPart->pt()<<" eta: "<<genPart->eta()<<" status: "<<genPart->status()<<endl;
-        // counter_initParticle++;
-        // cout<<"initial particle counter is ...."<<counter_initParticle<<endl;
-        // if (counter_initParticle==1){
-        // //mom1.SetPxPyPzE(genPart->Px(),genPart->Py(),genPart->Pz(),genPart->E())
-        // GENmom1.SetPxPyPzE(genPart->px(),genPart->py(),genPart->pz(),genPart->energy());
-        // GENmom1_id=genPart->pdgId();
-        // }
-        // if (counter_initParticle==2){
-        // //mom1.SetPxPyPzE(genPart->Px(),genPart->Py(),genPart->Pz(),genPart->E())
-        // GENmom2.SetPxPyPzE(genPart->px(),genPart->py(),genPart->pz(),genPart->energy());
-        // GENmom2_id=genPart->pdgId();
-        // }
-        // cout<<"pz of  mom1 is ....."<<GENmom1.Pz()<<endl;
-        // cout<<"pz of  mom2 is ....."<<GENmom2.Pz()<<endl;
-        // cout<<"energy of  mom1 is ....."<<GENmom1.E()<<endl;
-        // cout<<"energy of  mom2 is ....."<<GENmom2.E()<<endl;
-        // cout<<"pdg ID of 1st incoming particle is ....."<<GENmom1_id<<endl;
-        // cout<<"pdg ID of 2nd incoming particle is ....."<<GENmom2_id<<endl;
-        // }  //end if status, incoming particles
-        // if (counter_initParticle > 2)
-        // {
-        // cout << "initial particle can't be more than 2... please check for issue" << endl;
+                if (genPart->status() == 21) {
+         cout<<"found a gen incoming particle: id "<<genPart->pdgId()<<" pt: "<<genPart->pt()<<" eta: "<<genPart->eta()<<" status: "<<genPart->status()<<endl;
+         counter_initParticle++;
+         cout<<"initial particle counter is ...."<<counter_initParticle<<endl;
+         if (counter_initParticle==1){
+         //mom1.SetPxPyPzE(genPart->Px(),genPart->Py(),genPart->Pz(),genPart->E())
+         GENmom1.SetPxPyPzE(genPart->px(),genPart->py(),genPart->pz(),genPart->energy());
+         GENmom1_id=genPart->pdgId();
+         }
+         if (counter_initParticle==2){
+         //mom1.SetPxPyPzE(genPart->Px(),genPart->Py(),genPart->Pz(),genPart->E())
+         GENmom2.SetPxPyPzE(genPart->px(),genPart->py(),genPart->pz(),genPart->energy());
+         GENmom2_id=genPart->pdgId();
+        }
+         cout<<"pz of  mom1 is ....."<<GENmom1.Pz()<<endl;
+         cout<<"pz of  mom2 is ....."<<GENmom2.Pz()<<endl;
+         cout<<"energy of  mom1 is ....."<<GENmom1.E()<<endl;
+         cout<<"energy of  mom2 is ....."<<GENmom2.E()<<endl;
+         cout<<"pdg ID of 1st incoming particle is ....."<<GENmom1_id<<endl;
+         cout<<"pdg ID of 2nd incoming particle is ....."<<GENmom2_id<<endl;
+         }  //end if status, incoming particles
+         if (counter_initParticle > 2)
+         {
+         cout << "initial particle can't be more than 2... please check for issue" << endl;
         // exit(0);
-        // }
-        // //GENmothers
+         }
+         //GENmothers
         // SimpleParticleCollection_t mothers;  //third input to GENmela
         // mothers.push_back(SimpleParticle_t(GENmom1_id, GENmom1));
         // mothers.push_back(SimpleParticle_t(GENmom2_id, GENmom2));
@@ -6872,6 +6872,9 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             if (GENnjets_pt30_eta4p7>1 && GENdEtaj1j2>3.5 && GENDijetMass>200.0) {
                 GENpTj1_VBF=GENpTj1; GENdPhij1j2_VBF=GENdPhij1j2; GENdPhiHj1j2_VBF=GENdPhiHj1j2;
             }
+
+// start filling GEN mela variables 
+
             GENmela = new Mela(13.0, 125.0, TVar::SILENT);
             GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
             //mela->setInputEvent(&daughters, &associated, 0, 0);
@@ -6880,36 +6883,37 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             GENmela->setCurrentCandidateFromIndex(0);
             
             GENmela->setProcess(TVar::HSMHiggs, TVar::JHUGen, TVar::ZZGG);
-            GENmela->computeP(me_0plus_JHU, false);
+            GENmela->computeP(GENme_0plus_JHU, false);
             
             GENmela->setProcess(TVar::H0minus, TVar::JHUGen, TVar::ZZGG);
-            GENmela->computeP(p0minus_VAJHU, false);
+            GENmela->computeP(GENp0minus_VAJHU, false);
             
             GENpg1g4_VAJHU=0.0;
             GENmela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
             (GENmela->selfDHggcoupl)[0][0][0]=1.;
             (GENmela->selfDHzzcoupl)[0][0][0]=1.;
             (GENmela->selfDHzzcoupl)[0][3][0]=1.;
-            GENmela->computeP(pg1g4_VAJHU, true);
-            GENpg1g4_VAJHU -= me_0plus_JHU+p0minus_VAJHU;
+            GENmela->computeP(pg1g4_VAJHU, false);
+            GENpg1g4_VAJHU -= GENme_0plus_JHU+GENp0minus_VAJHU;
             
             GENmela->setProcess(TVar::bkgZZ, TVar::MCFM, TVar::ZZQQB);
-            GENmela->computeP(me_qqZZ_MCFM, false);
+            GENmela->computeP(GENme_qqZZ_MCFM, false);
             
-            GENmela->computeD_gg(TVar::MCFM, TVar::D_gg10, Dgg10_VAMCFM);
+            GENmela->computeD_gg(TVar::MCFM, TVar::D_gg10, GENDgg10_VAMCFM);  // ??
             
             GENmela->setProcess(TVar::HSMHiggs, TVar::JHUGen, TVar::ZZGG);
-            GENmela->computePM4l(TVar::SMSyst_None, p0plus_m4l);
+            GENmela->computePM4l(TVar::SMSyst_None, GENp0plus_m4l);
             
             GENmela->setProcess(TVar::bkgZZ, TVar::JHUGen, TVar::ZZGG);
-            GENmela->computePM4l(TVar::SMSyst_None, bkg_m4l);
+            GENmela->computePM4l(TVar::SMSyst_None, GENbkg_m4l);
             
-            GEND_bkg_kin = me_0plus_JHU/(me_0plus_JHU+me_qqZZ_MCFM*helper.getDbkgkinConstant(idL1*idL2*idL3*idL3,mass4l));
+/*            GEND_bkg_kin = me_0plus_JHU/(me_0plus_JHU+me_qqZZ_MCFM*helper.getDbkgkinConstant(idL1*idL2*idL3*idL3,mass4l));
             GEND_bkg_kin_vtx_BS = me_0plus_JHU/(me_0plus_JHU+me_qqZZ_MCFM*helper.getDbkgkinConstant(idL1*idL2*idL3*idL3,mass4l_vtxFSR_BS));
             
             GEND_bkg = me_0plus_JHU*p0plus_m4l/(me_0plus_JHU*p0plus_m4l+me_qqZZ_MCFM*bkg_m4l*helper.getDbkgConstant(idL1*idL2*idL3*idL4,mass4l)); // superMELA
-            GEND_g4 = me_0plus_JHU/(me_0plus_JHU+pow(2.521, 2)*p0minus_VAJHU); // D_0-
-            GEND_g1g4 = pg1g4_VAJHU*2.521/(me_0plus_JHU+pow(2.521, 2)*p0minus_VAJHU); // D_CP, 2.521 since g1=1 and g4=1 is used
+*/   // FIXME
+            GEND_g4 = GENme_0plus_JHU/(GENme_0plus_JHU+pow(2.521, 2)*GENp0minus_VAJHU); // D_0-
+            GEND_g1g4 = GENpg1g4_VAJHU*2.521/(GENme_0plus_JHU+pow(2.521, 2)*GENp0minus_VAJHU); // D_CP, 2.521 since g1=1 and g4=1 is used
             //TJe
             //} //shift endjetloop
             
