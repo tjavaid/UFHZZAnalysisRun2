@@ -4,8 +4,8 @@ from FWCore.ParameterSet.VarParsing import VarParsing
 process = cms.Process("UFHZZ4LAnalysis")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
-#process.MessageLogger.cerr.FwkReport.reportEvery = 1
+# process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 100
 process.MessageLogger.categories.append('UFHZZ4LAna')
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
@@ -20,18 +20,64 @@ process.Timing = cms.Service("Timing",
 
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
-#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
+# process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
 #process.maxEvents = 1000 #cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
-'/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/DCB7927B-269F-3B4B-9DA3-EFE07A37FC9E.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/DCB7927B-269F-3B4B-9DA3-EFE07A37FC9E.root',
+# /GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM
+# '/store/mc/RunIIAutumn18MiniAOD/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/80000/49CB36B2-E124-2249-A0F8-CE867CF4F8A6.root',
+# '/store/mc/RunIIAutumn18MiniAOD/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/80000/6F4F411E-8111-684D-827D-B5962A0CB94F.root',
+# '/store/mc/RunIIAutumn18MiniAOD/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/80000/79F49EC1-42B4-3349-A268-59510E899BCC.root',
+# '/store/mc/RunIIAutumn18MiniAOD/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/270000/D5E6F6E3-9CDF-9649-9D85-431625839928.root',
+# '/store/mc/RunIIAutumn18MiniAOD/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/270000/72D0FBAC-B7AF-844E-A8B0-63AF4AAB80EB.root'
+#
+# /GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1/MINIAODSIM
+#
+# NOT oppened '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/230000/5792C7B4-DA68-3C4E-BC65-C6F875BC5530.root',
+'file:/tmp/rasharma/69A19159-825A-F645-805E-6894E417C86F.root',
+'file:/tmp/rasharma/0593E6EE-55E1-B64B-B145-4784A60269E0.root',
+'file:/tmp/rasharma/06161B10-2C38-D741-B7A6-58A3DC3D7F1C.root',
+'file:/tmp/rasharma/573E3E9A-CE34-F84D-A932-14FB1439E553.root',
+'file:/tmp/rasharma/7AA54970-61A0-6E48-A488-7F3BADF4B2E1.root'
+# '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/230000/69A19159-825A-F645-805E-6894E417C86F.root',
+# '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/100000/0593E6EE-55E1-B64B-B145-4784A60269E0.root',
+# '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/100000/7AA54970-61A0-6E48-A488-7F3BADF4B2E1.root',
+# '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/240000/573E3E9A-CE34-F84D-A932-14FB1439E553.root',
+# '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/30000/06161B10-2C38-D741-B7A6-58A3DC3D7F1C.root',
+# '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/30000/333B89AC-ED70-314B-AA89-B5F196CE5E21.root',
+# '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/30000/86509D01-06E8-5B41-82BC-C916A2857B71.root',
+# '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/1210000/CD6C00C2-FE17-A140-9744-A6BD29810699.root',
+# '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/1210000/0BF893C5-A6F5-3342-A122-ED92EAA15748.root',
+# '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/120000/B5B6C422-F0C1-844E-974E-7D5CD741C10F.root',
+#
+#
+# /VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/RunIISummer20UL18MiniAOD-106X_upgrade2018_realistic_v11_L1v1-v1/MINIAODSIM
+# '/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/280000/3DA1679E-86B7-5E49-99B8-3B87FD081C74.root',
+# '/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/280000/56675EE2-C2BB-974D-98F7-FB2623F3A787.root',
+# '/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/280000/87EA1A4B-60F0-6F4C-884C-10220DA1CBC0.root',
+# '/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/280000/1A092DFB-8251-4040-8E5E-46971A41BF4C.root',
+# '/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/280000/7D5E8696-85E4-3F4A-8644-70506012F698.root',
+# '/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/30000/D5965022-AF5A-9941-88ED-3C8CBB3E47E5.root',
+#
+#
+# /WplusH_HToZZTo4L_M125_TuneCP5_13TeV_powheg2-minlo-HWJ_JHUGenV7011_pythia8/RunIISummer20UL18MiniAOD-106X_upgrade2018_realistic_v11_L1v1-v1/MINIAODSIM
+# '/store/mc/RunIISummer20UL18MiniAOD/WplusH_HToZZTo4L_M125_TuneCP5_13TeV_powheg2-minlo-HWJ_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/110000/4713C8F7-7F7D-F141-8756-F660FDC50215.root',
+# '/store/mc/RunIISummer20UL18MiniAOD/WplusH_HToZZTo4L_M125_TuneCP5_13TeV_powheg2-minlo-HWJ_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/110000/9D6986D7-766C-B449-8CDF-7E2A6305300C.root',
+# '/store/mc/RunIISummer20UL18MiniAOD/WplusH_HToZZTo4L_M125_TuneCP5_13TeV_powheg2-minlo-HWJ_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/110000/26F22CD4-CD05-B047-901D-5C5F94565FD2.root',
+# '/store/mc/RunIISummer20UL18MiniAOD/WplusH_HToZZTo4L_M125_TuneCP5_13TeV_powheg2-minlo-HWJ_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/110000/46587F25-05CA-1542-93E2-3509466B3142.root',
+# '/store/mc/RunIISummer20UL18MiniAOD/WplusH_HToZZTo4L_M125_TuneCP5_13TeV_powheg2-minlo-HWJ_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/110000/E942CADC-9A2E-5E44-9DAF-C17460E2390C.root',
+# '/store/mc/RunIISummer20UL18MiniAOD/WplusH_HToZZTo4L_M125_TuneCP5_13TeV_powheg2-minlo-HWJ_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/110000/A49F09E0-0169-4247-BB63-BB9BFF40C41B.root',
+
+
 )
 
 process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             )
 
 process.TFileService = cms.Service("TFileService",
-                                  fileName = cms.string("Sync_1031_2018_ttH_v2.root")##
+                                  fileName = cms.string("GluGluHToZZTo4L_M125_Summer20_2018.root")##
+                                  # fileName = cms.string("Sync_1031_2018_Wplus_HToZZTo4L_Summer20_F660FDC50215.root")##
 )
 
 # clean muons by segments 
@@ -300,9 +346,9 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                                   'HLT_Mu8_DiEle12_CaloIdL_TrackIdL_DZ_v', 
                               ),
                               verbose = cms.untracked.bool(False),              
+                              # verbose = cms.untracked.bool(True),
                               skimLooseLeptons = cms.untracked.int32(4),              
                               skimTightLeptons = cms.untracked.int32(4),              
-#                              verbose = cms.untracked.bool(True),              
                               year = cms.untracked.int32(2018),####for year put 2016,2017, or 2018 to select correct Muon training and electron MVA
                              )
 

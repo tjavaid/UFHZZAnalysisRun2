@@ -132,6 +132,9 @@
 //VBF Jets
 #include "UFHZZAnalysisRun2/UFHZZ4LAna/interface/HZZ4LJets.h"
 
+//nJettiness
+#include "UFHZZAnalysisRun2/UFHZZ4LAna/interface/NJettiness.h"
+
 // Jet energy correction
 #include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
@@ -196,7 +199,7 @@ private:
     virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
     virtual void endLuminosityBlock(edm::LuminosityBlock const& lumiSeg,edm::EventSetup const& eSetup);
     
-    void findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vector< pat::Electron > &selectedElectrons, const edm::Event& iEvent, const edm::EventSetup& iSetup);
+    void findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vector< pat::Electron > &selectedElectrons, const edm::Event& iEvent, const edm::EventSetup& iSetup, edm::Handle<pat::PackedCandidateCollection> &pfcands, edm::Handle<edm::View<pat::Jet> > &jets);
     void findZ1LCandidate(const edm::Event& iEvent);
     
     RoccoR  *calibrator;
@@ -427,6 +430,19 @@ private:
     float absdeltarapidity_hleadingjet_pt30_eta4p7_jesup; float absdeltarapidity_hleadingjet_pt30_eta4p7_jesdn;
     float absdeltarapidity_hleadingjet_pt30_eta4p7_jerup; float absdeltarapidity_hleadingjet_pt30_eta4p7_jerdn;
     float DijetMass, DijetDEta, DijetFisher;
+
+    // n-jettiness for additional ak4 jets
+    float TauC_Inc_0j, TauC_JetConstituents_0j, TauCnoHRapidity_JetConstituents_0j;
+    float TauB_Inc_0j, TauB_JetConstituents_0j;
+    float TauC_Inc_1j, TauC_JetConstituents_1j, TauCnoHRapidity_JetConstituents_1j;
+    float TauB_Inc_1j, TauB_JetConstituents_1j;
+    float TauC_Inc_2j, TauC_JetConstituents_2j, TauCnoHRapidity_JetConstituents_2j;
+    float TauB_Inc_2j, TauB_JetConstituents_2j;
+
+    float GeneralTau;
+    float GeneralTau1;
+    float GeneralTau2;
+    float GeneralTau3;
     
     // new nominal
     float pTj1=-10.0; float pTj2=-10.0;
@@ -1029,9 +1045,9 @@ UFHZZ4LAna::~UFHZZ4LAna()
 
 
 
-float UFHZZ4LAna::ApplyRoccoR(int Y, bool isMC, int charge, float pt, float eta, float phi, float genPt, float nLayers){
-    
-    
+float UFHZZ4LAna::ApplyRoccoR(int Y, bool isMC, int charge, float pt, float eta, float phi, float genPt, float nLayers)
+{
+
     float scale_factor;
     if(isMC && nLayers > 5)
     {
@@ -1483,6 +1499,28 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     absdeltarapidity_hleadingjet_pt30_eta4p7_jerup=-1.0; absdeltarapidity_hleadingjet_pt30_eta4p7_jerdn=-1.0;
     
     DijetMass=-1.0; DijetDEta=9999.0; DijetFisher=9999.0;
+
+    // n-jettiness for additional ak4 jets
+    TauC_Inc_0j=-9999.0;
+    TauC_Inc_1j=-9999.0;
+    TauC_Inc_2j=-9999.0;
+    TauC_JetConstituents_0j=-9999.0;
+    TauC_JetConstituents_1j=-9999.0;
+    TauC_JetConstituents_2j=-9999.0;
+    TauCnoHRapidity_JetConstituents_0j=-9999.0;
+    TauCnoHRapidity_JetConstituents_1j=-9999.0;
+    TauCnoHRapidity_JetConstituents_2j=-9999.0;
+    TauB_Inc_0j=-9999.0;
+    TauB_Inc_1j=-9999.0;
+    TauB_Inc_2j=-9999.0;
+    TauB_JetConstituents_0j=-9999.0;
+    TauB_JetConstituents_1j=-9999.0;
+    TauB_JetConstituents_2j=-9999.0;
+
+    GeneralTau=-9999.0;
+    GeneralTau1=-9999.0;
+    GeneralTau2=-9999.0;
+    GeneralTau3=-9999.0;
     
     mergedjet_iscleanH4l.clear();
     mergedjet_pt.clear(); mergedjet_eta.clear(); mergedjet_phi.clear(); mergedjet_mass.clear();
@@ -1959,7 +1997,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         
         if( (recoMuons.size() + recoElectrons.size()) >= (uint)skimLooseLeptons ) {
             
-            if (verbose) cout<<"found two leptons"<<endl;
+            if (verbose) cout<<"found >= " <<skimLooseLeptons << " leptons"<<endl;
             
             for(unsigned int i = 0; i < recoMuons.size(); i++) {
                 if (lep_ptreco.size()==0 || recoMuons[i].pt()<lep_ptreco[lep_ptreco.size()-1]) {
@@ -2234,17 +2272,23 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     lep_dataMCErr.push_back(helper.dataMCErr(recoMuons[lep_ptindex[i]],hMuScaleFacUnc));
                     lep_genindex.push_back(-1.0);
                 }
-                if (verbose) {cout<<" eta: "<<lep_eta[i]<<" phi: "<<lep_phi[i];
-                    if(abs(lep_ptid[i])==11)  cout<<" eSuperClusterOverP: "<<recoElectrons[lep_ptindex[i]].eSuperClusterOverP()<<" ecalEnergy: "<<recoElectrons[lep_ptindex[i]].ecalEnergy()<<" p: "<<recoElectrons[lep_ptindex[i]].p();
+                if (verbose) {
+                    cout<<" eta: "<<lep_eta[i]<<" phi: "<<lep_phi[i];
+                    if(abs(lep_ptid[i])==11)
+                        cout<<" eSuperClusterOverP: "<<recoElectrons[lep_ptindex[i]].eSuperClusterOverP()<<" ecalEnergy: "<<recoElectrons[lep_ptindex[i]].ecalEnergy()<<" p: "<<recoElectrons[lep_ptindex[i]].p();
                     cout<<" RelIso: "<<lep_RelIso[i]<<" isoCH: "<<lep_isoCH[i]<<" isoNH: "<<lep_isoNH[i]
-                    <<" isoPhot: "<<lep_isoPhot[i]<<" lep_isoPU: "<<lep_isoPU[i]<<" isoPUcorr: "<<lep_isoPUcorr[i]<<" Sip: "<<lep_Sip[i]
-                    <<" MiniIso: "<<lep_MiniIso[i]<<" ptRatio: "<<lep_ptRatio[i]<<" ptRel: "<<lep_ptRel[i]<<" lep_mva: "<<lep_mva[i];
-                    if(abs(lep_ptid[i])==11)    cout<<" SCeta: "<<recoElectrons[lep_ptindex[i]].superCluster()->eta()<<" dxy: "<<recoElectrons[lep_ptindex[i]].gsfTrack()->dxy(PV->position())<<" dz: "<<recoElectrons[lep_ptindex[i]].gsfTrack()->dz(PV->position());
-                    if(abs(lep_ptid[i])==11)    cout<<" Rho: "<<elRho<<" EleBDT_name: "<<EleBDT_name_161718<<" Uncorrected electron pt: "<<recoElectronsUnS[lep_ptindex[i]].pt();
-                    if(abs(lep_ptid[i])==13)    cout<<" Rho: "<<muRho;
+                        <<" isoPhot: "<<lep_isoPhot[i]<<" lep_isoPU: "<<lep_isoPU[i]<<" isoPUcorr: "<<lep_isoPUcorr[i]<<" Sip: "<<lep_Sip[i]
+                        <<" MiniIso: "<<lep_MiniIso[i]<<" ptRatio: "<<lep_ptRatio[i]<<" ptRel: "<<lep_ptRel[i]<<" lep_mva: "<<lep_mva[i];
+                    if(abs(lep_ptid[i])==11)
+                        cout<<" SCeta: "<<recoElectrons[lep_ptindex[i]].superCluster()->eta()<<" dxy: "<<recoElectrons[lep_ptindex[i]].gsfTrack()->dxy(PV->position())<<" dz: "<<recoElectrons[lep_ptindex[i]].gsfTrack()->dz(PV->position());
+                    if(abs(lep_ptid[i])==11)
+                        cout<<" Rho: "<<elRho<<" EleBDT_name: "<<EleBDT_name_161718<<" Uncorrected electron pt: "<<recoElectronsUnS[lep_ptindex[i]].pt();
+                    if(abs(lep_ptid[i])==13)
+                        cout<<" Rho: "<<muRho;
                     cout<<" dataMC: "<<lep_dataMC[i]<<" dataMCErr: "<<lep_dataMCErr[i];
                     cout<<" lep_pterr: "<<lep_pterr[i]<<" lep_pterrold: "<<lep_pterrold[i]<<" lep_tightIdHiPt: "<<lep_tightIdHiPt[i]<<endl;
-                    if((abs(lep_ptid[i])==13)&&lep_pt[i]>200)    cout<<"Muon pt over 200 isTrackerHighPtID? "<<helper.isTrackerHighPt(recoMuons[lep_ptindex[i]],PV)<<endl;}
+                    if((abs(lep_ptid[i])==13)&&lep_pt[i]>200)
+                        cout<<"Muon pt over 200 isTrackerHighPtID? "<<helper.isTrackerHighPt(recoMuons[lep_ptindex[i]],PV)<<endl;}
             }
             
             if (verbose) cout<<"adding taus to sorted list"<<endl;
@@ -2506,9 +2550,15 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 if (abs(lep_id[i])==11 && lep_RelIsoNoFSR[i]<isoCutEl && lep_tightId[i]==1) ntight+=1;
                 if (abs(lep_id[i])==13 && lep_RelIsoNoFSR[i]<isoCutMu && lep_tightId[i]==1) ntight+=1;
             }
-            
+
             if ( ntight >= (uint)skimTightLeptons ) {
-                
+
+                NJettiness CalculateNJettinessVar;
+                double Taub = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, 1.0, 1.0);
+                GeneralTau = Taub;
+                // std::cout << "Number of tight leptons: " << ntight << "\tskimTightLeptons = " << skimTightLeptons << std::endl;
+                // std::cout << "Taub = " << Taub << std::endl;
+
                 // Fake Rate Study (Z+1L Control Region)
                 if (verbose) cout<<"begin Z+1L fake rate study"<<endl;
                 // Z+1L selection
@@ -2524,7 +2574,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 vector<pat::Electron> selectedElectrons;
                 
                 if (verbose) cout<<"begin looking for higgs candidate"<<endl;
-                if(isCode4l) findHiggsCandidate(selectedMuons,selectedElectrons,iEvent, iSetup);
+                if(isCode4l) findHiggsCandidate(selectedMuons,selectedElectrons,iEvent, iSetup,pfCands, jets);
                 if (verbose) {cout<<"found higgs candidate? "<<foundHiggsCandidate<<endl; }
                 
                 // Jets
@@ -3569,15 +3619,15 @@ UFHZZ4LAna::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup)
             LHERunInfoProduct myLHERunInfoProduct = *(run.product());
             typedef std::vector<LHERunInfoProduct::Header>::const_iterator headers_const_iterator;
             for (headers_const_iterator iter=myLHERunInfoProduct.headers_begin(); iter!=myLHERunInfoProduct.headers_end(); iter++){
-                std::cout << iter->tag() << std::endl;
+                if (verbose) std::cout << iter->tag() << std::endl;
                 std::vector<std::string> lines = iter->lines();
                 for (unsigned int iLine = 0; iLine<lines.size(); iLine++) {
                     std::string pdfid=lines.at(iLine);
                     if (pdfid.substr(1,6)=="weight" && pdfid.substr(8,2)=="id") {
-                        std::cout<<pdfid<<std::endl;
+                        if (verbose) std::cout<<pdfid<<std::endl;
                         std::string pdf_weight_id = pdfid.substr(12,4);
                         int pdf_weightid=atoi(pdf_weight_id.c_str());
-                        std::cout<<"parsed id: "<<pdf_weightid<<std::endl;
+                        if (verbose) std::cout<<"parsed id: "<<pdf_weightid<<std::endl;
                         if (pdf_weightid==2001) {posNNPDF=int(pos);}
                         pos+=1;
                     }
@@ -3627,7 +3677,7 @@ UFHZZ4LAna::endLuminosityBlock(edm::LuminosityBlock const& lumiSeg,edm::EventSet
 //Pass empty vectors of pat leptons as selectedMuons and selectedElectrons
 // these will be filled in the function and then useable for more analysis.
 void
-UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vector< pat::Electron > &selectedElectrons,const edm::Event& iEvent, const edm::EventSetup& iSetup)
+UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vector< pat::Electron > &selectedElectrons,const edm::Event& iEvent, const edm::EventSetup& iSetup, edm::Handle<pat::PackedCandidateCollection> &pfCands, edm::Handle<edm::View<pat::Jet> > &jets)
 {
     
     using namespace edm;
@@ -3977,6 +4027,9 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                     
                     Z1Vec = Z1; Z2Vec = Z2; HVec = Z1+Z2;
                     massZ1 = Z1Vec.M(); massZ2 = Z2Vec.M(); mass4l = HVec.M();
+                    NJettiness CalculateNJettinessVar;
+                    double Taub1 = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, sqrt(mass4l), HVec.Eta());
+                    GeneralTau1 = Taub1;
                     
                     if (verbose) cout<<" new best candidate SR: mass4l: "<<HVec.M()<<endl;
                     if (HVec.M()>m4lLowCut)  { //m4lLowCut move forward
@@ -4008,7 +4061,9 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                     
                     Z1Vec = Z1; Z2Vec = Z2; HVec = Z1+Z2;
                     massZ1 = Z1Vec.M(); massZ2 = Z2Vec.M(); mass4l = HVec.M();
-                    
+                    NJettiness CalculateNJettinessVar;
+                    double Taub2 = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, sqrt(mass4l), HVec.Eta());
+                    GeneralTau2 = Taub2;
                     if (verbose) cout<<" new best candidate CR: mass4l: "<<HVec.M()<<endl;
                     if (HVec.M()>m4lLowCut){//m4lLowCut move forward
                         foundHiggsCandidate=true;
@@ -5118,8 +5173,31 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("pt_leadingjet_pt30_eta2p5_jesdn",&pt_leadingjet_pt30_eta2p5_jesdn,"pt_leadingjet_pt30_eta2p5_jesdn/F");
     tree->Branch("pt_leadingjet_pt30_eta2p5_jerup",&pt_leadingjet_pt30_eta2p5_jerup,"pt_leadingjet_pt30_eta2p5_jerup/F");
     tree->Branch("pt_leadingjet_pt30_eta2p5_jerdn",&pt_leadingjet_pt30_eta2p5_jerdn,"pt_leadingjet_pt30_eta2p5_jerdn/F");
-    
-    
+
+    // n-jettiness
+    tree->Branch("TauB_Inc_0j",&TauB_Inc_0j,"TauB_Inc_0j/F");
+    tree->Branch("TauB_JetConstituents_0j",&TauB_JetConstituents_0j,"TauB_JetConstituents_0j/F");
+    tree->Branch("TauC_Inc_0j",&TauC_Inc_0j,"TauC_Inc_0j/F");
+    tree->Branch("TauC_JetConstituents_0j",&TauC_JetConstituents_0j,"TauC_JetConstituents_0j/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_0j",&TauCnoHRapidity_JetConstituents_0j,"TauCnoHRapidity_JetConstituents_0j/F");
+
+    tree->Branch("TauB_Inc_1j",&TauB_Inc_1j,"TauB_Inc_1j/F");
+    tree->Branch("TauB_JetConstituents_1j",&TauB_JetConstituents_1j,"TauB_JetConstituents_1j/F");
+    tree->Branch("TauC_Inc_1j",&TauC_Inc_1j,"TauC_Inc_1j/F");
+    tree->Branch("TauC_JetConstituents_1j",&TauC_JetConstituents_1j,"TauC_JetConstituents_1j/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_1j",&TauCnoHRapidity_JetConstituents_1j,"TauCnoHRapidity_JetConstituents_1j/F");
+
+    tree->Branch("TauB_Inc_2j",&TauB_Inc_2j,"TauB_Inc_2j/F");
+    tree->Branch("TauB_JetConstituents_2j",&TauB_JetConstituents_2j,"TauB_JetConstituents_2j/F");
+    tree->Branch("TauC_Inc_2j",&TauC_Inc_2j,"TauC_Inc_2j/F");
+    tree->Branch("TauC_JetConstituents_2j",&TauC_JetConstituents_2j,"TauC_JetConstituents_2j/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_2j",&TauCnoHRapidity_JetConstituents_2j,"TauCnoHRapidity_JetConstituents_2j/F");
+
+    tree->Branch("GeneralTau",&GeneralTau,"GeneralTau/F");
+    tree->Branch("GeneralTau1",&GeneralTau1,"GeneralTau1/F");
+    tree->Branch("GeneralTau2",&GeneralTau2,"GeneralTau2/F");
+    tree->Branch("GeneralTau3",&GeneralTau3,"GeneralTau3/F");
+
     // merged jets
     tree->Branch("mergedjet_iscleanH4l",&mergedjet_iscleanH4l);
     tree->Branch("mergedjet_pt",&mergedjet_pt);
@@ -5465,7 +5543,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
     using namespace edm;
     using namespace pat;
     using namespace std;
-    
+
     // Jet Info
     double tempDeltaR = 999.0;
     //std::cout<<"ELISA = "<<"good jets "<<goodJets.size()<<std::endl;
@@ -5936,6 +6014,8 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
     H_mass.push_back(HVec.M());
     mass4l = HVec.M();
     mass4l_noFSR = HVecNoFSR.M();
+
+    // std::cout << "===> Higgs mass = " << HVec.M() << std::endl;
     
     if(RecoFourMuEvent){mass4mu = HVec.M();}
     else{mass4mu = -1;}
@@ -6164,7 +6244,154 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         
         // 	    std::cout<<" ------------ "<<std::endl;
         
-    }
+        /**
+         * START: nJettiness variable
+         */
+        float TauB_Inc_0j_temp = -999.0;
+        float TauB_Inc_1j_temp = -999.0;
+        float TauB_Inc_2j_temp = -999.0;
+        float TauC_Inc_0j_temp = -999.0;
+        float TauC_Inc_1j_temp = -999.0;
+        float TauC_Inc_2j_temp = -999.0;
+        float TauB_JetConstituents_0j_temp = -999.0;
+        float TauB_JetConstituents_1j_temp = -999.0;
+        float TauB_JetConstituents_2j_temp = -999.0;
+        float TauC_JetConstituents_0j_temp = -999.0;
+        float TauC_JetConstituents_1j_temp = -999.0;
+        float TauC_JetConstituents_2j_temp = -999.0;
+        float TauCnoHRapidity_JetConstituents_0j_temp = -999.0;
+        float TauCnoHRapidity_JetConstituents_1j_temp = -999.0;
+        float TauCnoHRapidity_JetConstituents_2j_temp = -999.0;
+
+        /**
+         * For zero jet scenario
+         */
+        for (int JetCounter = 0; JetCounter < goodJets.size(); ++JetCounter)
+        {
+            // Inclusive tauC
+            float TauC_Inc_0j_num = sqrt(goodJets[i].energy()*goodJets[i].energy() - goodJets[i].pz()*goodJets[i].pz());
+            float TauC_Inc_0j_den = 2*cosh(goodJets[i].rapidity() - HVec.Rapidity());
+            if (TauC_Inc_0j_num/TauC_Inc_0j_den > TauC_Inc_0j_temp) TauC_Inc_0j_temp = TauC_Inc_0j_num/TauC_Inc_0j_den;
+
+            // Inclusive tauB
+            if (goodJets[i].energy() - goodJets[i].pz() > TauB_Inc_0j_temp) TauB_Inc_0j_temp = goodJets[i].energy() - goodJets[i].pz();
+
+            // TauB & TauC using Jet Constituents
+            float TauB_JetConstituents_0j_local = 0.0;
+            float TauC_JetConstituents_0j_local = 0.0;
+            float TauC_JetConstituents_0j_local2 = 0.0;
+            for ( auto const & constituent : goodJets[i].daughterPtrVector())
+            {
+                // tauB
+                TauB_JetConstituents_0j_local += constituent->energy() - constituent->pz();
+
+                // tauC
+                double TauC2_numerator = sqrt(constituent->energy()*constituent->energy()-constituent->pz()*constituent->pz());
+                // tauC: version1: with higgs rapidity
+                double TauC2_denominator = 2*cosh(constituent->rapidity() - HVec.Eta());
+                TauC_JetConstituents_0j_local += TauC2_numerator/TauC2_denominator;
+
+                // tauC: version1: without higgs rapidity
+                TauC_JetConstituents_0j_local2 += TauC2_numerator/(2*cosh(constituent->rapidity()));
+            }
+            if (TauB_JetConstituents_0j_local > TauB_JetConstituents_0j_temp) TauB_JetConstituents_0j_temp = TauB_JetConstituents_0j_local;
+            if (TauC_JetConstituents_0j_local > TauC_JetConstituents_0j_temp) TauC_JetConstituents_0j_temp = TauC_JetConstituents_0j_local;
+            if (TauC_JetConstituents_0j_local2 > TauCnoHRapidity_JetConstituents_0j_temp) TauCnoHRapidity_JetConstituents_0j_temp = TauC_JetConstituents_0j_local2;
+        }
+        TauC_Inc_0j = TauC_Inc_0j_temp;
+        TauB_Inc_0j = TauB_Inc_0j_temp;
+        TauB_JetConstituents_0j = TauB_JetConstituents_0j_temp;
+        TauC_JetConstituents_0j = TauC_JetConstituents_0j_temp;
+        TauCnoHRapidity_JetConstituents_0j = TauCnoHRapidity_JetConstituents_0j_temp;
+
+        /**
+         * 1-Jet scenario: Here excluding leading jet from tau calculation
+         */
+        for (int JetCounter = 1; JetCounter < goodJets.size(); ++JetCounter)
+        {
+            // Inclusive tauC
+            float TauC_Inc_1j_num = sqrt(goodJets[i].energy()*goodJets[i].energy() - goodJets[i].pz()*goodJets[i].pz());
+            float TauC_Inc_1j_den = 2*cosh(goodJets[i].rapidity() - HVec.Rapidity());
+            if (TauC_Inc_1j_num/TauC_Inc_1j_den > TauC_Inc_1j_temp) TauC_Inc_1j_temp = TauC_Inc_1j_num/TauC_Inc_1j_den;
+
+            // Inclusive tauB
+            if (goodJets[i].energy() - goodJets[i].pz() > TauB_Inc_1j_temp) TauB_Inc_1j_temp = goodJets[i].energy() - goodJets[i].pz();
+
+            // TauB & TauC using Jet Constituents
+            float TauB_JetConstituents_1j_local = 0.0;
+            float TauC_JetConstituents_1j_local = 0.0;
+            float TauC_JetConstituents_1j_local2 = 0.0;
+            for ( auto const & constituent : goodJets[i].daughterPtrVector())
+            {
+                // tauB
+                TauB_JetConstituents_1j_local += constituent->energy() - constituent->pz();
+
+                // tauC
+                double TauC2_numerator = sqrt(constituent->energy()*constituent->energy()-constituent->pz()*constituent->pz());
+                // tauC: version1: with higgs rapidity
+                double TauC2_denominator = 2*cosh(constituent->rapidity() - HVec.Eta());
+                TauC_JetConstituents_1j_local += TauC2_numerator/TauC2_denominator;
+
+                // tauC: version1: without higgs rapidity
+                TauC_JetConstituents_1j_local2 += TauC2_numerator/(2*cosh(constituent->rapidity()));
+            }
+            if (TauB_JetConstituents_1j_local > TauB_JetConstituents_1j_temp) TauB_JetConstituents_1j_temp = TauB_JetConstituents_1j_local;
+            if (TauC_JetConstituents_1j_local > TauC_JetConstituents_1j_temp) TauC_JetConstituents_1j_temp = TauC_JetConstituents_1j_local;
+            if (TauC_JetConstituents_1j_local2 > TauCnoHRapidity_JetConstituents_1j_temp) TauCnoHRapidity_JetConstituents_1j_temp = TauC_JetConstituents_1j_local2;
+        }
+        TauC_Inc_1j = TauC_Inc_1j_temp;
+        TauB_Inc_1j = TauB_Inc_1j_temp;
+        TauB_JetConstituents_1j = TauB_JetConstituents_1j_temp;
+        TauC_JetConstituents_1j = TauC_JetConstituents_1j_temp;
+        TauCnoHRapidity_JetConstituents_1j = TauCnoHRapidity_JetConstituents_1j_temp;
+
+        /**
+         * 2-Jet scenario: Here excluding leading jet from tau calculation
+         */
+        for (int JetCounter = 2; JetCounter < goodJets.size(); ++JetCounter)
+        {
+            // Inclusive tauC
+            float TauC_Inc_2j_num = sqrt(goodJets[i].energy()*goodJets[i].energy() - goodJets[i].pz()*goodJets[i].pz());
+            float TauC_Inc_2j_den = 2*cosh(goodJets[i].rapidity() - HVec.Rapidity());
+            if (TauC_Inc_2j_num/TauC_Inc_2j_den > TauC_Inc_2j_temp) TauC_Inc_2j_temp = TauC_Inc_2j_num/TauC_Inc_2j_den;
+
+            // Inclusive tauB
+            if (goodJets[i].energy() - goodJets[i].pz() > TauB_Inc_2j_temp) TauB_Inc_2j_temp = goodJets[i].energy() - goodJets[i].pz();
+
+            // TauB & TauC using Jet Constituents
+            float TauB_JetConstituents_2j_local = 0.0;
+            float TauC_JetConstituents_2j_local = 0.0;
+            float TauC_JetConstituents_2j_local2 = 0.0;
+            for ( auto const & constituent : goodJets[i].daughterPtrVector())
+            {
+                // tauB
+                TauB_JetConstituents_2j_local += constituent->energy() - constituent->pz();
+
+                // tauC
+                double TauC2_numerator = sqrt(constituent->energy()*constituent->energy()-constituent->pz()*constituent->pz());
+                // tauC: version1: with higgs rapidity
+                double TauC2_denominator = 2*cosh(constituent->rapidity() - HVec.Eta());
+                TauC_JetConstituents_2j_local += TauC2_numerator/TauC2_denominator;
+
+                // tauC: version1: without higgs rapidity
+                TauC_JetConstituents_2j_local2 += TauC2_numerator/(2*cosh(constituent->rapidity()));
+            }
+            if (TauB_JetConstituents_2j_local > TauB_JetConstituents_2j_temp) TauB_JetConstituents_2j_temp = TauB_JetConstituents_2j_local;
+            if (TauC_JetConstituents_2j_local > TauC_JetConstituents_2j_temp) TauC_JetConstituents_2j_temp = TauC_JetConstituents_2j_local;
+            if (TauC_JetConstituents_2j_local2 > TauCnoHRapidity_JetConstituents_2j_temp) TauCnoHRapidity_JetConstituents_2j_temp = TauC_JetConstituents_2j_local2;
+        }
+        TauC_Inc_2j = TauC_Inc_2j_temp;
+        TauB_Inc_2j = TauB_Inc_2j_temp;
+        TauB_JetConstituents_2j = TauB_JetConstituents_2j_temp;
+        TauC_JetConstituents_2j = TauC_JetConstituents_2j_temp;
+        TauCnoHRapidity_JetConstituents_2j = TauCnoHRapidity_JetConstituents_2j_temp;
+        /**
+         * END: nJettiness variable
+         */
+    }  // END:: if (foundHiggsCandidate)
+
+
+
     // H+jet reco,
     // Nominal
     //		pTj1=-1.0; pTj2=-1.0;
@@ -6568,7 +6795,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
     int nFiducialPtSublead=0;
     
     for (unsigned int i=0; i<GENlep_id.size(); ++i) {
-        cout<<"size of gen lep id vector is ... "<<GENlep_id.size()<<endl;
+        if (verbose) cout<<"size of gen lep id vector is ... "<<GENlep_id.size()<<endl;
         TLorentzVector thisLep;
         thisLep.SetPtEtaPhiM(GENlep_pt[i],GENlep_eta[i],GENlep_phi[i],GENlep_mass[i]);
         
@@ -6603,7 +6830,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             LS3_Z1_2.SetPtEtaPhiM(GENlep_pt[L2],GENlep_eta[L2],GENlep_phi[L2],GENlep_mass[L2]);
             LS3_Z2_1.SetPtEtaPhiM(GENlep_pt[L3],GENlep_eta[L3],GENlep_phi[L3],GENlep_mass[L3]);
             LS3_Z2_2.SetPtEtaPhiM(GENlep_pt[L4],GENlep_eta[L4],GENlep_phi[L4],GENlep_mass[L4]);
-            cout<<"pt of LS3_Z1_1 is......."<<LS3_Z1_1.Pt()<<endl;
+            if (verbose) cout<<"pt of LS3_Z1_1 is......."<<LS3_Z1_1.Pt()<<endl;
             GENmass4l = (LS3_Z1_1+LS3_Z1_2+LS3_Z2_1+LS3_Z2_2).M();
             
             if (abs(GENlep_id[L1])==11 && abs(GENlep_id[L3])==11) {GENmass4e = GENmass4l;};
@@ -6720,12 +6947,12 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                 if (!inDR_pt30_eta4p7) {
                     GENnjets_pt30_eta4p7++;
                     GENjet_pt.push_back(genjet->pt());
-                    cout<<"original gen jet"<<genjet->pt()<<endl;
+                    if (verbose) cout<<"original gen jet"<<genjet->pt()<<endl;
                     GENjet_eta.push_back(genjet->eta());
                     GENjet_phi.push_back(genjet->phi());
                     GENjet_mass.push_back(genjet->mass());
                     //bjets
-                    cout <<"gen jet PDG id is .... "<<genjet_id<<endl;
+                    if (verbose) cout <<"gen jet PDG id is .... "<<genjet_id<<endl;
                     GENjet_id.push_back(genjet_id);
                     if (genjet_id==5){GENnbjets_pt30_eta4p7++;}  //FIXME
                     //TJ
@@ -6751,7 +6978,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             if (GENnjets_pt30_eta4p7>0) GENabsrapidity_leadingjet_pt30_eta4p7 = fabs(GENabsrapidity_leadingjet_pt30_eta4p7);
             
             
-            if (GENjet_pt.size()>0) {
+            if (GENjet_pt.size()>0 && verbose) {
                 cout<<"zeroth pt element of gen jet vector  "<<GENjet_pt[0]<<endl;
             }
             //TJs
@@ -6804,10 +7031,10 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             GENdaughters.push_back(SimpleParticle_t(GENlep_id[L2], LS3_Z1_2));
             GENdaughters.push_back(SimpleParticle_t(GENlep_id[L3], LS3_Z2_1));
             GENdaughters.push_back(SimpleParticle_t(GENlep_id[L4], LS3_Z2_2));   // try
-            cout<<"GENlep_id[L1]: "<<GENlep_id[L1]<<endl;
-            cout<<"GENlep_id[L2]: "<<GENlep_id[L2]<<endl;
-            cout<<"GENlep_id[L3]: "<<GENlep_id[L3]<<endl;
-            cout<<"GENlep_id[L4]: "<<GENlep_id[L4]<<endl;
+            if (verbose) cout<<"GENlep_id[L1]: "<<GENlep_id[L1]<<endl;
+            if (verbose) cout<<"GENlep_id[L2]: "<<GENlep_id[L2]<<endl;
+            if (verbose) cout<<"GENlep_id[L3]: "<<GENlep_id[L3]<<endl;
+            if (verbose) cout<<"GENlep_id[L4]: "<<GENlep_id[L4]<<endl;
             
             
             
