@@ -4,7 +4,7 @@ from FWCore.ParameterSet.VarParsing import VarParsing
 process = cms.Process("UFHZZ4LAnalysis")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
-#process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1
 process.MessageLogger.categories.append('UFHZZ4LAna')
 
@@ -19,8 +19,9 @@ process.Timing = cms.Service("Timing",
                              )
 
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
-#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
+#process.maxEvents = 1000 #cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
 #'/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/DCB7927B-269F-3B4B-9DA3-EFE07A37FC9E.root',
@@ -31,7 +32,8 @@ process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             )
 
 process.TFileService = cms.Service("TFileService",
-                                  fileName = cms.string("Sync_1031_2018_ttH_v2.root")##
+                                  #fileName = cms.string("Sync_1031_2018_ttH_v2.root")##
+                                  fileName = cms.string("Sync_1031_2018_ttH_v2_10K.root")##
 )
 
 # clean muons by segments 

@@ -433,7 +433,7 @@ private:
     float pTj1_2p5=-10.0; float pTj2_2p5=-10.0;
     float mj1j2=-999.0; float dEtaj1j2=-10.0;
     float etaj1=999.0; float etaj2=999.0;
-    float y4l=-10.0;
+//    float y4l=-10.0;
     float yj1=-10.0; float yj2=-10.0;
     float dPhiHj1=-10.0; float dyHj1=-10.0;
     //    float mj1j2=-1.0; float dEtaj1j2=-1.0;
@@ -5274,11 +5274,13 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("GENdPhiHj1j2",&GENdPhiHj1j2,"GENdPhiHj1j2/F");
     tree->Branch("GENdPhiHj1j2_VBF",&GENdPhiHj1j2_VBF,"GENdPhiHj1j2_VBF/F");
     
-    tree->Branch("GENpTj1_2p5",&GENpTj1_2p5,"GENpTj1_2p5/F");
     tree->Branch("GENyj1_2p5",&GENyj1_2p5,"GENyj1_2p5/F");
     tree->Branch("GENyj1",&GENyj1,"GENyj1/F");
     tree->Branch("GENpTj1",&GENpTj1,"GENpTj1/F");
+    tree->Branch("GENpTj1_2p5",&GENpTj1_2p5,"GENpTj1_2p5/F");
+    tree->Branch("GENpTj2",&GENpTj2,"GENpTj2/F");
     tree->Branch("GENpTj2_2p5",&GENpTj2_2p5,"GENpTj2_2p5/F");
+    tree->Branch("GENyj2",&GENyj2,"GENyj2/F");
     tree->Branch("GENyj2_2p5",&GENyj2_2p5,"GENyj2_2p5/F");
     
     tree->Branch("GENdPhiHj1_2p5",&GENdPhiHj1_2p5,"GENdPhiHj1_2p5/F");
@@ -6200,7 +6202,8 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         float csvj1=jet_csvv2[jet1index];
         //dPhiHj1=TMath::Abs(HVec.Phi()-Jet1.Phi());
         dPhiHj1=deltaPhi(HVec.Phi(),Jet1.Phi());
-        dyHj1=TMath::Abs(y4l-yj1);
+        //dyHj1=TMath::Abs(y4l-yj1);
+        dyHj1=TMath::Abs(rapidity4l-yj1);
     }
     if (njets_pt30_eta4p7 > 1) {
         Jet2.SetPtEtaPhiM(jet_pt[jet2index],jet_eta[jet2index],jet_phi[jet2index],jet_mass[jet2index]);
@@ -6228,7 +6231,8 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         yj1_2p5=Jet1_2p5.Rapidity();
         //dPhiHj1_2p5=TMath::Abs(HVec.Phi()-Jet1_2p5.Phi());
         dPhiHj1_2p5=deltaPhi(HVec.Phi(),Jet1_2p5.Phi());
-        dyHj1_2p5=TMath::Abs(y4l-yj1_2p5);
+        //dyHj1_2p5=TMath::Abs(y4l-yj1_2p5);
+        dyHj1_2p5=TMath::Abs(rapidity4l-yj1_2p5);
     }
     if (njets_pt30_eta2p5 > 1) {
         Jet2_2p5.SetPtEtaPhiM(jet_pt[jet2index2p5],jet_eta[jet2index2p5],jet_phi[jet2index2p5],jet_mass[jet2index2p5]);
@@ -6268,7 +6272,8 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         mass4lj_jesup=mass4l+Jet1_jesup.M();
         //dPhiHj1_jesup=TMath::Abs(HVec.Phi()-Jet1_jesup.Phi());
         dPhiHj1_jesup=deltaPhi(HVec.Phi(),Jet1_jesup.Phi());
-        dyHj1_jesup=TMath::Abs(y4l-yj1_jesup);
+        //dyHj1_jesup=TMath::Abs(y4l-yj1_jesup);
+        dyHj1_jesup=TMath::Abs(rapidity4l-yj1_jesup);
     }
     if (njets_pt30_eta4p7_jesup > 1) {
         Jet2_jesup.SetPtEtaPhiM(jet_jesup_pt[jet2index_jesup],jet_jesup_eta[jet2index_jesup],jet_jesup_phi[jet2index_jesup],jet_jesup_mass[jet2index_jesup]);
@@ -6290,7 +6295,8 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         yj1_2p5_jesup=Jet1_2p5.Rapidity();
         //dPhiHj1_2p5_jesup=TMath::Abs(HVec.Phi()-Jet1_2p5_jesup.Phi());
         dPhiHj1_2p5_jesup=deltaPhi(HVec.Phi(),Jet1_2p5_jesup.Phi());
-        dyHj1_2p5_jesup=TMath::Abs(y4l-yj1_2p5_jesup);
+        //dyHj1_2p5_jesup=TMath::Abs(y4l-yj1_2p5_jesup);
+        dyHj1_2p5_jesup=TMath::Abs(rapidity4l-yj1_2p5_jesup);
     }
     if (njets_pt30_eta2p5_jesup > 1) {
         Jet2_2p5_jesup.SetPtEtaPhiM(jet_jesup_pt[jet2index2p5_jesup],jet_jesup_eta[jet2index2p5_jesup],jet_jesup_phi[jet2index2p5_jesup],jet_jesup_mass[jet2index2p5_jesup]);
@@ -6329,7 +6335,8 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         mass4lj_jesdn=mass4l+Jet1_jesdn.M();
         //dPhiHj1_jesdn=TMath::Abs(HVec.Phi()-Jet1_jesdn.Phi());
         dPhiHj1_jesdn=deltaPhi(HVec.Phi(),Jet1_jesdn.Phi());
-        dyHj1_jesdn=TMath::Abs(y4l-yj1_jesdn);
+        //dyHj1_jesdn=TMath::Abs(y4l-yj1_jesdn);
+        dyHj1_jesdn=TMath::Abs(rapidity4l-yj1_jesdn);
     }
     if (njets_pt30_eta4p7_jesdn > 1) {
         Jet2_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet2index_jesdn],jet_jesdn_eta[jet2index_jesdn],jet_jesdn_phi[jet2index_jesdn],jet_jesdn_mass[jet2index_jesdn]);
@@ -6351,7 +6358,8 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         yj1_2p5_jesdn=TMath::Abs(Jet1_2p5.Rapidity());
         //dPhiHj1_2p5_jesdn=TMath::Abs(HVec.Phi()-Jet1_2p5_jesdn.Phi());
         dPhiHj1_2p5_jesdn=deltaPhi(HVec.Phi(),Jet1_2p5_jesdn.Phi());
-        dyHj1_2p5_jesdn=TMath::Abs(y4l-yj1_2p5_jesdn);
+        //dyHj1_2p5_jesdn=TMath::Abs(y4l-yj1_2p5_jesdn);
+        dyHj1_2p5_jesdn=TMath::Abs(rapidity4l-yj1_2p5_jesdn);
     }
     if (njets_pt30_eta2p5_jesdn > 1) {
         Jet2_2p5_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet2index2p5_jesdn],jet_jesdn_eta[jet2index2p5_jesdn],jet_jesdn_phi[jet2index2p5_jesdn],jet_jesdn_mass[jet2index2p5_jesdn]);
@@ -6819,7 +6827,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                 //GENJet1.SetPtEtaPhiM((*GENjet_pt)[GENjet1index],(*GENjet_eta)[GENjet1index],(*GENjet_phi)[GENjet1index],(*GENjet_mass)[GENjet1index]);
                 GENJet1.SetPtEtaPhiM(GENjet_pt[GENjet1index],GENjet_eta[GENjet1index],GENjet_phi[GENjet1index],GENjet_mass[GENjet1index]);
                 GENpTj1=GENJet1.Pt();
-                GENyj1=TMath::Abs(GENJet1.Rapidity());
+                GENyj1=GENJet1.Rapidity();
                 //GENdPhiHj1=TMath::Abs((LS3_Z1_1+LS3_Z1_2+LS3_Z2_1+LS3_Z2_2).Phi()-GENJet1.Phi());
                 //GENdPhiHj1=TMath::Abs(GENphi4l-GENJet1.Phi());
                 GENdPhiHj1=deltaPhi(GENphi4l,GENJet1.Phi());
@@ -6831,7 +6839,8 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                 //GENJet2.SetPtEtaPhiM((*GENjet_pt)[GENjet2index],(*GENjet_eta)[GENjet2index],(*GENjet_phi)[GENjet2index],(*GENjet_mass)[GENjet2index]);
                 GENJet2.SetPtEtaPhiM(GENjet_pt[GENjet2index],GENjet_eta[GENjet2index],GENjet_phi[GENjet2index],GENjet_mass[GENjet2index]);
                 GENpTj2=GENJet2.Pt();
-                GENyj2=TMath::Abs(GENJet2.Rapidity());
+                //GENyj2=TMath::Abs(GENJet2.Rapidity());
+                GENyj2=GENJet2.Rapidity();
                 GENDijetMass=(GENJet1+GENJet2).M();
                 GENmass4ljj=GENmass4l+GENDijetMass;
                 GENdEtaj1j2=TMath::Abs(GENJet1.Eta()-GENJet2.Eta());
@@ -6847,7 +6856,8 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                 //GENJet1_2p5.SetPtEtaPhiM((*GENjet_pt)[GENjet1index_2p5],(*GENjet_eta)[GENjet1index_2p5],(*GENjet_phi)[GENjet1index_2p5],(*GENjet_mass)[GENjet1index_2p5]);
                 GENJet1_2p5.SetPtEtaPhiM(GENjet_pt[GENjet1index_2p5],GENjet_eta[GENjet1index_2p5],GENjet_phi[GENjet1index_2p5],GENjet_mass[GENjet1index_2p5]);
                 GENpTj1_2p5=GENJet1_2p5.Pt();
-                GENyj1_2p5=TMath::Abs(GENJet1.Rapidity());
+                //GENyj1_2p5=TMath::Abs(GENJet1.Rapidity());
+                GENyj1_2p5=GENJet1.Rapidity();
                 //GENdPhiHj1_2p5=TMath::Abs((LS3_Z1_1+LS3_Z1_2+LS3_Z2_1+LS3_Z2_2).Phi()-GENJet1_2p5.Phi());
                 //GENdPhiHj1_2p5=TMath::Abs(GENphi4l-GENJet1_2p5.Phi());
                 GENdPhiHj1_2p5=deltaPhi(GENphi4l,GENJet1_2p5.Phi());
@@ -6858,7 +6868,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                 //GENJet2_2p5.SetPtEtaPhiM((*GENjet_pt)[GENjet2index_2p5],(*GENjet_eta)[GENjet2index_2p5],(*GENjet_phi)[GENjet2index_2p5],(*GENjet_mass)[GENjet2index_2p5]);
                 GENJet2_2p5.SetPtEtaPhiM(GENjet_pt[GENjet2index_2p5],GENjet_eta[GENjet2index_2p5],GENjet_phi[GENjet2index_2p5],GENjet_mass[GENjet2index_2p5]);
                 GENpTj2_2p5=GENJet2_2p5.Pt();
-                GENyj2_2p5=TMath::Abs(GENJet2.Rapidity());
+                GENyj2_2p5=GENJet2.Rapidity();
                 GENDijetMass_2p5=(GENJet1_2p5+GENJet2_2p5).M();
                 GENdEtaj1j2_2p5=TMath::Abs(GENJet1_2p5.Eta()-GENJet2_2p5.Eta());
                 //GENdPhij1j2_2p5=TMath::Abs(GENJet1_2p5.Phi()-GENJet2_2p5.Phi());
@@ -6912,8 +6922,8 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             
             GEND_bkg = me_0plus_JHU*p0plus_m4l/(me_0plus_JHU*p0plus_m4l+me_qqZZ_MCFM*bkg_m4l*helper.getDbkgConstant(idL1*idL2*idL3*idL4,mass4l)); // superMELA
 */   // FIXME
-            GEND_g4 = GENme_0plus_JHU/(GENme_0plus_JHU+pow(2.521, 2)*GENp0minus_VAJHU); // D_0-
-            GEND_g1g4 = GENpg1g4_VAJHU*2.521/(GENme_0plus_JHU+pow(2.521, 2)*GENp0minus_VAJHU); // D_CP, 2.521 since g1=1 and g4=1 is used
+            GEND_g4 = GENme_0plus_JHU/(GENme_0plus_JHU+pow(2.521, 2)*GENp0minus_VAJHU); // GEND_0-
+            GEND_g1g4 = GENpg1g4_VAJHU*2.521/(GENme_0plus_JHU+pow(2.521, 2)*GENp0minus_VAJHU); // GEND_CP, 2.521 since g1=1 and g4=1 is used
             //TJe
             //} //shift endjetloop
             
