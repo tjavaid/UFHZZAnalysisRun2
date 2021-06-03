@@ -937,7 +937,6 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
     kinZfitter_singleBS = new KinZfitter(!isMC, year);
     kinZfitter_vtx = new KinZfitter(!isMC, year);
     kinZfitter_vtx_BS = new KinZfitter(!isMC, year);
-    
     if(isCode4l && doMela){
         //     if(doMela){
         mela = new Mela(13.0, 125.0, TVar::SILENT);
@@ -6408,7 +6407,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                 if (genPart->status() == 21) {
          cout<<"found a gen incoming particle: id "<<genPart->pdgId()<<" pt: "<<genPart->pt()<<" eta: "<<genPart->eta()<<" status: "<<genPart->status()<<endl;
          counter_initParticle++;
-         cout<<"initial particle counter is ...."<<counter_initParticle<<endl;
+        // cout<<"initial particle counter is ...."<<counter_initParticle<<endl;
          if (counter_initParticle==1){
          //mom1.SetPxPyPzE(genPart->Px(),genPart->Py(),genPart->Pz(),genPart->E())
          GENmom1.SetPxPyPzE(genPart->px(),genPart->py(),genPart->pz(),genPart->energy());
@@ -6419,12 +6418,12 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
          GENmom2.SetPxPyPzE(genPart->px(),genPart->py(),genPart->pz(),genPart->energy());
          GENmom2_id=genPart->pdgId();
         }
-         cout<<"pz of  mom1 is ....."<<GENmom1.Pz()<<endl;
+/*         cout<<"pz of  mom1 is ....."<<GENmom1.Pz()<<endl;
          cout<<"pz of  mom2 is ....."<<GENmom2.Pz()<<endl;
          cout<<"energy of  mom1 is ....."<<GENmom1.E()<<endl;
          cout<<"energy of  mom2 is ....."<<GENmom2.E()<<endl;
          cout<<"pdg ID of 1st incoming particle is ....."<<GENmom1_id<<endl;
-         cout<<"pdg ID of 2nd incoming particle is ....."<<GENmom2_id<<endl;
+         cout<<"pdg ID of 2nd incoming particle is ....."<<GENmom2_id<<endl;  */
          }  //end if status, incoming particles
          if (counter_initParticle > 2)
          {
@@ -6690,7 +6689,8 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
         if (verbose) cout<<"passedFiducialSelection after other cuts? "<<passedFiducialSelection<<endl;
         
         if (passedFiducialSelection) {
-            
+            GENmela = new Mela(13.0, 125.0, TVar::SILENT); 
+            GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
             // DO GEN JETS
             if (verbose) cout<<"begin filling gen jets"<<endl;
             edm::View<reco::GenJet>::const_iterator genjet;
@@ -6728,12 +6728,12 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                 if (!inDR_pt30_eta4p7) {
                     GENnjets_pt30_eta4p7++;
                     GENjet_pt.push_back(genjet->pt());
-                    cout<<"original gen jet"<<genjet->pt()<<endl;
+                    //cout<<"original gen jet"<<genjet->pt()<<endl;
                     GENjet_eta.push_back(genjet->eta());
                     GENjet_phi.push_back(genjet->phi());
                     GENjet_mass.push_back(genjet->mass());
                     //bjets
-                    cout <<"gen jet PDG id is .... "<<genjet_id<<endl;
+//                    cout <<"gen jet PDG id is .... "<<genjet_id<<endl;
                     GENjet_id.push_back(genjet_id);
                     if (genjet_id==5){GENnbjets_pt30_eta4p7++;}  //FIXME
                     //TJ
@@ -6760,7 +6760,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             
             
             if (GENjet_pt.size()>0) {
-                cout<<"zeroth pt element of gen jet vector  "<<GENjet_pt[0]<<endl;
+ //               cout<<"zeroth pt element of gen jet vector  "<<GENjet_pt[0]<<endl;
             }
             //TJs
             //	    int GENjet1index=0; int GENjet2index=0; int GENjet1index_2p5=0; int GENjet2index_2p5=0;
@@ -6812,10 +6812,10 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             GENdaughters.push_back(SimpleParticle_t(GENlep_id[L2], LS3_Z1_2));
             GENdaughters.push_back(SimpleParticle_t(GENlep_id[L3], LS3_Z2_1));
             GENdaughters.push_back(SimpleParticle_t(GENlep_id[L4], LS3_Z2_2));   // try
-            cout<<"GENlep_id[L1]: "<<GENlep_id[L1]<<endl;
+/*            cout<<"GENlep_id[L1]: "<<GENlep_id[L1]<<endl;
             cout<<"GENlep_id[L2]: "<<GENlep_id[L2]<<endl;
             cout<<"GENlep_id[L3]: "<<GENlep_id[L3]<<endl;
-            cout<<"GENlep_id[L4]: "<<GENlep_id[L4]<<endl;
+            cout<<"GENlep_id[L4]: "<<GENlep_id[L4]<<endl;   */
             
             
             
@@ -6885,8 +6885,8 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
 
 // start filling GEN mela variables 
 
-            GENmela = new Mela(13.0, 125.0, TVar::SILENT);
-            GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
+//            GENmela = new Mela(13.0, 125.0, TVar::SILENT);
+//            GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
             //mela->setInputEvent(&daughters, &associated, 0, 0);
             GENmela->setInputEvent(&GENdaughters, &GENassociated, &GENmothers, 1);
             //GENmela->setInputEvent(&daughters, &associated, &mothers, 1);
