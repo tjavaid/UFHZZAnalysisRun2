@@ -432,11 +432,11 @@ private:
     float DijetMass, DijetDEta, DijetFisher;
 
     // n-jettiness for additional ak4 jets
-    float TauC_Inc_0j, TauC_JetConstituents_0j, TauCnoHRapidity_JetConstituents_0j;
+    float TauC_Inc_0j, TauC_JetConstituents_0j, TauCnoHRapidity_JetConstituents_0j, TauCnoHRapidity_Inc_0j;
     float TauB_Inc_0j, TauB_JetConstituents_0j;
-    float TauC_Inc_1j, TauC_JetConstituents_1j, TauCnoHRapidity_JetConstituents_1j;
+    float TauC_Inc_1j, TauC_JetConstituents_1j, TauCnoHRapidity_JetConstituents_1j, TauCnoHRapidity_Inc_1j;
     float TauB_Inc_1j, TauB_JetConstituents_1j;
-    float TauC_Inc_2j, TauC_JetConstituents_2j, TauCnoHRapidity_JetConstituents_2j;
+    float TauC_Inc_2j, TauC_JetConstituents_2j, TauCnoHRapidity_JetConstituents_2j, TauCnoHRapidity_Inc_2j;
     float TauB_Inc_2j, TauB_JetConstituents_2j;
 
     float TauC_Inc_0j_CorrRapidity;
@@ -444,18 +444,21 @@ private:
     float TauB_JetConstituents_0j_CorrRapidity;
     float TauC_JetConstituents_0j_CorrRapidity;
     float TauCnoHRapidity_JetConstituents_0j_CorrRapidity;
+    float TauCnoHRapidity_Inc_0j_CorrRapidity;
 
     float TauC_Inc_1j_CorrRapidity;
     float TauB_Inc_1j_CorrRapidity;
     float TauB_JetConstituents_1j_CorrRapidity;
     float TauC_JetConstituents_1j_CorrRapidity;
     float TauCnoHRapidity_JetConstituents_1j_CorrRapidity;
+    float TauCnoHRapidity_Inc_1j_CorrRapidity;
 
     float TauC_Inc_2j_CorrRapidity;
     float TauB_Inc_2j_CorrRapidity;
     float TauB_JetConstituents_2j_CorrRapidity;
     float TauC_JetConstituents_2j_CorrRapidity;
     float TauCnoHRapidity_JetConstituents_2j_CorrRapidity;
+    float TauCnoHRapidity_Inc_2j_CorrRapidity;
 
     float GeneralTau;
     float GeneralTau1;
@@ -1530,6 +1533,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     TauCnoHRapidity_JetConstituents_0j=-9999.0;
     TauCnoHRapidity_JetConstituents_1j=-9999.0;
     TauCnoHRapidity_JetConstituents_2j=-9999.0;
+    TauCnoHRapidity_Inc_0j=-9999.0;
+    TauCnoHRapidity_Inc_1j=-9999.0;
+    TauCnoHRapidity_Inc_2j=-9999.0;
     TauB_Inc_0j=-9999.0;
     TauB_Inc_1j=-9999.0;
     TauB_Inc_2j=-9999.0;
@@ -1542,16 +1548,19 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     TauB_JetConstituents_0j_CorrRapidity = -9999.0;
     TauC_JetConstituents_0j_CorrRapidity = -9999.0;
     TauCnoHRapidity_JetConstituents_0j_CorrRapidity = -9999.0;
+    TauCnoHRapidity_Inc_0j_CorrRapidity = -9999.0;
     TauC_Inc_1j_CorrRapidity = -9999.0;
     TauB_Inc_1j_CorrRapidity = -9999.0;
     TauB_JetConstituents_1j_CorrRapidity = -9999.0;
     TauC_JetConstituents_1j_CorrRapidity = -9999.0;
     TauCnoHRapidity_JetConstituents_1j_CorrRapidity = -9999.0;
+    TauCnoHRapidity_Inc_1j_CorrRapidity = -9999.0;
     TauC_Inc_2j_CorrRapidity = -9999.0;
     TauB_Inc_2j_CorrRapidity = -9999.0;
     TauB_JetConstituents_2j_CorrRapidity = -9999.0;
     TauC_JetConstituents_2j_CorrRapidity = -9999.0;
     TauCnoHRapidity_JetConstituents_2j_CorrRapidity = -9999.0;
+    TauCnoHRapidity_Inc_2j_CorrRapidity = -9999.0;
 
     GeneralTau=-9999.0;
     GeneralTau1=-9999.0;
@@ -5216,18 +5225,21 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("TauC_Inc_0j",&TauC_Inc_0j,"TauC_Inc_0j/F");
     tree->Branch("TauC_JetConstituents_0j",&TauC_JetConstituents_0j,"TauC_JetConstituents_0j/F");
     tree->Branch("TauCnoHRapidity_JetConstituents_0j",&TauCnoHRapidity_JetConstituents_0j,"TauCnoHRapidity_JetConstituents_0j/F");
+    tree->Branch("TauCnoHRapidity_Inc_0j",&TauCnoHRapidity_Inc_0j,"TauCnoHRapidity_Inc_0j/F");
 
     tree->Branch("TauB_Inc_1j",&TauB_Inc_1j,"TauB_Inc_1j/F");
     tree->Branch("TauB_JetConstituents_1j",&TauB_JetConstituents_1j,"TauB_JetConstituents_1j/F");
     tree->Branch("TauC_Inc_1j",&TauC_Inc_1j,"TauC_Inc_1j/F");
     tree->Branch("TauC_JetConstituents_1j",&TauC_JetConstituents_1j,"TauC_JetConstituents_1j/F");
     tree->Branch("TauCnoHRapidity_JetConstituents_1j",&TauCnoHRapidity_JetConstituents_1j,"TauCnoHRapidity_JetConstituents_1j/F");
+    tree->Branch("TauCnoHRapidity_Inc_1j",&TauCnoHRapidity_Inc_1j,"TauCnoHRapidity_Inc_1j/F");
 
     tree->Branch("TauB_Inc_2j",&TauB_Inc_2j,"TauB_Inc_2j/F");
     tree->Branch("TauB_JetConstituents_2j",&TauB_JetConstituents_2j,"TauB_JetConstituents_2j/F");
     tree->Branch("TauC_Inc_2j",&TauC_Inc_2j,"TauC_Inc_2j/F");
     tree->Branch("TauC_JetConstituents_2j",&TauC_JetConstituents_2j,"TauC_JetConstituents_2j/F");
     tree->Branch("TauCnoHRapidity_JetConstituents_2j",&TauCnoHRapidity_JetConstituents_2j,"TauCnoHRapidity_JetConstituents_2j/F");
+    tree->Branch("TauCnoHRapidity_Inc_2j",&TauCnoHRapidity_Inc_2j,"TauCnoHRapidity_Inc_2j/F");
 
 
     tree->Branch("TauC_Inc_0j_CorrRapidity",&TauC_Inc_0j_CorrRapidity,"TauC_Inc_0j_CorrRapidity/F");
@@ -5235,16 +5247,21 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("TauB_JetConstituents_0j_CorrRapidity",&TauB_JetConstituents_0j_CorrRapidity,"TauB_JetConstituents_0j_CorrRapidity/F");
     tree->Branch("TauC_JetConstituents_0j_CorrRapidity",&TauC_JetConstituents_0j_CorrRapidity,"TauC_JetConstituents_0j_CorrRapidity/F");
     tree->Branch("TauCnoHRapidity_JetConstituents_0j_CorrRapidity",&TauCnoHRapidity_JetConstituents_0j_CorrRapidity,"TauCnoHRapidity_JetConstituents_0j_CorrRapidity/F");
+    tree->Branch("TauCnoHRapidity_Inc_0j_CorrRapidity",&TauCnoHRapidity_Inc_0j_CorrRapidity,"TauCnoHRapidity_Inc_0j_CorrRapidity/F");
+
     tree->Branch("TauC_Inc_1j_CorrRapidity",&TauC_Inc_1j_CorrRapidity,"TauC_Inc_1j_CorrRapidity/F");
     tree->Branch("TauB_Inc_1j_CorrRapidity",&TauB_Inc_1j_CorrRapidity,"TauB_Inc_1j_CorrRapidity/F");
     tree->Branch("TauB_JetConstituents_1j_CorrRapidity",&TauB_JetConstituents_1j_CorrRapidity,"TauB_JetConstituents_1j_CorrRapidity/F");
     tree->Branch("TauC_JetConstituents_1j_CorrRapidity",&TauC_JetConstituents_1j_CorrRapidity,"TauC_JetConstituents_1j_CorrRapidity/F");
     tree->Branch("TauCnoHRapidity_JetConstituents_1j_CorrRapidity",&TauCnoHRapidity_JetConstituents_1j_CorrRapidity,"TauCnoHRapidity_JetConstituents_1j_CorrRapidity/F");
+    tree->Branch("TauCnoHRapidity_Inc_1j_CorrRapidity",&TauCnoHRapidity_Inc_1j_CorrRapidity,"TauCnoHRapidity_Inc_1j_CorrRapidity/F");
+
     tree->Branch("TauC_Inc_2j_CorrRapidity",&TauC_Inc_2j_CorrRapidity,"TauC_Inc_2j_CorrRapidity/F");
     tree->Branch("TauB_Inc_2j_CorrRapidity",&TauB_Inc_2j_CorrRapidity,"TauB_Inc_2j_CorrRapidity/F");
     tree->Branch("TauB_JetConstituents_2j_CorrRapidity",&TauB_JetConstituents_2j_CorrRapidity,"TauB_JetConstituents_2j_CorrRapidity/F");
     tree->Branch("TauC_JetConstituents_2j_CorrRapidity",&TauC_JetConstituents_2j_CorrRapidity,"TauC_JetConstituents_2j_CorrRapidity/F");
     tree->Branch("TauCnoHRapidity_JetConstituents_2j_CorrRapidity",&TauCnoHRapidity_JetConstituents_2j_CorrRapidity,"TauCnoHRapidity_JetConstituents_2j_CorrRapidity/F");
+    tree->Branch("TauCnoHRapidity_Inc_2j_CorrRapidity",&TauCnoHRapidity_Inc_2j_CorrRapidity,"TauCnoHRapidity_Inc_2j_CorrRapidity/F");
 
     tree->Branch("GeneralTau",&GeneralTau,"GeneralTau/F");
     tree->Branch("GeneralTau1",&GeneralTau1,"GeneralTau1/F");
@@ -6316,28 +6333,43 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         float TauCnoHRapidity_JetConstituents_1j_temp = -999.0;
         float TauCnoHRapidity_JetConstituents_2j_temp = -999.0;
 
+        float TauCnoHRapidity_Inc_0j_temp = -999.0;
+        float TauCnoHRapidity_Inc_1j_temp = -999.0;
+        float TauCnoHRapidity_Inc_2j_temp = -999.0;
+
         float TauC_Inc_0j_CorrRapidity_temp = -999.0;
         float TauB_Inc_0j_CorrRapidity_temp = -999.0;
         float TauB_JetConstituents_0j_CorrRapidity_temp = -999.0;
         float TauC_JetConstituents_0j_CorrRapidity_temp = -999.0;
         float TauCnoHRapidity_JetConstituents_0j_CorrRapidity_temp = -999.0;
+        float TauCnoHRapidity_Inc_0j_CorrRapidity_temp = -999.0;
 
         float TauC_Inc_1j_CorrRapidity_temp = -999.0;
         float TauB_Inc_1j_CorrRapidity_temp = -999.0;
         float TauB_JetConstituents_1j_CorrRapidity_temp = -999.0;
         float TauC_JetConstituents_1j_CorrRapidity_temp = -999.0;
         float TauCnoHRapidity_JetConstituents_1j_CorrRapidity_temp = -999.0;
+        float TauCnoHRapidity_Inc_1j_CorrRapidity_temp = -999.0;
 
         float TauC_Inc_2j_CorrRapidity_temp = -999.0;
         float TauB_Inc_2j_CorrRapidity_temp = -999.0;
         float TauB_JetConstituents_2j_CorrRapidity_temp = -999.0;
         float TauC_JetConstituents_2j_CorrRapidity_temp = -999.0;
         float TauCnoHRapidity_JetConstituents_2j_CorrRapidity_temp = -999.0;
+        float TauCnoHRapidity_Inc_2j_CorrRapidity_temp = -999.0;
+
+        unsigned int nJettinessSize_0J = goodJets.size();
+        unsigned int nJettinessSize_1J = goodJets.size();
+        unsigned int nJettinessSize_2J = goodJets.size();
+
+        // unsigned int nJettinessSize_0J = 1;
+        // unsigned int nJettinessSize_1J = 2;
+        // unsigned int nJettinessSize_2J = 3;
 
         /**
          * For zero jet scenario
          */
-        for (unsigned int JetCounter = 0; JetCounter < goodJets.size(); ++JetCounter)
+        for (unsigned int JetCounter = 0; JetCounter < nJettinessSize_0J; ++JetCounter)
         {
             // Inclusive tauC
             float TauC_Inc_0j_num = sqrt(goodJets[JetCounter].energy()*goodJets[JetCounter].energy() - goodJets[JetCounter].pz()*goodJets[JetCounter].pz());
@@ -6346,6 +6378,13 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
             {
                 TauC_Inc_0j_temp = TauC_Inc_0j_num/TauC_Inc_0j_den;
                 TauC_Inc_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+            }
+
+            // Inclusive tauC without Higgs rapidity
+            if (TauC_Inc_0j_num/(2*cosh(goodJets[JetCounter].rapidity())) > TauCnoHRapidity_Inc_0j_temp)
+            {
+                TauCnoHRapidity_Inc_0j_temp = TauC_Inc_0j_num/(2*cosh(goodJets[JetCounter].rapidity()));
+                TauCnoHRapidity_Inc_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
             }
 
             // Inclusive tauB
@@ -6394,17 +6433,19 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         TauB_JetConstituents_0j = TauB_JetConstituents_0j_temp;
         TauC_JetConstituents_0j = TauC_JetConstituents_0j_temp;
         TauCnoHRapidity_JetConstituents_0j = TauCnoHRapidity_JetConstituents_0j_temp;
+        TauCnoHRapidity_Inc_0j = TauCnoHRapidity_Inc_0j_temp;
 
         TauC_Inc_0j_CorrRapidity = TauC_Inc_0j_CorrRapidity_temp;
         TauB_Inc_0j_CorrRapidity = TauB_Inc_0j_CorrRapidity_temp;
         TauB_JetConstituents_0j_CorrRapidity = TauB_JetConstituents_0j_CorrRapidity_temp;
         TauC_JetConstituents_0j_CorrRapidity = TauC_JetConstituents_0j_CorrRapidity_temp;
         TauCnoHRapidity_JetConstituents_0j_CorrRapidity = TauCnoHRapidity_JetConstituents_0j_CorrRapidity_temp;
+        TauCnoHRapidity_Inc_0j_CorrRapidity = TauCnoHRapidity_Inc_0j_CorrRapidity_temp;
 
         /**
          * 1-Jet scenario: Here excluding leading jet from tau calculation
          */
-        for (unsigned int JetCounter = 1; JetCounter < goodJets.size(); ++JetCounter)
+        for (unsigned int JetCounter = 1; JetCounter < nJettinessSize_1J; ++JetCounter)
         {
             // Inclusive tauC
             float TauC_Inc_1j_num = sqrt(goodJets[JetCounter].energy()*goodJets[JetCounter].energy() - goodJets[JetCounter].pz()*goodJets[JetCounter].pz());
@@ -6413,6 +6454,13 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
             {
                 TauC_Inc_1j_temp = TauC_Inc_1j_num/TauC_Inc_1j_den;
                 TauC_Inc_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+            }
+
+            // Inclusive tauC without Higgs rapidity
+            if (TauC_Inc_1j_num/(2*cosh(goodJets[JetCounter].rapidity())) > TauCnoHRapidity_Inc_1j_temp)
+            {
+                TauCnoHRapidity_Inc_1j_temp = TauC_Inc_1j_num/(2*cosh(goodJets[JetCounter].rapidity()));
+                TauCnoHRapidity_Inc_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
             }
 
             // Inclusive tauB
@@ -6461,17 +6509,20 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         TauB_JetConstituents_1j = TauB_JetConstituents_1j_temp;
         TauC_JetConstituents_1j = TauC_JetConstituents_1j_temp;
         TauCnoHRapidity_JetConstituents_1j = TauCnoHRapidity_JetConstituents_1j_temp;
+        TauCnoHRapidity_Inc_1j = TauCnoHRapidity_Inc_1j_temp;
+
 
         TauC_Inc_1j_CorrRapidity = TauC_Inc_1j_CorrRapidity_temp;
         TauB_Inc_1j_CorrRapidity = TauB_Inc_1j_CorrRapidity_temp;
         TauB_JetConstituents_1j_CorrRapidity = TauB_JetConstituents_1j_CorrRapidity_temp;
         TauC_JetConstituents_1j_CorrRapidity = TauC_JetConstituents_1j_CorrRapidity_temp;
         TauCnoHRapidity_JetConstituents_1j_CorrRapidity = TauCnoHRapidity_JetConstituents_1j_CorrRapidity_temp;
+        TauCnoHRapidity_Inc_1j_CorrRapidity = TauCnoHRapidity_Inc_1j_CorrRapidity_temp;
 
         /**
          * 2-Jet scenario: Here excluding leading jet from tau calculation
          */
-        for (unsigned int JetCounter = 2; JetCounter < goodJets.size(); ++JetCounter)
+        for (unsigned int JetCounter = 2; JetCounter < nJettinessSize_2J; ++JetCounter)
         {
             // Inclusive tauC
             float TauC_Inc_2j_num = sqrt(goodJets[JetCounter].energy()*goodJets[JetCounter].energy() - goodJets[JetCounter].pz()*goodJets[JetCounter].pz());
@@ -6480,6 +6531,13 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
             {
                 TauC_Inc_2j_temp = TauC_Inc_2j_num/TauC_Inc_2j_den;
                 TauC_Inc_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+            }
+
+            // Inclusive tauC without Higgs rapidity
+            if (TauC_Inc_2j_num/(2*cosh(goodJets[JetCounter].rapidity())) > TauCnoHRapidity_Inc_2j_temp)
+            {
+                TauCnoHRapidity_Inc_2j_temp = TauC_Inc_2j_num/(2*cosh(goodJets[JetCounter].rapidity()));
+                TauCnoHRapidity_Inc_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
             }
 
             // Inclusive tauB
@@ -6528,12 +6586,14 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         TauB_JetConstituents_2j = TauB_JetConstituents_2j_temp;
         TauC_JetConstituents_2j = TauC_JetConstituents_2j_temp;
         TauCnoHRapidity_JetConstituents_2j = TauCnoHRapidity_JetConstituents_2j_temp;
+        TauCnoHRapidity_Inc_2j = TauCnoHRapidity_Inc_2j_temp;
 
         TauC_Inc_2j_CorrRapidity = TauC_Inc_2j_CorrRapidity_temp;
         TauB_Inc_2j_CorrRapidity = TauB_Inc_2j_CorrRapidity_temp;
         TauB_JetConstituents_2j_CorrRapidity = TauB_JetConstituents_2j_CorrRapidity_temp;
         TauC_JetConstituents_2j_CorrRapidity = TauC_JetConstituents_2j_CorrRapidity_temp;
         TauCnoHRapidity_JetConstituents_2j_CorrRapidity = TauCnoHRapidity_JetConstituents_2j_CorrRapidity_temp;
+        TauCnoHRapidity_Inc_2j_CorrRapidity = TauCnoHRapidity_Inc_2j_CorrRapidity_temp;
 
         /**
          * END: nJettiness variable
