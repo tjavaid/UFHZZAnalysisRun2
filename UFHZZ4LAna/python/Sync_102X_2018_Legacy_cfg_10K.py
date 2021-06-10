@@ -20,7 +20,9 @@ process.Timing = cms.Service("Timing",
 
 
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20000) )
 #process.maxEvents = 1000 #cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
@@ -33,7 +35,7 @@ process.source = cms.Source("PoolSource",fileNames = myfilelist,
 
 process.TFileService = cms.Service("TFileService",
                                   #fileName = cms.string("Sync_1031_2018_ttH_v2.root")##
-                                  fileName = cms.string("Sync_1031_2018_ttH_v2_10K.root")##
+                                  fileName = cms.string("Sync_1031_2018_ttH_v2_1K.root")##
 )
 
 # clean muons by segments 
