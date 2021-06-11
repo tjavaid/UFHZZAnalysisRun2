@@ -982,6 +982,9 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
         GENmela = new Mela(13.0, 125.0, TVar::SILENT);
         GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
     }
+
+    // NJettiness CalculateNJettinessVar;
+
     
     //string elec_scalefac_Cracks_name_161718[3] = {"egammaEffi.txt_EGM2D_cracks.root", "egammaEffi.txt_EGM2D_Moriond2018v1_gap.root", "egammaEffi.txt_EGM2D_Moriond2019_v1_gap.root"};
     string elec_scalefac_Cracks_name_161718[3] = {"ElectronSF_Legacy_2016_Gap.root", "ElectronSF_Legacy_2017_Gap.root", "ElectronSF_Legacy_2018_Gap.root"};
@@ -2598,9 +2601,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             if ( ntight >= (uint)skimTightLeptons ) {
 
-                NJettiness CalculateNJettinessVar;
-                double Taub = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, 1.0, 1.0);
-                GeneralTau = Taub;
+                // NJettiness CalculateNJettinessVar;
+                // double Taub = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, 1.0, 1.0);
+                // GeneralTau = Taub;
                 // std::cout << "Number of tight leptons: " << ntight << "\tskimTightLeptons = " << skimTightLeptons << std::endl;
                 // std::cout << "Taub = " << Taub << std::endl;
 
@@ -4072,9 +4075,9 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                     
                     Z1Vec = Z1; Z2Vec = Z2; HVec = Z1+Z2;
                     massZ1 = Z1Vec.M(); massZ2 = Z2Vec.M(); mass4l = HVec.M();
-                    NJettiness CalculateNJettinessVar;
-                    double Taub1 = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, sqrt(mass4l), HVec.Eta());
-                    GeneralTau1 = Taub1;
+                    // NJettiness CalculateNJettinessVar;
+                    // double Taub1 = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, sqrt(mass4l), HVec.Eta());
+                    // GeneralTau1 = Taub1;
                     
                     if (verbose) cout<<" new best candidate SR: mass4l: "<<HVec.M()<<endl;
                     if (HVec.M()>m4lLowCut)  { //m4lLowCut move forward
@@ -4106,9 +4109,9 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                     
                     Z1Vec = Z1; Z2Vec = Z2; HVec = Z1+Z2;
                     massZ1 = Z1Vec.M(); massZ2 = Z2Vec.M(); mass4l = HVec.M();
-                    NJettiness CalculateNJettinessVar;
-                    double Taub2 = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, sqrt(mass4l), HVec.Eta());
-                    GeneralTau2 = Taub2;
+                    // NJettiness CalculateNJettinessVar;
+                    // double Taub2 = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, sqrt(mass4l), HVec.Eta());
+                    // GeneralTau2 = Taub2;
                     if (verbose) cout<<" new best candidate CR: mass4l: "<<HVec.M()<<endl;
                     if (HVec.M()>m4lLowCut){//m4lLowCut move forward
                         foundHiggsCandidate=true;
@@ -5788,7 +5791,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                 
             }
             jet_pt.push_back(jet_jer->Pt());
-            // std::cout << "Line#5791:   Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event << "\tpT " << jet_jer->Pt() << jet1index  << "\t" << jet2index << std::endl;
+            // std::cout << "Line#5791:   Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event << "\tpT " << jet_jer->Pt() << "\t"<< jet1index  << "\t" << jet2index << std::endl;
             jet_pt_raw.push_back(goodJets[k].correctedJet("Uncorrected").pt());///jet Pt without JEC applied
             jet_eta.push_back(jet_jer->Eta());
             jet_phi.push_back(jet_jer->Phi());
@@ -6316,240 +6319,162 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         
         // 	    std::cout<<" ------------ "<<std::endl;
         
-        /**
-         * START: nJettiness variable
-         */
-        float TauB_Inc_0j_temp = -999.0;
-        float TauB_Inc_1j_temp = -999.0;
-        float TauB_Inc_2j_temp = -999.0;
-        float TauC_Inc_0j_temp = -999.0;
-        float TauC_Inc_1j_temp = -999.0;
-        float TauC_Inc_2j_temp = -999.0;
-        float TauB_JetConstituents_0j_temp = -999.0;
-        float TauB_JetConstituents_1j_temp = -999.0;
-        float TauB_JetConstituents_2j_temp = -999.0;
-        float TauC_JetConstituents_0j_temp = -999.0;
-        float TauC_JetConstituents_1j_temp = -999.0;
-        float TauC_JetConstituents_2j_temp = -999.0;
-        float TauCnoHRapidity_JetConstituents_0j_temp = -999.0;
-        float TauCnoHRapidity_JetConstituents_1j_temp = -999.0;
-        float TauCnoHRapidity_JetConstituents_2j_temp = -999.0;
+        // /**
+        //  * START: nJettiness variable
+        //  */
+        // float TauB_Inc_0j_temp = -999.0;
+        // float TauB_Inc_1j_temp = -999.0;
+        // float TauB_Inc_2j_temp = -999.0;
+        // float TauC_Inc_0j_temp = -999.0;
+        // float TauC_Inc_1j_temp = -999.0;
+        // float TauC_Inc_2j_temp = -999.0;
+        // float TauB_JetConstituents_0j_temp = -999.0;
+        // float TauB_JetConstituents_1j_temp = -999.0;
+        // float TauB_JetConstituents_2j_temp = -999.0;
+        // float TauC_JetConstituents_0j_temp = -999.0;
+        // float TauC_JetConstituents_1j_temp = -999.0;
+        // float TauC_JetConstituents_2j_temp = -999.0;
+        // float TauCnoHRapidity_JetConstituents_0j_temp = -999.0;
+        // float TauCnoHRapidity_JetConstituents_1j_temp = -999.0;
+        // float TauCnoHRapidity_JetConstituents_2j_temp = -999.0;
 
-        float TauCnoHRapidity_Inc_0j_temp = -999.0;
-        float TauCnoHRapidity_Inc_1j_temp = -999.0;
-        float TauCnoHRapidity_Inc_2j_temp = -999.0;
+        // float TauCnoHRapidity_Inc_0j_temp = -999.0;
+        // float TauCnoHRapidity_Inc_1j_temp = -999.0;
+        // float TauCnoHRapidity_Inc_2j_temp = -999.0;
 
-        float TauC_Inc_0j_CorrRapidity_temp = -999.0;
-        float TauB_Inc_0j_CorrRapidity_temp = -999.0;
-        float TauB_JetConstituents_0j_CorrRapidity_temp = -999.0;
-        float TauC_JetConstituents_0j_CorrRapidity_temp = -999.0;
-        float TauCnoHRapidity_JetConstituents_0j_CorrRapidity_temp = -999.0;
-        float TauCnoHRapidity_Inc_0j_CorrRapidity_temp = -999.0;
+        // float TauC_Inc_0j_CorrRapidity_temp = -999.0;
+        // float TauB_Inc_0j_CorrRapidity_temp = -999.0;
+        // float TauB_JetConstituents_0j_CorrRapidity_temp = -999.0;
+        // float TauC_JetConstituents_0j_CorrRapidity_temp = -999.0;
+        // float TauCnoHRapidity_JetConstituents_0j_CorrRapidity_temp = -999.0;
+        // float TauCnoHRapidity_Inc_0j_CorrRapidity_temp = -999.0;
 
-        float TauC_Inc_1j_CorrRapidity_temp = -999.0;
-        float TauB_Inc_1j_CorrRapidity_temp = -999.0;
-        float TauB_JetConstituents_1j_CorrRapidity_temp = -999.0;
-        float TauC_JetConstituents_1j_CorrRapidity_temp = -999.0;
-        float TauCnoHRapidity_JetConstituents_1j_CorrRapidity_temp = -999.0;
-        float TauCnoHRapidity_Inc_1j_CorrRapidity_temp = -999.0;
+        // float TauC_Inc_1j_CorrRapidity_temp = -999.0;
+        // float TauB_Inc_1j_CorrRapidity_temp = -999.0;
+        // float TauB_JetConstituents_1j_CorrRapidity_temp = -999.0;
+        // float TauC_JetConstituents_1j_CorrRapidity_temp = -999.0;
+        // float TauCnoHRapidity_JetConstituents_1j_CorrRapidity_temp = -999.0;
+        // float TauCnoHRapidity_Inc_1j_CorrRapidity_temp = -999.0;
 
-        float TauC_Inc_2j_CorrRapidity_temp = -999.0;
-        float TauB_Inc_2j_CorrRapidity_temp = -999.0;
-        float TauB_JetConstituents_2j_CorrRapidity_temp = -999.0;
-        float TauC_JetConstituents_2j_CorrRapidity_temp = -999.0;
-        float TauCnoHRapidity_JetConstituents_2j_CorrRapidity_temp = -999.0;
-        float TauCnoHRapidity_Inc_2j_CorrRapidity_temp = -999.0;
+        // float TauC_Inc_2j_CorrRapidity_temp = -999.0;
+        // float TauB_Inc_2j_CorrRapidity_temp = -999.0;
+        // float TauB_JetConstituents_2j_CorrRapidity_temp = -999.0;
+        // float TauC_JetConstituents_2j_CorrRapidity_temp = -999.0;
+        // float TauCnoHRapidity_JetConstituents_2j_CorrRapidity_temp = -999.0;
+        // float TauCnoHRapidity_Inc_2j_CorrRapidity_temp = -999.0;
 
-        // unsigned int nJettinessSize_0J = goodJets.size();
-        // unsigned int nJettinessSize_1J = goodJets.size();
-        // unsigned int nJettinessSize_2J = goodJets.size();
+        // // unsigned int nJettinessSize_0J = goodJets.size();
+        // // unsigned int nJettinessSize_1J = goodJets.size();
+        // // unsigned int nJettinessSize_2J = goodJets.size();
 
-        unsigned int nJettinessSize_0J;
-        unsigned int nJettinessSize_1J;
-        unsigned int nJettinessSize_2J;
+        // unsigned int nJettinessSize_0J;
+        // unsigned int nJettinessSize_1J;
+        // unsigned int nJettinessSize_2J;
 
-        if (goodJets.size() >= 5)
-        {
-            nJettinessSize_0J = 5;
-            nJettinessSize_1J = 5;
-            nJettinessSize_2J = 5;
-        }
-        else
-        {
-            nJettinessSize_0J = goodJets.size();
-            nJettinessSize_1J = goodJets.size();
-            nJettinessSize_2J = goodJets.size();
-        }
+        // if (goodJets.size() >= 5)
+        // {
+        //     nJettinessSize_0J = 5;
+        //     nJettinessSize_1J = 5;
+        //     nJettinessSize_2J = 5;
+        // }
+        // else
+        // {
+        //     nJettinessSize_0J = goodJets.size();
+        //     nJettinessSize_1J = goodJets.size();
+        //     nJettinessSize_2J = goodJets.size();
+        // }
 
         // std::cout << "nJettinessSize_0J: " << nJettinessSize_0J << "\tgoodJets.size(): " << goodJets.size() << std::endl;
         // std::cout << "nJettinessSize_1J: " << nJettinessSize_1J << "\tgoodJets.size(): " << goodJets.size() << std::endl;
         // std::cout << "nJettinessSize_2J: " << nJettinessSize_2J << "\tgoodJets.size(): " << goodJets.size() << std::endl;
 
-        // std::cout << "goodJets.size(): " << goodJets.size() << ", " <<  nJettinessSize_0J << "\t" << nJettinessSize_1J << "\t" << nJettinessSize_2J << std::endl;
-        // void TauB_Def1_Calculation(flaot energy, float pz, float rapidity, float &calculated_tauB, float &calculated_tauB_rapidity)
-        // {
-        //     // Inclusive tauB
-        //     if (energy - pz > calculated_tauB)
-        //     {
-        //         calculated_tauB = energy - pz;
-        //         calculated_tauB_rapidity = rapidity;
-        //     }
-        // }
 
-        // void TauC_Def1_Calculation(flaot energy, float pz, float rapidity, float rapidityH, float &calculated_tauC, float &calculated_tauC_rapidity)
-        // {
-        //     // Inclusive tauC
-        //     float TauC_Inc_0j_num = sqrt(energy*energy - pz*pz);
-        //     float TauC_Inc_0j_den = 2*cosh(rapidity - rapidityH);
-        //     if (TauC_Inc_0j_num/TauC_Inc_0j_den > calculated_tauC)
-        //     {
-        //         calculated_tauC = TauC_Inc_0j_num/TauC_Inc_0j_den;
-        //         calculated_tauC_rapidity = rapidity;
-        //     }
-        // }
         /**
          * For zero jet scenario
          */
-                        // NJettiness CalculateNJettinessVar;
-                // double Taub = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, 1.0, 1.0);
-                // GeneralTau = Taub;
+
+    NJettiness CalculateNJettinessVar;
+    CalculateNJettinessVar.GetRapidityWeightedValues(
+         0,  // NJettiness, // this depends on the jettiness that we would like to use
+         goodJets,   // Fixed don't change
+         HVec.Rapidity(),
+         TauB_Inc_0j,
+         TauB_JetConstituents_0j,
+         TauB_Inc_0j_CorrRapidity,
+         TauB_JetConstituents_0j_CorrRapidity,
+         TauC_Inc_0j,
+         TauC_JetConstituents_0j,
+         TauCnoHRapidity_Inc_0j,
+         TauCnoHRapidity_JetConstituents_0j,
+         TauC_Inc_0j_CorrRapidity,
+         TauC_JetConstituents_0j_CorrRapidity,
+         TauCnoHRapidity_Inc_0j_CorrRapidity,
+         TauCnoHRapidity_JetConstituents_0j_CorrRapidity,
+         5 // nJettinessSize_temp; use this if don't want to use all available good jets
+        );
 
 
-    // GetRapidityWeightedValues(
-    //      0,  // NJettiness, // this depends on the jettiness that we would like to use
-    //      goodJets,   // Fixed don't change
-    //      HiggsRapidity,
-    //      TauB_Inc_0j,
-    //      TauB_JetConstituents_0j,
-    //      TauB_Inc_0j_CorrRapidity,
-    //      TauB_JetConstituents_0j_CorrRapidity,
-    //      TauC_Inc_0j,
-    //      TauC_JetConstituents_0j,
-    //      TauCnoHRapidity_Inc_0j,
-    //      TauCnoHRapidity_JetConstituents_0j,
-    //      TauC_Inc_0j_CorrRapidity,
-    //      TauC_JetConstituents_0j_CorrRapidity,
-    //      TauCnoHRapidity_Inc_0j_CorrRapidity,
-    //      TauCnoHRapidity_JetConstituents_0j_CorrRapidity,
-    //      0 // nJettinessSize_temp; use this if don't want to use all available good jets
-    //     );
-    //
+    CalculateNJettinessVar.GetRapidityWeightedValues(
+         1, // NJettiness, // this depends on the jettiness that we would like to use
+         goodJets,   // Fixed don't change
+         HVec.Rapidity(),
+         TauB_Inc_1j,
+         TauB_JetConstituents_1j,
+         TauB_Inc_1j_CorrRapidity,
+         TauB_JetConstituents_1j_CorrRapidity,
+         TauC_Inc_1j,
+         TauC_JetConstituents_1j,
+         TauCnoHRapidity_Inc_1j,
+         TauCnoHRapidity_JetConstituents_1j,
+         TauC_Inc_1j_CorrRapidity,
+         TauC_JetConstituents_1j_CorrRapidity,
+         TauCnoHRapidity_Inc_1j_CorrRapidity,
+         TauCnoHRapidity_JetConstituents_1j_CorrRapidity,
+         5 // nJettinessSize_temp; use this if don't want to use all available good jets
+        );
 
-    // GetRapidityWeightedValues(
-    //      1, // NJettiness, // this depends on the jettiness that we would like to use
-    //      goodJets,   // Fixed don't change
-    //      HiggsRapidity,
-    //      TauB_Inc_1j,
-    //      TauB_JetConstituents_1j,
-    //      TauB_Inc_1j_CorrRapidity,
-    //      TauB_JetConstituents_1j_CorrRapidity,
-    //      TauC_Inc_1j,
-    //      TauC_JetConstituents_1j,
-    //      TauCnoHRapidity_Inc_1j,
-    //      TauCnoHRapidity_JetConstituents_1j,
-    //      TauC_Inc_1j_CorrRapidity,
-    //      TauC_JetConstituents_1j_CorrRapidity,
-    //      TauCnoHRapidity_Inc_1j_CorrRapidity,
-    //      TauCnoHRapidity_JetConstituents_1j_CorrRapidity,
-    //      0 // nJettinessSize_temp; use this if don't want to use all available good jets
-    //     );
-    //
-    // GetRapidityWeightedValues(
-    //      2, // NJettiness, // this depends on the jettiness that we would like to use
-    //      goodJets,   // Fixed don't change
-    //      HiggsRapidity,
-    //      TauB_Inc_2j,
-    //      TauB_JetConstituents_2j,
-    //      TauB_Inc_2j_CorrRapidity,
-    //      TauB_JetConstituents_2j_CorrRapidity,
-    //      TauC_Inc_2j,
-    //      TauC_JetConstituents_2j,
-    //      TauCnoHRapidity_Inc_2j,
-    //      TauCnoHRapidity_JetConstituents_2j,
-    //      TauC_Inc_2j_CorrRapidity,
-    //      TauC_JetConstituents_2j_CorrRapidity,
-    //      TauCnoHRapidity_Inc_2j_CorrRapidity,
-    //      TauCnoHRapidity_JetConstituents_2j_CorrRapidity,
-    //      0 // nJettinessSize_temp; use this if don't want to use all available good jets
-    //     );
-    //
-        for (unsigned int JetCounter = 0; JetCounter < nJettinessSize_0J; ++JetCounter)
-        {
-            // Inclusive tauC
-            float TauC_Inc_0j_num = sqrt(goodJets[JetCounter].energy()*goodJets[JetCounter].energy() - goodJets[JetCounter].pz()*goodJets[JetCounter].pz());
-            float TauC_Inc_0j_den = 2*cosh(goodJets[JetCounter].rapidity() - HVec.Rapidity());
-            if (TauC_Inc_0j_num/TauC_Inc_0j_den > TauC_Inc_0j_temp)
-            {
-                TauC_Inc_0j_temp = TauC_Inc_0j_num/TauC_Inc_0j_den;
-                TauC_Inc_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-
-            // Inclusive tauC without Higgs rapidity
-            if (TauC_Inc_0j_num/(2*cosh(goodJets[JetCounter].rapidity())) > TauCnoHRapidity_Inc_0j_temp)
-            {
-                TauCnoHRapidity_Inc_0j_temp = TauC_Inc_0j_num/(2*cosh(goodJets[JetCounter].rapidity()));
-                TauCnoHRapidity_Inc_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-
-            if (abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz()) > TauB_Inc_0j_temp)
-            {
-                TauB_Inc_0j_temp = abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz());
-                TauB_Inc_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-
-            // TauB & TauC using Jet Constituents
-            float TauB_JetConstituents_0j_local = 0.0;
-            float TauC_JetConstituents_0j_local = 0.0;
-            float TauC_JetConstituents_0j_local2 = 0.0;
-            for ( auto const & constituent : goodJets[JetCounter].daughterPtrVector())
-            {
-                // tauB
-                TauB_JetConstituents_0j_local += abs(constituent->energy() - constituent->pz());
-
-                // tauC
-                double TauC2_numerator = sqrt(constituent->energy()*constituent->energy()-constituent->pz()*constituent->pz());
-                // tauC: version1: with higgs rapidity
-                double TauC2_denominator = 2*cosh(constituent->rapidity() - HVec.Eta());
-                TauC_JetConstituents_0j_local += TauC2_numerator/TauC2_denominator;
-
-                // tauC: version1: without higgs rapidity
-                TauC_JetConstituents_0j_local2 += TauC2_numerator/(2*cosh(constituent->rapidity()));
-            }
-            if (TauB_JetConstituents_0j_local > TauB_JetConstituents_0j_temp)
-            {
-                TauB_JetConstituents_0j_temp = TauB_JetConstituents_0j_local;
-                TauB_JetConstituents_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-            if (TauC_JetConstituents_0j_local > TauC_JetConstituents_0j_temp)
-            {
-                TauC_JetConstituents_0j_temp = TauC_JetConstituents_0j_local;
-                TauC_JetConstituents_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-            if (TauC_JetConstituents_0j_local2 > TauCnoHRapidity_JetConstituents_0j_temp)
-            {
-                TauCnoHRapidity_JetConstituents_0j_temp = TauC_JetConstituents_0j_local2;
-                TauCnoHRapidity_JetConstituents_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-        }
-
+    CalculateNJettinessVar.GetRapidityWeightedValues(
+         2, // NJettiness, // this depends on the jettiness that we would like to use
+         goodJets,   // Fixed don't change
+         HVec.Rapidity(),
+         TauB_Inc_2j,
+         TauB_JetConstituents_2j,
+         TauB_Inc_2j_CorrRapidity,
+         TauB_JetConstituents_2j_CorrRapidity,
+         TauC_Inc_2j,
+         TauC_JetConstituents_2j,
+         TauCnoHRapidity_Inc_2j,
+         TauCnoHRapidity_JetConstituents_2j,
+         TauC_Inc_2j_CorrRapidity,
+         TauC_JetConstituents_2j_CorrRapidity,
+         TauCnoHRapidity_Inc_2j_CorrRapidity,
+         TauCnoHRapidity_JetConstituents_2j_CorrRapidity,
+         5 // nJettinessSize_temp; use this if don't want to use all available good jets
+        );
 
         // for (unsigned int JetCounter = 0; JetCounter < nJettinessSize_0J; ++JetCounter)
         // {
         //     // Inclusive tauC
-        //     TauC_Def1_Calculation(goodJets[JetCounter].energy(), goodJets[JetCounter].pz(),
-        //                         goodJets[JetCounter].rapidity(), HVec.Rapidity(),
-        //                         TauC_Inc_0j_temp, TauC_Inc_0j_CorrRapidity_temp
-        //                         )
-        //     TauC_Def1_Calculation(goodJets[JetCounter].energy(), goodJets[JetCounter].pz(),
-        //                         goodJets[JetCounter].rapidity(), 0.0,
-        //                         TauCnoHRapidity_Inc_0j_temp, TauCnoHRapidity_Inc_0j_CorrRapidity_temp
-        //                         )
+        //     float TauC_Inc_0j_num = sqrt(goodJets[JetCounter].energy()*goodJets[JetCounter].energy() - goodJets[JetCounter].pz()*goodJets[JetCounter].pz());
+        //     float TauC_Inc_0j_den = 2*cosh(goodJets[JetCounter].rapidity() - HVec.Rapidity());
+        //     if (TauC_Inc_0j_num/TauC_Inc_0j_den > TauC_Inc_0j_temp)
+        //     {
+        //         TauC_Inc_0j_temp = TauC_Inc_0j_num/TauC_Inc_0j_den;
+        //         TauC_Inc_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
 
-        //     // Inclusive tauB
-        //     TauB_Def1_Calculation(goodJets[JetCounter].energy(), goodJets[JetCounter].pz(),
-        //                         goodJets[JetCounter].rapidity(),
-        //                         TauB_Inc_0j_temp, TauB_Inc_0j_CorrRapidity_temp
-        //                         )
+        //     // Inclusive tauC without Higgs rapidity
+        //     if (TauC_Inc_0j_num/(2*cosh(goodJets[JetCounter].rapidity())) > TauCnoHRapidity_Inc_0j_temp)
+        //     {
+        //         TauCnoHRapidity_Inc_0j_temp = TauC_Inc_0j_num/(2*cosh(goodJets[JetCounter].rapidity()));
+        //         TauCnoHRapidity_Inc_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
+
+        //     if (abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz()) > TauB_Inc_0j_temp)
+        //     {
+        //         TauB_Inc_0j_temp = abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz());
+        //         TauB_Inc_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
 
         //     // TauB & TauC using Jet Constituents
         //     float TauB_JetConstituents_0j_local = 0.0;
@@ -6558,12 +6483,12 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         //     for ( auto const & constituent : goodJets[JetCounter].daughterPtrVector())
         //     {
         //         // tauB
-        //         TauB_JetConstituents_0j_local += constituent->energy() - constituent->pz();
+        //         TauB_JetConstituents_0j_local += abs(constituent->energy() - constituent->pz());
 
         //         // tauC
         //         double TauC2_numerator = sqrt(constituent->energy()*constituent->energy()-constituent->pz()*constituent->pz());
         //         // tauC: version1: with higgs rapidity
-        //         double TauC2_denominator = 2*cosh(constituent->rapidity() - HVec.Eta());
+        //         double TauC2_denominator = 2*cosh(constituent->rapidity() - HVec.Rapidity());
         //         TauC_JetConstituents_0j_local += TauC2_numerator/TauC2_denominator;
 
         //         // tauC: version1: without higgs rapidity
@@ -6585,174 +6510,175 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         //         TauCnoHRapidity_JetConstituents_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
         //     }
         // }
-        TauB_Inc_0j = TauB_Inc_0j_temp;
-        TauB_JetConstituents_0j = TauB_JetConstituents_0j_temp;
 
-        TauB_Inc_0j_CorrRapidity = TauB_Inc_0j_CorrRapidity_temp;
-        TauB_JetConstituents_0j_CorrRapidity = TauB_JetConstituents_0j_CorrRapidity_temp;
+        // TauB_Inc_0j = TauB_Inc_0j_temp;
+        // TauB_JetConstituents_0j = TauB_JetConstituents_0j_temp;
 
-        TauC_Inc_0j = TauC_Inc_0j_temp;
-        TauC_JetConstituents_0j = TauC_JetConstituents_0j_temp;
-        TauCnoHRapidity_Inc_0j = TauCnoHRapidity_Inc_0j_temp;
-        TauCnoHRapidity_JetConstituents_0j = TauCnoHRapidity_JetConstituents_0j_temp;
+        // TauB_Inc_0j_CorrRapidity = TauB_Inc_0j_CorrRapidity_temp;
+        // TauB_JetConstituents_0j_CorrRapidity = TauB_JetConstituents_0j_CorrRapidity_temp;
 
-        TauC_Inc_0j_CorrRapidity = TauC_Inc_0j_CorrRapidity_temp;
-        TauC_JetConstituents_0j_CorrRapidity = TauC_JetConstituents_0j_CorrRapidity_temp;
-        TauCnoHRapidity_Inc_0j_CorrRapidity = TauCnoHRapidity_Inc_0j_CorrRapidity_temp;
-        TauCnoHRapidity_JetConstituents_0j_CorrRapidity = TauCnoHRapidity_JetConstituents_0j_CorrRapidity_temp;
+        // TauC_Inc_0j = TauC_Inc_0j_temp;
+        // TauC_JetConstituents_0j = TauC_JetConstituents_0j_temp;
+        // TauCnoHRapidity_Inc_0j = TauCnoHRapidity_Inc_0j_temp;
+        // TauCnoHRapidity_JetConstituents_0j = TauCnoHRapidity_JetConstituents_0j_temp;
 
-        /**
-         * 1-Jet scenario: Here excluding leading jet from tau calculation
-         */
-        for (unsigned int JetCounter = 1; JetCounter < nJettinessSize_1J; ++JetCounter)
-        {
-            // Inclusive tauC
-            float TauC_Inc_1j_num = sqrt(goodJets[JetCounter].energy()*goodJets[JetCounter].energy() - goodJets[JetCounter].pz()*goodJets[JetCounter].pz());
-            float TauC_Inc_1j_den = 2*cosh(goodJets[JetCounter].rapidity() - HVec.Rapidity());
-            if (TauC_Inc_1j_num/TauC_Inc_1j_den > TauC_Inc_1j_temp)
-            {
-                TauC_Inc_1j_temp = TauC_Inc_1j_num/TauC_Inc_1j_den;
-                TauC_Inc_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
+        // TauC_Inc_0j_CorrRapidity = TauC_Inc_0j_CorrRapidity_temp;
+        // TauC_JetConstituents_0j_CorrRapidity = TauC_JetConstituents_0j_CorrRapidity_temp;
+        // TauCnoHRapidity_Inc_0j_CorrRapidity = TauCnoHRapidity_Inc_0j_CorrRapidity_temp;
+        // TauCnoHRapidity_JetConstituents_0j_CorrRapidity = TauCnoHRapidity_JetConstituents_0j_CorrRapidity_temp;
 
-            // Inclusive tauC without Higgs rapidity
-            if (TauC_Inc_1j_num/(2*cosh(goodJets[JetCounter].rapidity())) > TauCnoHRapidity_Inc_1j_temp)
-            {
-                TauCnoHRapidity_Inc_1j_temp = TauC_Inc_1j_num/(2*cosh(goodJets[JetCounter].rapidity()));
-                TauCnoHRapidity_Inc_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
+        // /**
+        //  * 1-Jet scenario: Here excluding leading jet from tau calculation
+        //  */
+        // for (unsigned int JetCounter = 1; JetCounter < nJettinessSize_1J; ++JetCounter)
+        // {
+        //     // Inclusive tauC
+        //     float TauC_Inc_1j_num = sqrt(goodJets[JetCounter].energy()*goodJets[JetCounter].energy() - goodJets[JetCounter].pz()*goodJets[JetCounter].pz());
+        //     float TauC_Inc_1j_den = 2*cosh(goodJets[JetCounter].rapidity() - HVec.Rapidity());
+        //     if (TauC_Inc_1j_num/TauC_Inc_1j_den > TauC_Inc_1j_temp)
+        //     {
+        //         TauC_Inc_1j_temp = TauC_Inc_1j_num/TauC_Inc_1j_den;
+        //         TauC_Inc_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
 
-            // Inclusive tauB
-            if (abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz()) > TauB_Inc_1j_temp)
-            {
-                TauB_Inc_1j_temp = abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz());
-                TauB_Inc_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
+        //     // Inclusive tauC without Higgs rapidity
+        //     if (TauC_Inc_1j_num/(2*cosh(goodJets[JetCounter].rapidity())) > TauCnoHRapidity_Inc_1j_temp)
+        //     {
+        //         TauCnoHRapidity_Inc_1j_temp = TauC_Inc_1j_num/(2*cosh(goodJets[JetCounter].rapidity()));
+        //         TauCnoHRapidity_Inc_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
 
-            // TauB & TauC using Jet Constituents
-            float TauB_JetConstituents_1j_local = 0.0;
-            float TauC_JetConstituents_1j_local = 0.0;
-            float TauC_JetConstituents_1j_local2 = 0.0;
-            for ( auto const & constituent : goodJets[JetCounter].daughterPtrVector())
-            {
-                // tauB
-                TauB_JetConstituents_1j_local += abs(constituent->energy() - constituent->pz());
+        //     // Inclusive tauB
+        //     if (abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz()) > TauB_Inc_1j_temp)
+        //     {
+        //         TauB_Inc_1j_temp = abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz());
+        //         TauB_Inc_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
 
-                // tauC
-                double TauC2_numerator = sqrt(constituent->energy()*constituent->energy()-constituent->pz()*constituent->pz());
-                // tauC: version1: with higgs rapidity
-                double TauC2_denominator = 2*cosh(constituent->rapidity() - HVec.Eta());
-                TauC_JetConstituents_1j_local += TauC2_numerator/TauC2_denominator;
+        //     // TauB & TauC using Jet Constituents
+        //     float TauB_JetConstituents_1j_local = 0.0;
+        //     float TauC_JetConstituents_1j_local = 0.0;
+        //     float TauC_JetConstituents_1j_local2 = 0.0;
+        //     for ( auto const & constituent : goodJets[JetCounter].daughterPtrVector())
+        //     {
+        //         // tauB
+        //         TauB_JetConstituents_1j_local += abs(constituent->energy() - constituent->pz());
 
-                // tauC: version1: without higgs rapidity
-                TauC_JetConstituents_1j_local2 += TauC2_numerator/(2*cosh(constituent->rapidity()));
-            }
-            if (TauB_JetConstituents_1j_local > TauB_JetConstituents_1j_temp)
-            {
-                TauB_JetConstituents_1j_temp = TauB_JetConstituents_1j_local;
-                TauB_JetConstituents_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-            if (TauC_JetConstituents_1j_local > TauC_JetConstituents_1j_temp)
-            {
-                TauC_JetConstituents_1j_temp = TauC_JetConstituents_1j_local;
-                TauC_JetConstituents_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-            if (TauC_JetConstituents_1j_local2 > TauCnoHRapidity_JetConstituents_1j_temp)
-            {
-                TauCnoHRapidity_JetConstituents_1j_temp = TauC_JetConstituents_1j_local2;
-                TauCnoHRapidity_JetConstituents_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-        }
-        TauC_Inc_1j = TauC_Inc_1j_temp;
-        TauB_Inc_1j = TauB_Inc_1j_temp;
-        TauB_JetConstituents_1j = TauB_JetConstituents_1j_temp;
-        TauC_JetConstituents_1j = TauC_JetConstituents_1j_temp;
-        TauCnoHRapidity_JetConstituents_1j = TauCnoHRapidity_JetConstituents_1j_temp;
-        TauCnoHRapidity_Inc_1j = TauCnoHRapidity_Inc_1j_temp;
+        //         // tauC
+        //         double TauC2_numerator = sqrt(constituent->energy()*constituent->energy()-constituent->pz()*constituent->pz());
+        //         // tauC: version1: with higgs rapidity
+        //         double TauC2_denominator = 2*cosh(constituent->rapidity() - HVec.Eta());
+        //         TauC_JetConstituents_1j_local += TauC2_numerator/TauC2_denominator;
+
+        //         // tauC: version1: without higgs rapidity
+        //         TauC_JetConstituents_1j_local2 += TauC2_numerator/(2*cosh(constituent->rapidity()));
+        //     }
+        //     if (TauB_JetConstituents_1j_local > TauB_JetConstituents_1j_temp)
+        //     {
+        //         TauB_JetConstituents_1j_temp = TauB_JetConstituents_1j_local;
+        //         TauB_JetConstituents_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
+        //     if (TauC_JetConstituents_1j_local > TauC_JetConstituents_1j_temp)
+        //     {
+        //         TauC_JetConstituents_1j_temp = TauC_JetConstituents_1j_local;
+        //         TauC_JetConstituents_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
+        //     if (TauC_JetConstituents_1j_local2 > TauCnoHRapidity_JetConstituents_1j_temp)
+        //     {
+        //         TauCnoHRapidity_JetConstituents_1j_temp = TauC_JetConstituents_1j_local2;
+        //         TauCnoHRapidity_JetConstituents_1j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
+        // }
+        // TauC_Inc_1j = TauC_Inc_1j_temp;
+        // TauB_Inc_1j = TauB_Inc_1j_temp;
+        // TauB_JetConstituents_1j = TauB_JetConstituents_1j_temp;
+        // TauC_JetConstituents_1j = TauC_JetConstituents_1j_temp;
+        // TauCnoHRapidity_JetConstituents_1j = TauCnoHRapidity_JetConstituents_1j_temp;
+        // TauCnoHRapidity_Inc_1j = TauCnoHRapidity_Inc_1j_temp;
 
 
-        TauC_Inc_1j_CorrRapidity = TauC_Inc_1j_CorrRapidity_temp;
-        TauB_Inc_1j_CorrRapidity = TauB_Inc_1j_CorrRapidity_temp;
-        TauB_JetConstituents_1j_CorrRapidity = TauB_JetConstituents_1j_CorrRapidity_temp;
-        TauC_JetConstituents_1j_CorrRapidity = TauC_JetConstituents_1j_CorrRapidity_temp;
-        TauCnoHRapidity_JetConstituents_1j_CorrRapidity = TauCnoHRapidity_JetConstituents_1j_CorrRapidity_temp;
-        TauCnoHRapidity_Inc_1j_CorrRapidity = TauCnoHRapidity_Inc_1j_CorrRapidity_temp;
+        // TauC_Inc_1j_CorrRapidity = TauC_Inc_1j_CorrRapidity_temp;
+        // TauB_Inc_1j_CorrRapidity = TauB_Inc_1j_CorrRapidity_temp;
+        // TauB_JetConstituents_1j_CorrRapidity = TauB_JetConstituents_1j_CorrRapidity_temp;
+        // TauC_JetConstituents_1j_CorrRapidity = TauC_JetConstituents_1j_CorrRapidity_temp;
+        // TauCnoHRapidity_JetConstituents_1j_CorrRapidity = TauCnoHRapidity_JetConstituents_1j_CorrRapidity_temp;
+        // TauCnoHRapidity_Inc_1j_CorrRapidity = TauCnoHRapidity_Inc_1j_CorrRapidity_temp;
 
-        /**
-         * 2-Jet scenario: Here excluding leading jet from tau calculation
-         */
-        for (unsigned int JetCounter = 2; JetCounter < nJettinessSize_2J; ++JetCounter)
-        {
-            // Inclusive tauC
-            float TauC_Inc_2j_num = sqrt(goodJets[JetCounter].energy()*goodJets[JetCounter].energy() - goodJets[JetCounter].pz()*goodJets[JetCounter].pz());
-            float TauC_Inc_2j_den = 2*cosh(goodJets[JetCounter].rapidity() - HVec.Rapidity());
-            if (TauC_Inc_2j_num/TauC_Inc_2j_den > TauC_Inc_2j_temp)
-            {
-                TauC_Inc_2j_temp = TauC_Inc_2j_num/TauC_Inc_2j_den;
-                TauC_Inc_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
+        // /**
+        //  * 2-Jet scenario: Here excluding leading jet from tau calculation
+        //  */
+        // for (unsigned int JetCounter = 2; JetCounter < nJettinessSize_2J; ++JetCounter)
+        // {
+        //     // Inclusive tauC
+        //     float TauC_Inc_2j_num = sqrt(goodJets[JetCounter].energy()*goodJets[JetCounter].energy() - goodJets[JetCounter].pz()*goodJets[JetCounter].pz());
+        //     float TauC_Inc_2j_den = 2*cosh(goodJets[JetCounter].rapidity() - HVec.Rapidity());
+        //     if (TauC_Inc_2j_num/TauC_Inc_2j_den > TauC_Inc_2j_temp)
+        //     {
+        //         TauC_Inc_2j_temp = TauC_Inc_2j_num/TauC_Inc_2j_den;
+        //         TauC_Inc_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
 
-            // Inclusive tauC without Higgs rapidity
-            if (TauC_Inc_2j_num/(2*cosh(goodJets[JetCounter].rapidity())) > TauCnoHRapidity_Inc_2j_temp)
-            {
-                TauCnoHRapidity_Inc_2j_temp = TauC_Inc_2j_num/(2*cosh(goodJets[JetCounter].rapidity()));
-                TauCnoHRapidity_Inc_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
+        //     // Inclusive tauC without Higgs rapidity
+        //     if (TauC_Inc_2j_num/(2*cosh(goodJets[JetCounter].rapidity())) > TauCnoHRapidity_Inc_2j_temp)
+        //     {
+        //         TauCnoHRapidity_Inc_2j_temp = TauC_Inc_2j_num/(2*cosh(goodJets[JetCounter].rapidity()));
+        //         TauCnoHRapidity_Inc_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
 
-            // Inclusive tauB
-            if (abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz()) > TauB_Inc_2j_temp)
-            {
-                TauB_Inc_2j_temp = abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz());
-                TauB_Inc_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
+        //     // Inclusive tauB
+        //     if (abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz()) > TauB_Inc_2j_temp)
+        //     {
+        //         TauB_Inc_2j_temp = abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz());
+        //         TauB_Inc_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
 
-            // TauB & TauC using Jet Constituents
-            float TauB_JetConstituents_2j_local = 0.0;
-            float TauC_JetConstituents_2j_local = 0.0;
-            float TauC_JetConstituents_2j_local2 = 0.0;
-            for ( auto const & constituent : goodJets[JetCounter].daughterPtrVector())
-            {
-                // tauB
-                TauB_JetConstituents_2j_local += abs(constituent->energy() - constituent->pz());
+        //     // TauB & TauC using Jet Constituents
+        //     float TauB_JetConstituents_2j_local = 0.0;
+        //     float TauC_JetConstituents_2j_local = 0.0;
+        //     float TauC_JetConstituents_2j_local2 = 0.0;
+        //     for ( auto const & constituent : goodJets[JetCounter].daughterPtrVector())
+        //     {
+        //         // tauB
+        //         TauB_JetConstituents_2j_local += abs(constituent->energy() - constituent->pz());
 
-                // tauC
-                double TauC2_numerator = sqrt(constituent->energy()*constituent->energy()-constituent->pz()*constituent->pz());
-                // tauC: version1: with higgs rapidity
-                double TauC2_denominator = 2*cosh(constituent->rapidity() - HVec.Eta());
-                TauC_JetConstituents_2j_local += TauC2_numerator/TauC2_denominator;
+        //         // tauC
+        //         double TauC2_numerator = sqrt(constituent->energy()*constituent->energy()-constituent->pz()*constituent->pz());
+        //         // tauC: version1: with higgs rapidity
+        //         double TauC2_denominator = 2*cosh(constituent->rapidity() - HVec.Eta());
+        //         TauC_JetConstituents_2j_local += TauC2_numerator/TauC2_denominator;
 
-                // tauC: version1: without higgs rapidity
-                TauC_JetConstituents_2j_local2 += TauC2_numerator/(2*cosh(constituent->rapidity()));
-            }
-            if (TauB_JetConstituents_2j_local > TauB_JetConstituents_2j_temp)
-            {
-                TauB_JetConstituents_2j_temp = TauB_JetConstituents_2j_local;
-                TauB_JetConstituents_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-            if (TauC_JetConstituents_2j_local > TauC_JetConstituents_2j_temp)
-            {
-                TauC_JetConstituents_2j_temp = TauC_JetConstituents_2j_local;
-                TauC_JetConstituents_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-            if (TauC_JetConstituents_2j_local2 > TauCnoHRapidity_JetConstituents_2j_temp)
-            {
-                TauCnoHRapidity_JetConstituents_2j_temp = TauC_JetConstituents_2j_local2;
-                TauCnoHRapidity_JetConstituents_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
-            }
-        }
-        TauC_Inc_2j = TauC_Inc_2j_temp;
-        TauB_Inc_2j = TauB_Inc_2j_temp;
-        TauB_JetConstituents_2j = TauB_JetConstituents_2j_temp;
-        TauC_JetConstituents_2j = TauC_JetConstituents_2j_temp;
-        TauCnoHRapidity_JetConstituents_2j = TauCnoHRapidity_JetConstituents_2j_temp;
-        TauCnoHRapidity_Inc_2j = TauCnoHRapidity_Inc_2j_temp;
+        //         // tauC: version1: without higgs rapidity
+        //         TauC_JetConstituents_2j_local2 += TauC2_numerator/(2*cosh(constituent->rapidity()));
+        //     }
+        //     if (TauB_JetConstituents_2j_local > TauB_JetConstituents_2j_temp)
+        //     {
+        //         TauB_JetConstituents_2j_temp = TauB_JetConstituents_2j_local;
+        //         TauB_JetConstituents_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
+        //     if (TauC_JetConstituents_2j_local > TauC_JetConstituents_2j_temp)
+        //     {
+        //         TauC_JetConstituents_2j_temp = TauC_JetConstituents_2j_local;
+        //         TauC_JetConstituents_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
+        //     if (TauC_JetConstituents_2j_local2 > TauCnoHRapidity_JetConstituents_2j_temp)
+        //     {
+        //         TauCnoHRapidity_JetConstituents_2j_temp = TauC_JetConstituents_2j_local2;
+        //         TauCnoHRapidity_JetConstituents_2j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
+        //     }
+        // }
+        // TauC_Inc_2j = TauC_Inc_2j_temp;
+        // TauB_Inc_2j = TauB_Inc_2j_temp;
+        // TauB_JetConstituents_2j = TauB_JetConstituents_2j_temp;
+        // TauC_JetConstituents_2j = TauC_JetConstituents_2j_temp;
+        // TauCnoHRapidity_JetConstituents_2j = TauCnoHRapidity_JetConstituents_2j_temp;
+        // TauCnoHRapidity_Inc_2j = TauCnoHRapidity_Inc_2j_temp;
 
-        TauC_Inc_2j_CorrRapidity = TauC_Inc_2j_CorrRapidity_temp;
-        TauB_Inc_2j_CorrRapidity = TauB_Inc_2j_CorrRapidity_temp;
-        TauB_JetConstituents_2j_CorrRapidity = TauB_JetConstituents_2j_CorrRapidity_temp;
-        TauC_JetConstituents_2j_CorrRapidity = TauC_JetConstituents_2j_CorrRapidity_temp;
-        TauCnoHRapidity_JetConstituents_2j_CorrRapidity = TauCnoHRapidity_JetConstituents_2j_CorrRapidity_temp;
-        TauCnoHRapidity_Inc_2j_CorrRapidity = TauCnoHRapidity_Inc_2j_CorrRapidity_temp;
+        // TauC_Inc_2j_CorrRapidity = TauC_Inc_2j_CorrRapidity_temp;
+        // TauB_Inc_2j_CorrRapidity = TauB_Inc_2j_CorrRapidity_temp;
+        // TauB_JetConstituents_2j_CorrRapidity = TauB_JetConstituents_2j_CorrRapidity_temp;
+        // TauC_JetConstituents_2j_CorrRapidity = TauC_JetConstituents_2j_CorrRapidity_temp;
+        // TauCnoHRapidity_JetConstituents_2j_CorrRapidity = TauCnoHRapidity_JetConstituents_2j_CorrRapidity_temp;
+        // TauCnoHRapidity_Inc_2j_CorrRapidity = TauCnoHRapidity_Inc_2j_CorrRapidity_temp;
 
         /**
          * END: nJettiness variable
