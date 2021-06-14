@@ -148,7 +148,10 @@ void NJettiness::GetRapidityWeightedValues(
     for (unsigned int JetCounter = NJettiness; JetCounter < nJettinessSize; ++JetCounter)
     {
         // Inclusive tauC
-        float TauC_Inc_0j_num = sqrt(goodJets[JetCounter].energy()*goodJets[JetCounter].energy() - goodJets[JetCounter].pz()*goodJets[JetCounter].pz());
+        // float TauC_Inc_0j_num = sqrt(goodJets[JetCounter].energy()*goodJets[JetCounter].energy() - goodJets[JetCounter].pz()*goodJets[JetCounter].pz());
+        // float TauC_Inc_0j_num = 1.0;
+        float TauC_Inc_0j_num = goodJets[JetCounter].pt();
+        // float TauC_Inc_0j_num = goodJets[JetCounter].energy() - abs(goodJets[JetCounter].pz());
         float TauC_Inc_0j_den = 2*cosh(goodJets[JetCounter].rapidity() - HiggsRapidity);
         if (TauC_Inc_0j_num/TauC_Inc_0j_den > TauC_Inc_0j_temp)
         {
@@ -164,9 +167,13 @@ void NJettiness::GetRapidityWeightedValues(
         }
 
         // Inclusive tauB
-        if (abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz()) > TauB_Inc_0j_temp)
+        // if ((goodJets[JetCounter].energy() - goodJets[JetCounter].pz()) > TauB_Inc_0j_temp)
+        if ((goodJets[JetCounter].pt()*TMath::Exp(-abs(goodJets[JetCounter].rapidity()))) > TauB_Inc_0j_temp)
+        // if ((TMath::Exp(-abs(goodJets[JetCounter].rapidity()))) > TauB_Inc_0j_temp)
         {
-            TauB_Inc_0j_temp = abs(goodJets[JetCounter].energy() - goodJets[JetCounter].pz());
+            // TauB_Inc_0j_temp = (goodJets[JetCounter].energy() - goodJets[JetCounter].pz());
+            // TauB_Inc_0j_temp = (TMath::Exp(-abs(goodJets[JetCounter].rapidity())));
+            TauB_Inc_0j_temp = (goodJets[JetCounter].pt()*TMath::Exp(-abs(goodJets[JetCounter].rapidity())));
             TauB_Inc_0j_CorrRapidity_temp = goodJets[JetCounter].rapidity();
         }
 
@@ -177,10 +184,14 @@ void NJettiness::GetRapidityWeightedValues(
         for ( auto const & constituent : goodJets[JetCounter].daughterPtrVector())
         {
             // tauB
-            TauB_JetConstituents_0j_local += abs(constituent->energy() - constituent->pz());
+            // TauB_JetConstituents_0j_local += (constituent->energy() - constituent->pz());
+            // TauB_JetConstituents_0j_local += (TMath::Exp(-abs(constituent->rapidity())));
+            TauB_JetConstituents_0j_local += (constituent->pt()*TMath::Exp(-abs(constituent->rapidity())));
 
             // tauC
-            double TauC2_numerator = sqrt(constituent->energy()*constituent->energy()-constituent->pz()*constituent->pz());
+            // double TauC2_numerator = sqrt(constituent->energy()*constituent->energy()-constituent->pz()*constituent->pz());
+            // double TauC2_numerator = 1.0;
+            double TauC2_numerator = constituent->pt();
             // tauC: version1: with higgs rapidity
             double TauC2_denominator = 2*cosh(constituent->rapidity() - HiggsRapidity);
             TauC_JetConstituents_0j_local += TauC2_numerator/TauC2_denominator;
