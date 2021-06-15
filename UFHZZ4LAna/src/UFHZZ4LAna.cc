@@ -460,7 +460,7 @@ private:
     float TauCnoHRapidity_JetConstituents_2j_CorrRapidity;
     float TauCnoHRapidity_Inc_2j_CorrRapidity;
 
-    float GeneralTau;
+    float Tau0;
     float GeneralTau1;
     float GeneralTau2;
     float GeneralTau3;
@@ -1565,7 +1565,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     TauCnoHRapidity_JetConstituents_2j_CorrRapidity = -9999.0;
     TauCnoHRapidity_Inc_2j_CorrRapidity = -9999.0;
 
-    GeneralTau=-9999.0;
+    Tau0=-9999.0;
     GeneralTau1=-9999.0;
     GeneralTau2=-9999.0;
     GeneralTau3=-9999.0;
@@ -5266,7 +5266,7 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("TauCnoHRapidity_JetConstituents_2j_CorrRapidity",&TauCnoHRapidity_JetConstituents_2j_CorrRapidity,"TauCnoHRapidity_JetConstituents_2j_CorrRapidity/F");
     tree->Branch("TauCnoHRapidity_Inc_2j_CorrRapidity",&TauCnoHRapidity_Inc_2j_CorrRapidity,"TauCnoHRapidity_Inc_2j_CorrRapidity/F");
 
-    tree->Branch("GeneralTau",&GeneralTau,"GeneralTau/F");
+    tree->Branch("Tau0",&Tau0,"Tau0/F");
     tree->Branch("GeneralTau1",&GeneralTau1,"GeneralTau1/F");
     tree->Branch("GeneralTau2",&GeneralTau2,"GeneralTau2/F");
     tree->Branch("GeneralTau3",&GeneralTau3,"GeneralTau3/F");
@@ -6329,7 +6329,16 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
          */
 
         NJettiness CalculateNJettinessVar;
-        CalculateNJettinessVar.GetRapidityWeightedValues(
+        // double Taub = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, 1.0, 1.0);
+        // Tau0 = Taub;
+        // std::cout << "Number of tight leptons: " << ntight << "\tskimTightLeptons = " << skimTightLeptons << std::endl;
+        // std::cout << "Taub = " << Taub << std::endl;
+
+        Tau0 = CalculateNJettinessVar.Tau0(pfCands, sqrt((HVec.M())^2 + (HVec.Pt())^2), HVec.Rapidity(),
+                                                    Lep1, Lep2, Lep3, Lep4);
+
+        // NJettiness CalculateNJettinessVar;
+        CalculateNJettinessVar.GetRapidityWeightedValues_pTWeighted_UsingEnergy(
              0,  // NJettiness, // this depends on the jettiness that we would like to use
              goodJets,   // Fixed don't change
              HVec.Rapidity(),
@@ -6349,7 +6358,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
             );
 
 
-        CalculateNJettinessVar.GetRapidityWeightedValues(
+        CalculateNJettinessVar.GetRapidityWeightedValues_pTWeighted_UsingEnergy(
              1, // NJettiness, // this depends on the jettiness that we would like to use
              goodJets,   // Fixed don't change
              HVec.Rapidity(),
@@ -6368,7 +6377,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
              0 // nJettinessSize_temp; use this if don't want to use all available good jets
             );
 
-        CalculateNJettinessVar.GetRapidityWeightedValues(
+        CalculateNJettinessVar.GetRapidityWeightedValues_pTWeighted_UsingEnergy(
              2, // NJettiness, // this depends on the jettiness that we would like to use
              goodJets,   // Fixed don't change
              HVec.Rapidity(),
