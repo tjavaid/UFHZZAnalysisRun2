@@ -19,7 +19,8 @@ process.Timing = cms.Service("Timing",
                              )
 
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20000) )
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 
 myfilelist = cms.untracked.vstring(

@@ -427,68 +427,66 @@ private:
     float absdeltarapidity_hleadingjet_pt30_eta4p7_jesup; float absdeltarapidity_hleadingjet_pt30_eta4p7_jesdn;
     float absdeltarapidity_hleadingjet_pt30_eta4p7_jerup; float absdeltarapidity_hleadingjet_pt30_eta4p7_jerdn;
     float DijetMass, DijetDEta, DijetFisher;
-    float qgj1=-1.0; float qgj2=-1.0;
+    float qgj1; float qgj2;
     float csvj1, csvj2; 
     // new nominal
-    float pTj1=-1.0; float pTj2=-1.0;
-    float pTj1_2p5=-1.0; float pTj2_2p5=-1.0;
-    float mj1j2=-999.0; float dEtaj1j2=-10.0;
-    float mj1=-10; float mj2=-10;
+    float pTj1; float pTj2;
+    float pTj1_2p5; float pTj2_2p5;
+    float mj1j2; float dEtaj1j2;
+    float mj1; float mj2;
 
-    float etaj1=999.0; float etaj2=999.0;
-//    float y4l=-10.0;
-    float yj1=-10.0; float yj2=-10.0;
-    float phij1=-10.0; float phij2=-10.0;
-    float dPhiHj1=-10.0; float dyHj1=-1.0;
-    //    float mj1j2=-1.0; float dEtaj1j2=-1.0;
-    float dPhij1j2=-10.0; float dPhiHj1j2=-10.0;
-    float dPhij1j2_VBF = -10.0;
-    float yj1_2p5=-1.0; float yj2_2p5=-1.0;
+    float etaj1; float etaj2;
+    float yj1; float yj2;
+    float phij1; float phij2;
+    float dPhiHj1; float dyHj1;
+    float dPhij1j2; float dPhiHj1j2;
+    float dPhij1j2_VBF ;
+    float yj1_2p5; float yj2_2p5;
     
-    float dPhiHj1_2p5=-10.0; float dyHj1_2p5=-1.0;
-    float mj1j2_2p5=-999.0; float dEtaj1j2_2p5=-10.0;
-    float dPhij1j2_2p5=-10.0; float dPhiHj1j2_2p5=-10.0;
-    float pTj1_VBF=-10.0; float dPhiHj1j2_VBF =-10.0; //float dPhij1j2_VBF_jesdn=-1.0; float dPhiHj1j2_VBF_jesdn=-1.0;
+    float dPhiHj1_2p5; float dyHj1_2p5;
+    float mj1j2_2p5; float dEtaj1j2_2p5;
+    float dPhij1j2_2p5; float dPhiHj1j2_2p5;
+    float pTj1_VBF; float dPhiHj1j2_VBF; //float dPhij1j2_VBF_jesdn=-1.0; float dPhiHj1j2_VBF_jesdn=-1.0;
     
     
     // JES up reco
-    float pTj1_jesup=-10.0; float pTj2_jesup=-10.0;
-    float pTj1_2p5_jesup=-10.0; //float pTj2_jesup=-1.0;
-    float mj1j2_jesup=-999.0; float dEtaj1j2_jesup=-10.0;
+    float pTj1_jesup; float pTj2_jesup;
+    float pTj1_2p5_jesup; //float pTj2_jesup=-1.0;
+    float mj1j2_jesup; float dEtaj1j2_jesup;
     
-    float yj1_jesup=-10.0; float yj2_jesup=-10.0;
-    float dPhiHj1_jesup=-10.0; float dyHj1_jesup=-10.0;
-    float dPhij1j2_jesup=-10.0; float dPhiHj1j2_jesup=-10.0;
-    float yj1_2p5_jesup=-10.0; float yj2_2p5_jesup=-10.0;
+    float yj1_jesup; float yj2_jesup;
+    float dPhiHj1_jesup; float dyHj1_jesup;
+    float dPhij1j2_jesup; float dPhiHj1j2_jesup;
+    float yj1_2p5_jesup; float yj2_2p5_jesup;
     
-    float dPhiHj1_2p5_jesup=-10.0; float dyHj1_2p5_jesup=-10.0;
-    float mj1j2_2p5_jesup=-999.0; float dEtaj1j2_2p5_jesup=-10.0;
-    float dPhij1j2_2p5_jesup=-10.0; float dPhiHj1j2_2p5_jesup=-10.0;
-    float etaj2_jesup = -10.0;
-    float pTj2_2p5_jesup=-10.0;
-    float pTj1_VBF_jesup =-10.0; float dPhij1j2_VBF_jesup=-10.0; float dPhiHj1j2_VBF_jesup=-10.0;
-    float etaj1_jesup = -10.0;
-    float mass4lj_jesup=-999.0; float mass4ljj_jesup=-999.0;
-    float pT4lj_jesup=-999.0; float pT4ljj_jesup=-999.0;
+    float dPhiHj1_2p5_jesup; float dyHj1_2p5_jesup;
+    float mj1j2_2p5_jesup; float dEtaj1j2_2p5_jesup;
+    float dPhij1j2_2p5_jesup; float dPhiHj1j2_2p5_jesup;
+    float etaj2_jesup;
+    float pTj2_2p5_jesup;
+    float pTj1_VBF_jesup; float dPhij1j2_VBF_jesup; float dPhiHj1j2_VBF_jesup;
+    float etaj1_jesup;
+    float mass4lj_jesup; float mass4ljj_jesup;
+    float pT4lj_jesup; float pT4ljj_jesup;
     // JES dn reco
-    float pTj1_jesdn=-10.0; float pTj2_jesdn=-10.0;
-    float pTj1_2p5_jesdn=-10.0; //float pTj2_jesdn=-1.0;
-    float mj1j2_jesdn=-999.0; float dEtaj1j2_jesdn=-10.0;
+    float pTj1_jesdn; float pTj2_jesdn;
+    float pTj1_2p5_jesdn;
+    float mj1j2_jesdn; float dEtaj1j2_jesdn;
     
-    float yj1_jesdn=-10.0; float yj2_jesdn=-10.0;
-    float dPhiHj1_jesdn=-10.0; float dyHj1_jesdn=-10.0;
-    float dPhij1j2_jesdn=-10.0; float dPhiHj1j2_jesdn=-10.0;
-    float yj1_2p5_jesdn=-10.0; float yj2_2p5_jesdn=-10.0;
-    float etaj1_jesdn =-10.0;
-    float etaj2_jesdn=-10.0;
+    float yj1_jesdn; float yj2_jesdn;
+    float dPhiHj1_jesdn; float dyHj1_jesdn;
+    float dPhij1j2_jesdn; float dPhiHj1j2_jesdn;
+    float yj1_2p5_jesdn; float yj2_2p5_jesdn;
+    float etaj1_jesdn;
+    float etaj2_jesdn;
     
-    float dPhiHj1_2p5_jesdn=-10.0; float dyHj1_2p5_jesdn=-10.0;
-    float mj1j2_2p5_jesdn=-999.0; float dEtaj1j2_2p5_jesdn=-10.0;
-    float dPhij1j2_2p5_jesdn=-10.0; float dPhiHj1j2_2p5_jesdn=-10.0;
-    float pTj1_VBF_jesdn=-10.0; float dPhij1j2_VBF_jesdn=-10.0; float dPhiHj1j2_VBF_jesdn=-10.0;
-    float pTj2_2p5_jesdn=-10.0;
-    float mass4lj_jesdn=-999.0; float mass4ljj_jesdn=-999.0;
-    float pT4lj_jesdn=-999.0; float pT4ljj_jesdn=-999.0;
+    float dPhiHj1_2p5_jesdn; float dyHj1_2p5_jesdn;
+    float mj1j2_2p5_jesdn; float dEtaj1j2_2p5_jesdn;
+    float dPhij1j2_2p5_jesdn; float dPhiHj1j2_2p5_jesdn;
+    float pTj1_VBF_jesdn; float dPhij1j2_VBF_jesdn; float dPhiHj1j2_VBF_jesdn;
+    float pTj2_2p5_jesdn;
+    float mass4lj_jesdn; float mass4ljj_jesdn;
+    float pT4lj_jesdn; float pT4ljj_jesdn;
     
     // merged jets
     vector<int>   mergedjet_iscleanH4l;
@@ -1473,6 +1471,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     nbjets_pt30_eta4p7=0; nvjets_pt40_eta2p4=0;
     
     pt_leadingjet_pt30_eta4p7=-1.0;
+//    pTj1=-1; 
     pt_leadingjet_pt30_eta4p7_jesup=-1.0; pt_leadingjet_pt30_eta4p7_jesdn=-1.0;
     pt_leadingjet_pt30_eta4p7_jerup=-1.0; pt_leadingjet_pt30_eta4p7_jerdn=-1.0;
     
@@ -1489,7 +1488,69 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     absdeltarapidity_hleadingjet_pt30_eta4p7_jerup=-1.0; absdeltarapidity_hleadingjet_pt30_eta4p7_jerdn=-1.0;
     
     DijetMass=-1.0; DijetDEta=9999.0; DijetFisher=9999.0;
-    
+   
+    // new obs. initialization
+        // new nominal
+    pTj1=-1.0; pTj2=-1.0;
+    pTj1_2p5=-1.0; pTj2_2p5=-1.0;
+    mj1j2=-1.0; dEtaj1j2=-999.0;
+    mj1=-1.0; mj2=-1.0;
+
+    etaj1=-1.0; etaj2=-1.0;
+    yj1=-9999.0; yj2=-9999.0;
+    phij1=-9999.0; phij2=-9999.0;
+    dPhiHj1=-9999.0; dyHj1=-9999.0;
+    dPhij1j2=-9999.0; dPhiHj1j2=-1.0;
+    dPhij1j2_VBF=-9999.0;
+    yj1_2p5=-9999.0; yj2_2p5=-9999.0;
+
+    dPhiHj1_2p5=-9999.0; dyHj1_2p5=-9999.0;
+    mj1j2_2p5=-1.0; dEtaj1j2_2p5=-9999.0;
+    dPhij1j2_2p5=-9999.0; dPhiHj1j2_2p5=-9999.0;
+    pTj1_VBF=-9999.0; dPhiHj1j2_VBF=-9999.0; //float dPhij1j2_VBF_jesdn=-1.0; float dPhiHj1j2_VBF_jesdn=-1.0;
+
+
+    // JES up reco
+    pTj1_jesup=-1.0; pTj2_jesup=-1.0;
+    pTj1_2p5_jesup=-1.0; //float pTj2_jesup=-1.0;
+    mj1j2_jesup=-1.0; dEtaj1j2_jesup=-9999.0;
+
+    yj1_jesup=-9999.0; yj2_jesup=-9999.0;
+    dPhiHj1_jesup=-9999.0; dyHj1_jesup=-9999.0;
+    dPhij1j2_jesup=-9999.0; dPhiHj1j2_jesup=-9999.0;
+    yj1_2p5_jesup=-9999.0; yj2_2p5_jesup=-9999.0;
+
+    dPhiHj1_2p5_jesup=-9999.0; dyHj1_2p5_jesup=-9999.0;
+    mj1j2_2p5_jesup=-1.0; dEtaj1j2_2p5_jesup=-9999.0;
+    dPhij1j2_2p5_jesup=-9999.0; dPhiHj1j2_2p5_jesup=-9999.0;
+    etaj2_jesup=-9999.0;
+    pTj2_2p5_jesup=-1.0;
+    pTj1_VBF_jesup=-1.0; dPhij1j2_VBF_jesup=-9999.0; dPhiHj1j2_VBF_jesup=-9999.0;
+    etaj1_jesup=-9999.0;
+    mass4lj_jesup=-1.0; mass4ljj_jesup=-1.0;
+    pT4lj_jesup=-1.0; pT4ljj_jesup=-1.0;
+    // JES dn reco
+    pTj1_jesdn=-1.0; pTj2_jesdn=-1.0;
+    pTj1_2p5_jesdn=-1.0;
+    mj1j2_jesdn=-1.0; dEtaj1j2_jesdn=-9999.0;
+
+    yj1_jesdn=-9999.0; yj2_jesdn=-9999.0;
+    dPhiHj1_jesdn=-9999.0; dyHj1_jesdn=-9999.0;
+    dPhij1j2_jesdn=-9999.0; dPhiHj1j2_jesdn=-9999.0;
+    yj1_2p5_jesdn=-9999.0; yj2_2p5_jesdn=-9999.0;
+    etaj1_jesdn=-9999.0;
+    etaj2_jesdn=-9999.0;
+
+    dPhiHj1_2p5_jesdn=-9999.0; dyHj1_2p5_jesdn=-9999.0;
+    mj1j2_2p5_jesdn=-1.0; dEtaj1j2_2p5_jesdn=-9999.0;
+    dPhij1j2_2p5_jesdn=-9999.0; dPhiHj1j2_2p5_jesdn=-9999.0;
+    pTj1_VBF_jesdn=-1.0; dPhij1j2_VBF_jesdn=-9999.0; dPhiHj1j2_VBF_jesdn=-9999.0;
+    pTj2_2p5_jesdn=-1.0;
+    mass4lj_jesdn=-1.0; mass4ljj_jesdn=-1.0;
+    pT4lj_jesdn=-1.0; pT4ljj_jesdn=-1.0;
+
+
+ 
     mergedjet_iscleanH4l.clear();
     mergedjet_pt.clear(); mergedjet_eta.clear(); mergedjet_phi.clear(); mergedjet_mass.clear();
     mergedjet_L1.clear();
@@ -5485,11 +5546,12 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
     // jets reco new declaration, TJ
     //int jet1index=-1, jet2index=-1;
     float jet1pt=0.0, jet2pt=0.0;
-    int jet1index2p5=-1, jet2index2p5=-1;
+    int jet1index2p5=-1.0, jet2index2p5=-1.0;
     //float jet1pt2p5=0.0, jet2pt2p5=0.0;
     //            float qgj1=-1.0; float qgj2=-1.0;
     //	    float csvj1, csvj2;
-    int jet1index_jesup=-1, jet2index_jesup=-1;
+    int jet1index2=-1.0; int jet2index2=-1.0;
+    int jet1index_jesup=-1.0, jet2index_jesup=-1.0;
     float jet1pt_jesup=0.0, jet2pt_jesup=0.0;
     int jet1index2p5_jesup=-1, jet2index2p5_jesup=-1;
     float jet1pt2p5_jesup=0.0, jet2pt2p5_jesup=0.0;
@@ -5622,31 +5684,39 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
             if (isclean_H4l) {
                 njets_pt30_eta4p7++;
                 jet_iscleanH4l.push_back((int)jet_pt.size());
-                if (jet_jer->Pt() > jet1pt )  {
-		    jet2pt=jet1pt;; jet2index=jet1index;
+		if (jet_jer->Pt() > pt_leadingjet_pt30_eta4p7) {
                     pt_leadingjet_pt30_eta4p7 = jet_jer->Pt();
-	            jet1pt=jet_jer->Pt();jet1index=k;
-        	    cout<<"in loop:   Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" pTj1: "<<pTj1<<endl;
+        	    cout<<"in loop:   Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" pt_leadingjet_pt30_eta4p7 : "<<pt_leadingjet_pt30_eta4p7<<endl;
                     absrapidity_leadingjet_pt30_eta4p7 = jet_jer->Rapidity(); //take abs later
+		    }
+                if (jet_jer->Pt() > jet1pt )  {
+		    jet2pt=jet1pt; jet2index2=jet1index2;
+	            //jet1pt=jet_jer->Pt();jet1index2=k;
+	            jet1pt=jet_jer->Pt();jet1index2=(int)jet_pt.size();;
+//        	    cout<<"in loop:   Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" pTj1: "<<pTj1<<endl;
                 }
                else if (jet_jer->Pt()>jet2pt) {
-                    jet2pt=jet_jer->Pt(); jet2index= k; //(int)jet_pt.size();
+                    //jet2pt=jet_jer->Pt(); jet2index2= k; //(int)jet_pt.size();
+                    jet2pt=jet_jer->Pt(); jet2index2= (int)jet_pt.size(); //(int)jet_pt.size();
                 }
                 if (fabs(goodJets[k].eta())<2.5) {
                     njets_pt30_eta2p5++;
-                    if (jet_jer->Pt() >jet1pt2p5) {
-			jet2pt2p5=jet1pt2p5; jet2index_2p5=jet1index_2p5; jet1index_2p5=k;
-                        jet1pt2p5 = jet_jer->Pt();
+		    if (jet_jer->Pt() > pt_leadingjet_pt30_eta2p5) {
                         pt_leadingjet_pt30_eta2p5 = jet_jer->Pt();
                     }
+                    if (jet_jer->Pt() >jet1pt2p5) {
+			//jet2pt2p5=jet1pt2p5; jet2index_2p5=jet1index_2p5; jet1index_2p5=k;
+			jet2pt2p5=jet1pt2p5; jet2index_2p5=jet1index_2p5; jet1index_2p5=(int)jet_pt.size();;
+                        jet1pt2p5 = jet_jer->Pt();
+                    }
 		    else if (jet_jer->Pt()>jet2pt2p5) {
-			//pTj2_2p5=jet_jer->Pt(); jet2index_2p5=k; //(int)jet_pt.size();
-			jet2pt2p5=jet_jer->Pt(); jet2index_2p5=k; //(int)jet_pt.size();
+			//jet2pt2p5=jet_jer->Pt(); jet2index_2p5=k; //(int)jet_pt.size();
+			jet2pt2p5=jet_jer->Pt(); jet2index_2p5=(int)jet_pt.size(); // k; 
 		   } 
                     
                 }
                 
-            }
+            }  // isclean_H4l
             jet_pt.push_back(jet_jer->Pt());
             jet_pt_raw.push_back(goodJets[k].correctedJet("Uncorrected").pt());///jet Pt without JEC applied
             jet_eta.push_back(jet_jer->Eta());
@@ -5702,7 +5772,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
             jet_bTagEffi.push_back(helper.get_bTagEffi(jet_jer->Pt(), jet_jer->Eta(), hbTagEffi));
             jet_cTagEffi.push_back(helper.get_bTagEffi(jet_jer->Pt(), jet_jer->Eta(), hcTagEffi));
             jet_udsgTagEffi.push_back(helper.get_bTagEffi(jet_jer->Pt(), jet_jer->Eta(), hudsgTagEffi));
-        }
+        }   // if (jet_jer->Pt() > 30.0 && fabs(goodJets[k].eta())<4.7)
         
         // JER up
         if (jet_jerup->Pt() > 30.0 && fabs(jet_jerup->Eta())<4.7) {
@@ -5848,69 +5918,9 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
             
         }
 
-} // loop over jets, original
-//  shifting new obs. inside main loop       
+} // loop over jets
 
-    //TLorentzVector Jet1, Jet2, Jet1_2p5, Jet2_2p5;
-    SimpleParticleCollection_t associated;
-    if (njets_pt30_eta4p7 > 0 ) {
-//      cout<<"jet1 index is ........"<<jet1index<<endl;
-        Jet1.SetPtEtaPhiM(jet_pt[jet1index],jet_eta[jet1index],jet_phi[jet1index],jet_mass[jet1index]);
-        associated.push_back(SimpleParticle_t(0, Jet1));
-        pTj1=Jet1.Pt();
-        pt_leadingjet_pt30_eta4p7=Jet1.Pt();
-        cout<<"njet0 condition  Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" pTj1: "<<pTj1<<endl;
-        etaj1=Jet1.Eta();
-        yj1=Jet1.Rapidity();
-        qgj1=jet_QGTagger[jet1index];
-        qgj1=jet_QGTagger[jet1index];
-        csvj1=jet_csvv2[jet1index];
-        csvj1=jet_csvv2[jet1index];
-        dPhiHj1=deltaPhi(HVec.Phi(),Jet1.Phi());
-        //dyHj1=TMath::Abs(y4l-yj1);
-        dyHj1=TMath::Abs(rapidity4l-yj1);
-    }    
-    if (njets_pt30_eta4p7 > 1) {
-        Jet2.SetPtEtaPhiM(jet_pt[jet2index],jet_eta[jet2index],jet_phi[jet2index],jet_mass[jet2index]);
-        associated.push_back(SimpleParticle_t(0, Jet2));
-        pTj2=Jet2.Pt();
-        etaj2=Jet2.Eta();
-        yj2=Jet2.Rapidity();
-        qgj2=jet_QGTagger[jet2index];
-        csvj2=jet_csvv2[jet2index];
-        mj1j2=(Jet1+Jet2).M();
-        mass4ljj=mass4l+mj1j2;
-        dEtaj1j2=TMath::Abs(Jet1.Eta()-Jet2.Eta());
-        dPhij1j2=TMath::Abs(Jet1.Phi()-Jet2.Phi());
-        dPhij1j2=deltaPhi(Jet1.Phi(),Jet2.Phi());
-      //  dPhiHj1j2=TMath::Abs(HVec.Phi()-(Jet1+Jet2).Phi());
-        dPhiHj1j2=deltaPhi(HVec.Phi(),(Jet1+Jet2).Phi());
-    }    
-    if (njets_pt30_eta2p5 > 0) {
-        Jet1_2p5.SetPtEtaPhiM(jet_pt[jet1index2p5],jet_eta[jet1index2p5],jet_phi[jet1index2p5],jet_mass[jet1index2p5]);
-        pTj1_2p5=Jet1_2p5.Pt();
-        pt_leadingjet_pt30_eta2p5=Jet1_2p5.Pt();
-        yj1_2p5=Jet1_2p5.Rapidity();
-        //dPhiHj1_2p5=TMath::Abs(HVec.Phi()-Jet1_2p5.Phi());
-        dPhiHj1_2p5=deltaPhi(HVec.Phi(),Jet1_2p5.Phi());
-        //dyHj1_2p5=TMath::Abs(y4l-yj1_2p5);
-        dyHj1_2p5=TMath::Abs(rapidity4l-yj1_2p5);
-    }    
-    if (njets_pt30_eta2p5 > 1) {
-        Jet2_2p5.SetPtEtaPhiM(jet_pt[jet2index2p5],jet_eta[jet2index2p5],jet_phi[jet2index2p5],jet_mass[jet2index2p5]);
-        pTj2_2p5=Jet2_2p5.Pt();
-        yj2_2p5=Jet2_2p5.Rapidity();
-        mj1j2_2p5=(Jet1_2p5+Jet2_2p5).M();
-        dEtaj1j2_2p5=TMath::Abs(Jet1_2p5.Eta()-Jet2_2p5.Eta());
-      //dPhij1j2_2p5=TMath::Abs(Jet1_2p5.Phi()-Jet2_2p5.Phi());
-        dPhij1j2_2p5=deltaPhi(Jet1_2p5.Phi(),Jet2_2p5.Phi());
-        dPhiHj1j2_2p5=deltaPhi(HVec.Phi(),(Jet1_2p5+Jet2_2p5).Phi());
-    } 
-
-   // ending shift new obs. inside main loop
-        
-//    } // loop over jets, shifting
-    
+ 
     // // merged jet
     // for( unsigned int k = 0; k < selectedMergedJets.size(); k++) {
     
@@ -6029,8 +6039,184 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
     if (njets_pt30_eta4p7_jesdn>0) absrapidity_leadingjet_pt30_eta4p7_jesdn = fabs(absrapidity_leadingjet_pt30_eta4p7_jesdn);
     if (njets_pt30_eta4p7_jerup>0) absrapidity_leadingjet_pt30_eta4p7_jerup = fabs(absrapidity_leadingjet_pt30_eta4p7_jerup);
     if (njets_pt30_eta4p7_jerdn>0) absrapidity_leadingjet_pt30_eta4p7_jerdn = fabs(absrapidity_leadingjet_pt30_eta4p7_jerdn);
-    
-    //std::cout<<"Higgs = "<<foundHiggsCandidate<<std::endl;
+  
+/////// set new obs.
+
+    SimpleParticleCollection_t associated;
+    if (njets_pt30_eta4p7 > 0 ) {
+//      cout<<"jet1 index is ........"<<jet1index<<endl;
+        Jet1.SetPtEtaPhiM(jet_pt[jet1index2],jet_eta[jet1index2],jet_phi[jet1index2],jet_mass[jet1index2]);
+        associated.push_back(SimpleParticle_t(0, Jet1));
+        pTj1=Jet1.Pt();
+        //pt_leadingjet_pt30_eta4p7=Jet1.Pt();
+        cout<<"njet0 condition  Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" pTj1: "<<pTj1<<endl;
+        etaj1=Jet1.Eta();
+        yj1=Jet1.Rapidity();
+        qgj1=jet_QGTagger[jet1index2];
+        qgj1=jet_QGTagger[jet1index2];
+        csvj1=jet_csvv2[jet1index2];
+        csvj1=jet_csvv2[jet1index2];
+        dPhiHj1=deltaPhi(HVec.Phi(),Jet1.Phi());
+        //dyHj1=TMath::Abs(y4l-yj1);
+        dyHj1=TMath::Abs(rapidity4l-yj1);
+    }    
+    if (njets_pt30_eta4p7 > 1) { 
+        Jet2.SetPtEtaPhiM(jet_pt[jet2index2],jet_eta[jet2index2],jet_phi[jet2index2],jet_mass[jet2index2]);
+        associated.push_back(SimpleParticle_t(0, Jet2));
+        pTj2=Jet2.Pt();
+        etaj2=Jet2.Eta();
+        yj2=Jet2.Rapidity();
+        qgj2=jet_QGTagger[jet2index2];
+        csvj2=jet_csvv2[jet2index2];
+        mj1j2=(Jet1+Jet2).M();
+        mass4ljj=mass4l+mj1j2;
+        dEtaj1j2=TMath::Abs(Jet1.Eta()-Jet2.Eta());
+        dPhij1j2=TMath::Abs(Jet1.Phi()-Jet2.Phi());
+        dPhij1j2=deltaPhi(Jet1.Phi(),Jet2.Phi());
+      //  dPhiHj1j2=TMath::Abs(HVec.Phi()-(Jet1+Jet2).Phi());
+        dPhiHj1j2=deltaPhi(HVec.Phi(),(Jet1+Jet2).Phi());
+    }    
+    if (njets_pt30_eta2p5 > 0) { 
+        Jet1_2p5.SetPtEtaPhiM(jet_pt[jet1index2p5],jet_eta[jet1index2p5],jet_phi[jet1index2p5],jet_mass[jet1index2p5]);
+        pTj1_2p5=Jet1_2p5.Pt();
+       // pt_leadingjet_pt30_eta2p5=Jet1_2p5.Pt();
+        yj1_2p5=Jet1_2p5.Rapidity();
+        //dPhiHj1_2p5=TMath::Abs(HVec.Phi()-Jet1_2p5.Phi());
+        dPhiHj1_2p5=deltaPhi(HVec.Phi(),Jet1_2p5.Phi());
+        //dyHj1_2p5=TMath::Abs(y4l-yj1_2p5);
+        dyHj1_2p5=TMath::Abs(rapidity4l-yj1_2p5);
+    }    
+    if (njets_pt30_eta2p5 > 1) { 
+        Jet2_2p5.SetPtEtaPhiM(jet_pt[jet2index2p5],jet_eta[jet2index2p5],jet_phi[jet2index2p5],jet_mass[jet2index2p5]);
+        pTj2_2p5=Jet2_2p5.Pt();
+        yj2_2p5=Jet2_2p5.Rapidity();
+        mj1j2_2p5=(Jet1_2p5+Jet2_2p5).M();
+        dEtaj1j2_2p5=TMath::Abs(Jet1_2p5.Eta()-Jet2_2p5.Eta());
+      //dPhij1j2_2p5=TMath::Abs(Jet1_2p5.Phi()-Jet2_2p5.Phi());
+        dPhij1j2_2p5=deltaPhi(Jet1_2p5.Phi(),Jet2_2p5.Phi());
+        dPhiHj1j2_2p5=deltaPhi(HVec.Phi(),(Jet1_2p5+Jet2_2p5).Phi());
+    } 
+   
+    // JES up
+    //TLorentzVector Jet1, Jet2, Jet1_2p5, Jet2_2p5;
+    TLorentzVector Jet1_jesup, Jet2_jesup, Jet1_2p5_jesup, Jet2_2p5_jesup;
+    TLorentzVector Jet1_jesdn, Jet2_jesdn, Jet1_2p5_jesdn, Jet2_2p5_jesdn;
+
+    if (njets_pt30_eta4p7_jesup > 0) {
+        Jet1_jesup.SetPtEtaPhiM(jet_jesup_pt[jet1index_jesup],jet_jesup_eta[jet1index_jesup],jet_jesup_phi[jet1index_jesup],jet_jesup_mass[jet1index_jesup]);
+        pTj1_jesup=Jet1_jesup.Pt();
+        pT4lj_jesup=pT4l+Jet1_jesup.Pt();
+        etaj1_jesup=Jet1_jesup.Eta();
+        yj1_jesup=Jet1_jesup.Rapidity();
+        mass4lj_jesup=mass4l+Jet1_jesup.M();
+        //dPhiHj1_jesup=TMath::Abs(HVec.Phi()-Jet1_jesup.Phi());
+        dPhiHj1_jesup=deltaPhi(HVec.Phi(),Jet1_jesup.Phi());
+        //dyHj1_jesup=TMath::Abs(y4l-yj1_jesup);
+        dyHj1_jesup=TMath::Abs(rapidity4l-yj1_jesup);
+    }
+    if (njets_pt30_eta4p7_jesup > 1) {
+        Jet2_jesup.SetPtEtaPhiM(jet_jesup_pt[jet2index_jesup],jet_jesup_eta[jet2index_jesup],jet_jesup_phi[jet2index_jesup],jet_jesup_mass[jet2index_jesup]);
+        pTj2_jesup=Jet2_jesup.Pt();
+        etaj2_jesup=Jet2_jesup.Eta();
+        yj2_jesup=Jet2_jesup.Rapidity();
+        mj1j2_jesup=(Jet1_jesup+Jet2_jesup).M();
+        mass4ljj_jesup=mass4l+mj1j2_jesup;
+        pT4ljj_jesup=pT4l+(Jet1_jesup+Jet2_jesup).Pt();
+        dEtaj1j2_jesup=TMath::Abs(Jet1_jesup.Eta()-Jet2_jesup.Eta());
+        //dPhij1j2_jesup=TMath::Abs(Jet1_jesup.Phi()-Jet2_jesup.Phi());
+        dPhij1j2_jesup=deltaPhi(Jet1_jesup.Phi(),Jet2_jesup.Phi());
+        //dPhiHj1j2_jesup=TMath::Abs(HVec.Phi()-(Jet1_jesup+Jet2_jesup).Phi());
+        dPhiHj1j2_jesup=deltaPhi(HVec.Phi(),(Jet1_jesup+Jet2_jesup).Phi());
+    }
+    if (njets_pt30_eta2p5_jesup > 0) {
+        Jet1_2p5_jesup.SetPtEtaPhiM(jet_jesup_pt[jet1index2p5_jesup],jet_jesup_eta[jet1index2p5_jesup],jet_jesup_phi[jet1index2p5_jesup],jet_jesup_mass[jet1index2p5_jesup]);
+        pTj1_2p5_jesup=Jet1_2p5_jesup.Pt();
+        yj1_2p5_jesup=Jet1_2p5.Rapidity();
+        //dPhiHj1_2p5_jesup=TMath::Abs(HVec.Phi()-Jet1_2p5_jesup.Phi());
+        dPhiHj1_2p5_jesup=deltaPhi(HVec.Phi(),Jet1_2p5_jesup.Phi());
+        //dyHj1_2p5_jesup=TMath::Abs(y4l-yj1_2p5_jesup);
+        dyHj1_2p5_jesup=TMath::Abs(rapidity4l-yj1_2p5_jesup);
+    }
+    if (njets_pt30_eta2p5_jesup > 1) {
+        Jet2_2p5_jesup.SetPtEtaPhiM(jet_jesup_pt[jet2index2p5_jesup],jet_jesup_eta[jet2index2p5_jesup],jet_jesup_phi[jet2index2p5_jesup],jet_jesup_mass[jet2index2p5_jesup]);
+        pTj2_2p5_jesup=Jet2_2p5_jesup.Pt();
+        yj2_2p5_jesup=Jet2_2p5_jesup.Rapidity();
+        mj1j2_2p5_jesup=(Jet1_2p5_jesup+Jet2_2p5_jesup).M();
+        dEtaj1j2_2p5_jesup=TMath::Abs(Jet1_2p5_jesup.Eta()-Jet2_2p5_jesup.Eta());
+        //dPhij1j2_2p5_jesup=TMath::Abs(Jet1_2p5_jesup.Phi()-Jet2_2p5_jesup.Phi());
+        dPhij1j2_2p5_jesup=deltaPhi(Jet1_2p5_jesup.Phi(),Jet2_2p5_jesup.Phi());
+        //dPhiHj1j2_2p5_jesup=TMath::Abs(HVec.Phi()-(Jet1_2p5_jesup+Jet2_2p5_jesup).Phi());
+        dPhiHj1j2_2p5_jesup=deltaPhi(HVec.Phi(),(Jet1_2p5_jesup+Jet2_2p5_jesup).Phi());
+    }
+
+
+// JES dn
+
+       // JES dn
+    if (njets_pt30_eta4p7_jesdn > 0) {
+        Jet1_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet1index_jesdn],jet_jesdn_eta[jet1index_jesdn],jet_jesdn_phi[jet1index_jesdn],jet_jesdn_mass[jet1index_jesdn]);
+        pTj1_jesdn=Jet1_jesdn.Pt();
+        pT4lj_jesdn=pT4l+Jet1_jesdn.Pt();
+        etaj1_jesdn=Jet1_jesdn.Eta();
+        yj1_jesdn=Jet1_jesdn.Rapidity();
+        mass4lj_jesdn=mass4l+Jet1_jesdn.M();
+        //dPhiHj1_jesdn=TMath::Abs(HVec.Phi()-Jet1_jesdn.Phi());
+        dPhiHj1_jesdn=deltaPhi(HVec.Phi(),Jet1_jesdn.Phi());
+        //dyHj1_jesdn=TMath::Abs(y4l-yj1_jesdn);
+        dyHj1_jesdn=TMath::Abs(rapidity4l-yj1_jesdn);
+    }
+    if (njets_pt30_eta4p7_jesdn > 1) {
+        Jet2_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet2index_jesdn],jet_jesdn_eta[jet2index_jesdn],jet_jesdn_phi[jet2index_jesdn],jet_jesdn_mass[jet2index_jesdn]);
+        pTj2_jesdn=Jet2_jesdn.Pt();
+        etaj2_jesdn=Jet2_jesdn.Eta();
+        yj2_jesdn=TMath::Abs(Jet2_jesdn.Rapidity());
+        mj1j2_jesdn=(Jet1_jesdn+Jet2_jesdn).M();
+        mass4ljj_jesdn=mass4l+mj1j2_jesdn;
+        pT4ljj_jesdn=pT4l+(Jet1_jesdn+Jet2_jesdn).Pt();
+        dEtaj1j2_jesdn=TMath::Abs(Jet1_jesdn.Eta()-Jet2_jesdn.Eta());
+        //dPhij1j2_jesdn=TMath::Abs(Jet1_jesdn.Phi()-Jet2_jesdn.Phi());
+        dPhij1j2_jesdn=deltaPhi(Jet1_jesdn.Phi(),Jet2_jesdn.Phi());
+        //dPhiHj1j2_jesdn=TMath::Abs(HVec.Phi()-(Jet1_jesdn+Jet2_jesdn).Phi());
+        dPhiHj1j2_jesdn=deltaPhi(HVec.Phi(),(Jet1_jesdn+Jet2_jesdn).Phi());
+    }
+    if (njets_pt30_eta2p5_jesdn > 0) {
+        Jet1_2p5_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet1index2p5_jesdn],jet_jesdn_eta[jet1index2p5_jesdn],jet_jesdn_phi[jet1index2p5_jesdn],jet_jesdn_mass[jet1index2p5_jesdn]);
+        pTj1_2p5_jesdn=Jet1_2p5_jesdn.Pt();
+        yj1_2p5_jesdn=TMath::Abs(Jet1_2p5.Rapidity());
+        //dPhiHj1_2p5_jesdn=TMath::Abs(HVec.Phi()-Jet1_2p5_jesdn.Phi());
+        dPhiHj1_2p5_jesdn=deltaPhi(HVec.Phi(),Jet1_2p5_jesdn.Phi());
+        //dyHj1_2p5_jesdn=TMath::Abs(y4l-yj1_2p5_jesdn);
+        dyHj1_2p5_jesdn=TMath::Abs(rapidity4l-yj1_2p5_jesdn);
+    }
+    if (njets_pt30_eta2p5_jesdn > 1) {
+        Jet2_2p5_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet2index2p5_jesdn],jet_jesdn_eta[jet2index2p5_jesdn],jet_jesdn_phi[jet2index2p5_jesdn],jet_jesdn_mass[jet2index2p5_jesdn]);
+        pTj2_2p5_jesdn=Jet2_2p5_jesdn.Pt();
+        yj2_2p5_jesdn=TMath::Abs(Jet2_2p5_jesdn.Rapidity());
+        mj1j2_2p5_jesdn=(Jet1_2p5_jesdn+Jet2_2p5_jesdn).M();
+        dEtaj1j2_2p5_jesdn=TMath::Abs(Jet1_2p5_jesdn.Eta()-Jet2_2p5_jesdn.Eta());
+        //dPhij1j2_2p5_jesdn=TMath::Abs(Jet1_2p5_jesdn.Phi()-Jet2_2p5_jesdn.Phi());
+        dPhij1j2_2p5_jesdn=deltaPhi(Jet1_2p5_jesdn.Phi(),Jet2_2p5_jesdn.Phi());
+        dPhiHj1j2_2p5_jesdn=deltaPhi(HVec.Phi(),(Jet1_2p5_jesdn+Jet2_2p5_jesdn).Phi());
+    }
+
+
+    //   float pTj1_VBF=-1.0; float dPhij1j2_VBF=-1.0; float dPhiHj1j2_VBF=-1.0;
+    if (njets_pt30_eta4p7>1 && dEtaj1j2>3.5 && mj1j2>200.0) {
+        pTj1_VBF=pTj1; dPhij1j2_VBF=dPhij1j2; dPhiHj1j2_VBF=dPhiHj1j2;
+    }
+    //    float pTj1_VBF_jesup=-1.0; float dPhij1j2_VBF_jesup=-1.0; float dPhiHj1j2_VBF_jesup=-1.0;
+    if (njets_pt30_eta4p7_jesup>1 && dEtaj1j2_jesup>3.5 && mj1j2_jesup>200.0) {
+        pTj1_VBF_jesup=pTj1_jesup; dPhij1j2_VBF_jesup=dPhij1j2_jesup; dPhiHj1j2_VBF_jesup=dPhiHj1j2_jesup;
+    }
+    //     float pTj1_VBF_jesdn=-1.0; float dPhij1j2_VBF_jesdn=-1.0; float dPhiHj1j2_VBF_jesdn=-1.0;
+    if (njets_pt30_eta4p7_jesdn>1 && dEtaj1j2_jesdn>3.5 && mj1j2_jesdn>200.0) {
+        pTj1_VBF_jesdn=pTj1_jesdn; dPhij1j2_VBF_jesdn=dPhij1j2_jesdn; dPhiHj1j2_VBF_jesdn=dPhiHj1j2_jesdn;
+    }
+
+ 
+
+
+ //std::cout<<"Higgs = "<<foundHiggsCandidate<<std::endl;
     
     if (foundHiggsCandidate) {
         //std::cout<<"finalState = "<<finalState<<std::endl;
@@ -6235,220 +6421,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         // 	    std::cout<<" ------------ "<<std::endl;
         
     }
-    // H+jet reco,
-// temporary comment-out start
-/*
 
-    TLorentzVector thisJet, Jet1, Jet2, Jet1_2p5, Jet2_2p5;
-    SimpleParticleCollection_t associated;
-    //		float qgj1=-1.0; float qgj2=-1.0;
-    //                float csvj1=-10.0; float csvj2=-10.0;
-    // pT4l = HVec.Pt(); eta4l = HVec.Eta(); rapidity4l = HVec.Rapidity(); phi4l = HVec.Phi();
-    if (njets_pt30_eta4p7 > 0 && jet_pt[jet1index] > 30) {
-	//if (njets_pt30_eta4p7 > 0 && jet_pt[jet1index] > 30 && jet_eta[jet1index] <4.7) {
-//	if (njets_pt30_eta4p7 > 0 && jet_pt[jet1index] > 30 && jet_eta[jet1index] <4.7 && foundHiggsCandidate) {
-        //Jet1.SetPtEtaPhiM((*jet_pt)[jet1index],(*jet_eta)[jet1index],(*jet_phi)[jet1index],(*jet_mass)[jet1index]);
-//	cout<<"jet1 index is ........"<<jet1index<<endl;
-        Jet1.SetPtEtaPhiM(jet_pt[jet1index],jet_eta[jet1index],jet_phi[jet1index],jet_mass[jet1index]);
-        associated.push_back(SimpleParticle_t(0, Jet1));
-        pTj1=Jet1.Pt();
-        etaj1=Jet1.Eta();
-        yj1=Jet1.Rapidity();
-        //qgj1=(*jet_QGTagger)[jet1index];
-        //qgj1=jet_QGTagger[jet1index];
-        float qgj1=jet_QGTagger[jet1index];
-        //csvj1=(*jet_csvv2)[jet1index];
-        //csvj1=jet_csvv2[jet1index];
-        float csvj1=jet_csvv2[jet1index];
-        //dPhiHj1=TMath::Abs(HVec.Phi()-Jet1.Phi());
-        dPhiHj1=deltaPhi(HVec.Phi(),Jet1.Phi());
-        //dyHj1=TMath::Abs(y4l-yj1);
-        dyHj1=TMath::Abs(rapidity4l-yj1);
-    }
-    if (njets_pt30_eta4p7 > 1) {
-    //if (njets_pt30_eta4p7 > 0 && jet_pt[jet2index] > 30) {
-        Jet2.SetPtEtaPhiM(jet_pt[jet2index],jet_eta[jet2index],jet_phi[jet2index],jet_mass[jet2index]);
-        associated.push_back(SimpleParticle_t(0, Jet2));
-        pTj2=Jet2.Pt();
-        etaj2=Jet2.Eta();
-        yj2=Jet2.Rapidity();
-        //qgj2=(*jet_QGTagger)[jet2index];
-        //qgj2=jet_QGTagger[jet2index];
-        float qgj2=jet_QGTagger[jet2index];
-        //csvj2=(*jet_csvv2)[jet2index];
-        //csvj2=jet_csvv2[jet2index];
-        float csvj2=jet_csvv2[jet2index];
-        mj1j2=(Jet1+Jet2).M();
-        mass4ljj=mass4l+mj1j2;
-        dEtaj1j2=TMath::Abs(Jet1.Eta()-Jet2.Eta());
-        //dPhij1j2=TMath::Abs(Jet1.Phi()-Jet2.Phi());
-        dPhij1j2=deltaPhi(Jet1.Phi(),Jet2.Phi());
-        //dPhiHj1j2=TMath::Abs(HVec.Phi()-(Jet1+Jet2).Phi());
-        dPhiHj1j2=deltaPhi(HVec.Phi(),(Jet1+Jet2).Phi());
-    }
-    if (njets_pt30_eta2p5 > 0 && jet_pt[jet1index2p5] > 30) {
-        Jet1_2p5.SetPtEtaPhiM(jet_pt[jet1index2p5],jet_eta[jet1index2p5],jet_phi[jet1index2p5],jet_mass[jet1index2p5]);
-        pTj1_2p5=Jet1_2p5.Pt();
-        yj1_2p5=Jet1_2p5.Rapidity();
-        //dPhiHj1_2p5=TMath::Abs(HVec.Phi()-Jet1_2p5.Phi());
-        dPhiHj1_2p5=deltaPhi(HVec.Phi(),Jet1_2p5.Phi());
-        //dyHj1_2p5=TMath::Abs(y4l-yj1_2p5);
-        dyHj1_2p5=TMath::Abs(rapidity4l-yj1_2p5);
-    }
-    if (njets_pt30_eta2p5 > 1 && jet_pt[jet2index2p5] > 30) {
-        Jet2_2p5.SetPtEtaPhiM(jet_pt[jet2index2p5],jet_eta[jet2index2p5],jet_phi[jet2index2p5],jet_mass[jet2index2p5]);
-        pTj2_2p5=Jet2_2p5.Pt();
-        yj2_2p5=Jet2_2p5.Rapidity();
-        mj1j2_2p5=(Jet1_2p5+Jet2_2p5).M();
-        dEtaj1j2_2p5=TMath::Abs(Jet1_2p5.Eta()-Jet2_2p5.Eta());
-        //dPhij1j2_2p5=TMath::Abs(Jet1_2p5.Phi()-Jet2_2p5.Phi());
-        dPhij1j2_2p5=deltaPhi(Jet1_2p5.Phi(),Jet2_2p5.Phi());
-        dPhiHj1j2_2p5=deltaPhi(HVec.Phi(),(Jet1_2p5+Jet2_2p5).Phi());
-    }
-  
- */ 
-    // JES up
-    //TLorentzVector Jet1, Jet2, Jet1_2p5, Jet2_2p5;
-    TLorentzVector Jet1_jesup, Jet2_jesup, Jet1_2p5_jesup, Jet2_2p5_jesup;
-    TLorentzVector Jet1_jesdn, Jet2_jesdn, Jet1_2p5_jesdn, Jet2_2p5_jesdn;
-    //                float pTj1_jesup=-1.0; float pTj2_jesup=-1.0;
-    //                float pTj1_2p5_jesup=-1.0;
-    //
-    //                float yj1_jesup=-1.0; float yj2_jesup=-1.0;
-    //                float dPhiHj1_jesup=-1.0; float dyHj1_jesup=-1.0;
-    //                float mj1j2_jesup=-1.0; float etaj1_jesup=-1.0; float etaj2_jesup=-1.0; float dEtaj1j2_jesup=-1.0;
-    //                float dPhij1j2_jesup=-1.0; float dPhiHj1j2_jesup=-1.0;
-    //                float yj1_2p5_jesup=-1.0; float yj2_2p5_jesup=-1.0;
-    //
-    //                float dPhiHj1_2p5_jesup=-1.0; float dyHj1_2p5_jesup=-1.0;
-    //                float mj1j2_2p5_jesup=-1.0; float dEtaj1j2_2p5_jesup=-1.0;
-    //                float dPhij1j2_2p5_jesup=-1.0; float dPhiHj1j2_2p5_jesup=-1.0;
-    //		float pTj2_2p5_jesup=-1.0;
-    
-    if (njets_pt30_eta4p7_jesup > 0) {
-        Jet1_jesup.SetPtEtaPhiM(jet_jesup_pt[jet1index_jesup],jet_jesup_eta[jet1index_jesup],jet_jesup_phi[jet1index_jesup],jet_jesup_mass[jet1index_jesup]);
-        pTj1_jesup=Jet1_jesup.Pt();
-        pT4lj_jesup=pT4l+Jet1_jesup.Pt();
-        etaj1_jesup=Jet1_jesup.Eta();
-        yj1_jesup=Jet1_jesup.Rapidity();
-        mass4lj_jesup=mass4l+Jet1_jesup.M();
-        //dPhiHj1_jesup=TMath::Abs(HVec.Phi()-Jet1_jesup.Phi());
-        dPhiHj1_jesup=deltaPhi(HVec.Phi(),Jet1_jesup.Phi());
-        //dyHj1_jesup=TMath::Abs(y4l-yj1_jesup);
-        dyHj1_jesup=TMath::Abs(rapidity4l-yj1_jesup);
-    }
-    if (njets_pt30_eta4p7_jesup > 1) {
-        Jet2_jesup.SetPtEtaPhiM(jet_jesup_pt[jet2index_jesup],jet_jesup_eta[jet2index_jesup],jet_jesup_phi[jet2index_jesup],jet_jesup_mass[jet2index_jesup]);
-        pTj2_jesup=Jet2_jesup.Pt();
-        etaj2_jesup=Jet2_jesup.Eta();
-        yj2_jesup=Jet2_jesup.Rapidity();
-        mj1j2_jesup=(Jet1_jesup+Jet2_jesup).M();
-        mass4ljj_jesup=mass4l+mj1j2_jesup;
-        pT4ljj_jesup=pT4l+(Jet1_jesup+Jet2_jesup).Pt();
-        dEtaj1j2_jesup=TMath::Abs(Jet1_jesup.Eta()-Jet2_jesup.Eta());
-        //dPhij1j2_jesup=TMath::Abs(Jet1_jesup.Phi()-Jet2_jesup.Phi());
-        dPhij1j2_jesup=deltaPhi(Jet1_jesup.Phi(),Jet2_jesup.Phi());
-        //dPhiHj1j2_jesup=TMath::Abs(HVec.Phi()-(Jet1_jesup+Jet2_jesup).Phi());
-        dPhiHj1j2_jesup=deltaPhi(HVec.Phi(),(Jet1_jesup+Jet2_jesup).Phi());
-    }
-    if (njets_pt30_eta2p5_jesup > 0) {
-        Jet1_2p5_jesup.SetPtEtaPhiM(jet_jesup_pt[jet1index2p5_jesup],jet_jesup_eta[jet1index2p5_jesup],jet_jesup_phi[jet1index2p5_jesup],jet_jesup_mass[jet1index2p5_jesup]);
-        pTj1_2p5_jesup=Jet1_2p5_jesup.Pt();
-        yj1_2p5_jesup=Jet1_2p5.Rapidity();
-        //dPhiHj1_2p5_jesup=TMath::Abs(HVec.Phi()-Jet1_2p5_jesup.Phi());
-        dPhiHj1_2p5_jesup=deltaPhi(HVec.Phi(),Jet1_2p5_jesup.Phi());
-        //dyHj1_2p5_jesup=TMath::Abs(y4l-yj1_2p5_jesup);
-        dyHj1_2p5_jesup=TMath::Abs(rapidity4l-yj1_2p5_jesup);
-    }
-    if (njets_pt30_eta2p5_jesup > 1) {
-        Jet2_2p5_jesup.SetPtEtaPhiM(jet_jesup_pt[jet2index2p5_jesup],jet_jesup_eta[jet2index2p5_jesup],jet_jesup_phi[jet2index2p5_jesup],jet_jesup_mass[jet2index2p5_jesup]);
-        pTj2_2p5_jesup=Jet2_2p5_jesup.Pt();
-        yj2_2p5_jesup=Jet2_2p5_jesup.Rapidity();
-        mj1j2_2p5_jesup=(Jet1_2p5_jesup+Jet2_2p5_jesup).M();
-        dEtaj1j2_2p5_jesup=TMath::Abs(Jet1_2p5_jesup.Eta()-Jet2_2p5_jesup.Eta());
-        //dPhij1j2_2p5_jesup=TMath::Abs(Jet1_2p5_jesup.Phi()-Jet2_2p5_jesup.Phi());
-        dPhij1j2_2p5_jesup=deltaPhi(Jet1_2p5_jesup.Phi(),Jet2_2p5_jesup.Phi());
-        //dPhiHj1j2_2p5_jesup=TMath::Abs(HVec.Phi()-(Jet1_2p5_jesup+Jet2_2p5_jesup).Phi());
-        dPhiHj1j2_2p5_jesup=deltaPhi(HVec.Phi(),(Jet1_2p5_jesup+Jet2_2p5_jesup).Phi());
-    }
-    
-    // JES dn
-    //                float pTj1_jesdn=-1.0; float pTj2_jesdn=-1.0;
-    //                float pTj1_2p5_jesdn=-1.0; //float pTj2_jesdn=-1.0;
-    //                float mj1j2_jesdn=-1.0; float dEtaj1j2_jesdn=-1.0;
-    //
-    //                float yj1_jesdn=-1.0; float yj2_jesdn=-1.0;
-    //                float dPhiHj1_jesdn=-1.0; float dyHj1_jesdn=-1.0;
-    //                float dPhij1j2_jesdn=-1.0; float dPhiHj1j2_jesdn=-1.0;
-    //                float yj1_2p5_jesdn=-1.0; float yj2_2p5_jesdn=-1.0;
-    //
-    //                float dPhiHj1_2p5_jesdn=-1.0; float dyHj1_2p5_jesdn=-1.0;
-    //                float mj1j2_2p5_jesdn=-1.0; float dEtaj1j2_2p5_jesdn=-1.0;
-    //                float dPhij1j2_2p5_jesdn=-1.0; float dPhiHj1j2_2p5_jesdn=-1.0;
-    //		float pTj2_2p5_jesdn=-1.0;
-    
-    
-    if (njets_pt30_eta4p7_jesdn > 0) {
-        Jet1_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet1index_jesdn],jet_jesdn_eta[jet1index_jesdn],jet_jesdn_phi[jet1index_jesdn],jet_jesdn_mass[jet1index_jesdn]);
-        pTj1_jesdn=Jet1_jesdn.Pt();
-        pT4lj_jesdn=pT4l+Jet1_jesdn.Pt();
-        etaj1_jesdn=Jet1_jesdn.Eta();
-        yj1_jesdn=Jet1_jesdn.Rapidity();
-        mass4lj_jesdn=mass4l+Jet1_jesdn.M();
-        //dPhiHj1_jesdn=TMath::Abs(HVec.Phi()-Jet1_jesdn.Phi());
-        dPhiHj1_jesdn=deltaPhi(HVec.Phi(),Jet1_jesdn.Phi());
-        //dyHj1_jesdn=TMath::Abs(y4l-yj1_jesdn);
-        dyHj1_jesdn=TMath::Abs(rapidity4l-yj1_jesdn);
-    }
-    if (njets_pt30_eta4p7_jesdn > 1) {
-        Jet2_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet2index_jesdn],jet_jesdn_eta[jet2index_jesdn],jet_jesdn_phi[jet2index_jesdn],jet_jesdn_mass[jet2index_jesdn]);
-        pTj2_jesdn=Jet2_jesdn.Pt();
-        etaj2_jesdn=Jet2_jesdn.Eta();
-        yj2_jesdn=TMath::Abs(Jet2_jesdn.Rapidity());
-        mj1j2_jesdn=(Jet1_jesdn+Jet2_jesdn).M();
-        mass4ljj_jesdn=mass4l+mj1j2_jesdn;
-        pT4ljj_jesdn=pT4l+(Jet1_jesdn+Jet2_jesdn).Pt();
-        dEtaj1j2_jesdn=TMath::Abs(Jet1_jesdn.Eta()-Jet2_jesdn.Eta());
-        //dPhij1j2_jesdn=TMath::Abs(Jet1_jesdn.Phi()-Jet2_jesdn.Phi());
-        dPhij1j2_jesdn=deltaPhi(Jet1_jesdn.Phi(),Jet2_jesdn.Phi());
-        //dPhiHj1j2_jesdn=TMath::Abs(HVec.Phi()-(Jet1_jesdn+Jet2_jesdn).Phi());
-        dPhiHj1j2_jesdn=deltaPhi(HVec.Phi(),(Jet1_jesdn+Jet2_jesdn).Phi());
-    }
-    if (njets_pt30_eta2p5_jesdn > 0) {
-        Jet1_2p5_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet1index2p5_jesdn],jet_jesdn_eta[jet1index2p5_jesdn],jet_jesdn_phi[jet1index2p5_jesdn],jet_jesdn_mass[jet1index2p5_jesdn]);
-        pTj1_2p5_jesdn=Jet1_2p5_jesdn.Pt();
-        yj1_2p5_jesdn=TMath::Abs(Jet1_2p5.Rapidity());
-        //dPhiHj1_2p5_jesdn=TMath::Abs(HVec.Phi()-Jet1_2p5_jesdn.Phi());
-        dPhiHj1_2p5_jesdn=deltaPhi(HVec.Phi(),Jet1_2p5_jesdn.Phi());
-        //dyHj1_2p5_jesdn=TMath::Abs(y4l-yj1_2p5_jesdn);
-        dyHj1_2p5_jesdn=TMath::Abs(rapidity4l-yj1_2p5_jesdn);
-    }
-    if (njets_pt30_eta2p5_jesdn > 1) {
-        Jet2_2p5_jesdn.SetPtEtaPhiM(jet_jesdn_pt[jet2index2p5_jesdn],jet_jesdn_eta[jet2index2p5_jesdn],jet_jesdn_phi[jet2index2p5_jesdn],jet_jesdn_mass[jet2index2p5_jesdn]);
-        pTj2_2p5_jesdn=Jet2_2p5_jesdn.Pt();
-        yj2_2p5_jesdn=TMath::Abs(Jet2_2p5_jesdn.Rapidity());
-        mj1j2_2p5_jesdn=(Jet1_2p5_jesdn+Jet2_2p5_jesdn).M();
-        dEtaj1j2_2p5_jesdn=TMath::Abs(Jet1_2p5_jesdn.Eta()-Jet2_2p5_jesdn.Eta());
-        //dPhij1j2_2p5_jesdn=TMath::Abs(Jet1_2p5_jesdn.Phi()-Jet2_2p5_jesdn.Phi());
-        dPhij1j2_2p5_jesdn=deltaPhi(Jet1_2p5_jesdn.Phi(),Jet2_2p5_jesdn.Phi());
-        dPhiHj1j2_2p5_jesdn=deltaPhi(HVec.Phi(),(Jet1_2p5_jesdn+Jet2_2p5_jesdn).Phi());
-    }
-    
-    
-    //   float pTj1_VBF=-1.0; float dPhij1j2_VBF=-1.0; float dPhiHj1j2_VBF=-1.0;
-    if (njets_pt30_eta4p7>1 && dEtaj1j2>3.5 && mj1j2>200.0) {
-        pTj1_VBF=pTj1; dPhij1j2_VBF=dPhij1j2; dPhiHj1j2_VBF=dPhiHj1j2;
-    }
-    //    float pTj1_VBF_jesup=-1.0; float dPhij1j2_VBF_jesup=-1.0; float dPhiHj1j2_VBF_jesup=-1.0;
-    if (njets_pt30_eta4p7_jesup>1 && dEtaj1j2_jesup>3.5 && mj1j2_jesup>200.0) {
-        pTj1_VBF_jesup=pTj1_jesup; dPhij1j2_VBF_jesup=dPhij1j2_jesup; dPhiHj1j2_VBF_jesup=dPhiHj1j2_jesup;
-    }
-    //     float pTj1_VBF_jesdn=-1.0; float dPhij1j2_VBF_jesdn=-1.0; float dPhiHj1j2_VBF_jesdn=-1.0;
-    if (njets_pt30_eta4p7_jesdn>1 && dEtaj1j2_jesdn>3.5 && mj1j2_jesdn>200.0) {
-        pTj1_VBF_jesdn=pTj1_jesdn; dPhij1j2_VBF_jesdn=dPhij1j2_jesdn; dPhiHj1j2_VBF_jesdn=dPhiHj1j2_jesdn;
-    }
-    
-    //ending jets
 }
 
 
