@@ -32,7 +32,8 @@ process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             )
 
 process.TFileService = cms.Service("TFileService",
-                                  fileName = cms.string("Sync_1031_2018_ttH_v2.root")##
+                                  #fileName = cms.string("Sync_1031_2018_ttH_v2.root")##
+                                  fileName = cms.string("Sync_2206_2021_ttH_20K.root")##
 )
 
 # clean muons by segments 

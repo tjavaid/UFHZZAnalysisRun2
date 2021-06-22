@@ -563,14 +563,14 @@ private:
     float GENpTj2; float GENyj2;
     
     float GENdPhiHj1; float GENdyHj1;
-    float GENDijetMass; float GENdEtaj1j2;
+    float GENmj1j2; float GENdEtaj1j2;
     float GENdPhij1j2; float GENdPhiHj1j2;
     
     float GENpTj1_2p5; float GENyj1_2p5; float GENyj1;
     float GENpTj2_2p5; float GENyj2_2p5;
     
     float GENdPhiHj1_2p5; float GENdyHj1_2p5;
-    float GENDijetMass_2p5; float GENdEtaj1j2_2p5;
+    float GENmj1j2_2p5; float GENdEtaj1j2_2p5;
     float GENdPhij1j2_2p5; float GENdPhiHj1j2_2p5;
     float GENpTj1_VBF;
     float GENdPhij1j2_VBF;
@@ -598,7 +598,7 @@ private:
     
     // MEM
     Mela* mela;
-    Mela* GENmela;// FIXME
+//    Mela* GENmela;// FIXME
     
     float me_0plus_JHU, me_qqZZ_MCFM, p0plus_m4l, bkg_m4l;
     float D_bkg_kin, D_bkg, D_g4, D_g1g4;
@@ -941,7 +941,12 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
     kinZfitter_singleBS = new KinZfitter(!isMC, year);
     kinZfitter_vtx = new KinZfitter(!isMC, year);
     kinZfitter_vtx_BS = new KinZfitter(!isMC, year);
-    if(isCode4l && doMela){
+//test
+//    GENmela = new Mela(13.0, 125.0, TVar::SILENT);  
+//    GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
+// test init
+//    if(isCode4l && doMela){
+    if(isCode4l && doMela && GENdoMela){
         //     if(doMela){
         mela = new Mela(13.0, 125.0, TVar::SILENT);
         mela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
@@ -1617,15 +1622,25 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     GENpTj2=-10.0; GENyj2=-10.0;
     
     GENdPhiHj1=-1000.0; GENdyHj1=-1.0;
-    GENDijetMass=-999.0; GENdEtaj1j2=-10.0;
+    GENmj1j2=-999.0; GENdEtaj1j2=-10.0;
     GENdPhij1j2=-1000.0; GENdPhiHj1j2=-1000.0;
     
     GENpTj1_2p5=-10.0; GENyj1_2p5=-10.0; GENyj1=-10.0; GENpTj1=-10.0;
     GENpTj2_2p5=-10.0; GENyj2_2p5=-10.0;
     
     GENdPhiHj1_2p5=-1000.0; GENdyHj1_2p5=-10.0;
-    GENDijetMass_2p5=-10.0; GENdEtaj1j2_2p5=-10.0;
+    GENmj1j2_2p5=-10.0; GENdEtaj1j2_2p5=-10.0;
     GENdPhij1j2_2p5=-1000.0; GENdPhiHj1j2_2p5=-1000.0;
+//    if(GENdomela){
+//    GENmela = new Mela(13.0, 125.0, TVar::SILENT);
+//    GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
+//    }
+    GENme_0plus_JHU=999.0; GENme_qqZZ_MCFM=999.0; GENp0plus_m4l=999.0; GENbkg_m4l=999.0; GEND_bkg_kin=999.0; GEND_bkg=999.0;
+    GEND_bkg_kin_vtx_BS=999.0;
+
+    GENp0minus_VAJHU=999.0; GENpg1g4_VAJHU=999.0; GENDgg10_VAMCFM=999.0, GEND_g4=999.0; GEND_g1g4=999.0;
+
+
     // TJ initialization end
     // ME
     me_0plus_JHU=999.0; me_qqZZ_MCFM=999.0; p0plus_m4l=999.0; bkg_m4l=999.0; D_bkg_kin=999.0; D_bkg=999.0;
@@ -2898,7 +2913,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     SimpleParticleCollection_t associated;         //here  j1
                     if (njets_pt30_eta4p7 > 0) {
                         Jet1.SetPtEtaPhiM(jet_pt[jet1index],jet_eta[jet1index],jet_phi[jet1index],jet_mass[jet1index]);
-			cout<<"jet1index is ........, "<<jet1index<<endl;
+		//	cout<<"jet1index is ........, "<<jet1index<<endl;
                         associated.push_back(SimpleParticle_t(0, Jet1));
                     }
                     if (njets_pt30_eta4p7 > 1) {   // here j2
@@ -3188,7 +3203,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                         TLorentzVector jet1, jet2;
                         jet1.SetPtEtaPhiM(jet_pt[jet1index],jet_eta[jet1index],jet_phi[jet1index],jet_mass[jet1index]);
                         jet2.SetPtEtaPhiM(jet_pt[jet2index],jet_eta[jet2index],jet_phi[jet2index],jet_mass[jet2index]);
-			cout<<"jet2index is ...., "<<jet2index<<endl;
+//			cout<<"jet2index is ...., "<<jet2index<<endl;
                         TLorentzVector Dijet;
                         Dijet = jet1+jet2;
                         DijetMass = Dijet.M();
@@ -5337,7 +5352,7 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     // TJ setting branches
     tree->Branch("GENdPhiHj1",&GENdPhiHj1,"GENdPhiHj1/F");
     tree->Branch("GENdyHj1",&GENdyHj1,"GENdyHj1/F");
-    tree->Branch("GENDijetMass",&GENDijetMass,"GENDijetMass/F");
+    tree->Branch("GENmj1j2",&GENmj1j2,"GENmj1j2/F");
     tree->Branch("GENdEtaj1j2",&GENdEtaj1j2,"GENdEtaj1j2/F");
     tree->Branch("GENdPhij1j2",&GENdPhij1j2,"GENdPhij1j2/F");
     tree->Branch("GENdPhij1j2_VBF",&GENdPhij1j2_VBF,"GENdPhij1j2_VBF/F");
@@ -5355,7 +5370,7 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     
     tree->Branch("GENdPhiHj1_2p5",&GENdPhiHj1_2p5,"GENdPhiHj1_2p5/F");
     tree->Branch("GENdyHj1_2p5",&GENdyHj1_2p5,"GENdyHj1_2p5/F");
-    tree->Branch("GENDijetMass_2p5",&GENDijetMass_2p5,"GENDijetMass_2p5/F");
+    tree->Branch("GENmj1j2_2p5",&GENmj1j2_2p5,"GENmj1j2_2p5/F");
     tree->Branch("GENdEtaj1j2_2p5",&GENdEtaj1j2_2p5,"GENdEtaj1j2_2p5/F");
     tree->Branch("GENdPhij1j2_2p5",&GENdPhij1j2_2p5,"GENdPhij1j2_2p5/F");
     tree->Branch("GENdPhiHj1j2_2p5",&GENdPhiHj1j2_2p5,"GENdPhiHj1j2_2p5/F");
@@ -5686,7 +5701,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                 jet_iscleanH4l.push_back((int)jet_pt.size());
 		if (jet_jer->Pt() > pt_leadingjet_pt30_eta4p7) {
                     pt_leadingjet_pt30_eta4p7 = jet_jer->Pt();
-        	    cout<<"in loop:   Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" pt_leadingjet_pt30_eta4p7 : "<<pt_leadingjet_pt30_eta4p7<<endl;
+        	//    cout<<"in loop:   Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" pt_leadingjet_pt30_eta4p7 : "<<pt_leadingjet_pt30_eta4p7<<endl;
                     absrapidity_leadingjet_pt30_eta4p7 = jet_jer->Rapidity(); //take abs later
 		    }
                 if (jet_jer->Pt() > jet1pt )  {
@@ -6049,7 +6064,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         associated.push_back(SimpleParticle_t(0, Jet1));
         pTj1=Jet1.Pt();
         //pt_leadingjet_pt30_eta4p7=Jet1.Pt();
-        cout<<"njet0 condition  Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" pTj1: "<<pTj1<<endl;
+    //    cout<<"njet0 condition  Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" pTj1: "<<pTj1<<endl;
         etaj1=Jet1.Eta();
         yj1=Jet1.Rapidity();
         qgj1=jet_QGTagger[jet1index2];
@@ -6725,8 +6740,8 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
         if (verbose) cout<<"passedFiducialSelection after other cuts? "<<passedFiducialSelection<<endl;
         
         if (passedFiducialSelection) {
-            GENmela = new Mela(13.0, 125.0, TVar::SILENT); 
-            GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
+//            GENmela = new Mela(13.0, 125.0, TVar::SILENT); 
+//            GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
             // DO GEN JETS
             if (verbose) cout<<"begin filling gen jets"<<endl;
             edm::View<reco::GenJet>::const_iterator genjet;
@@ -6874,8 +6889,8 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
 		GENpT4ljj = GENpT4l + GENpTj1 + GENpTj2;
                 //GENyj2=TMath::Abs(GENJet2.Rapidity());
                 GENyj2=GENJet2.Rapidity();
-                GENDijetMass=(GENJet1+GENJet2).M();
-                GENmass4ljj=GENmass4l+GENDijetMass;
+                GENmj1j2=(GENJet1+GENJet2).M();
+                GENmass4ljj=GENmass4l+GENmj1j2;
                 GENdEtaj1j2=TMath::Abs(GENJet1.Eta()-GENJet2.Eta());
                 //GENdPhij1j2=TMath::Abs(GENJet1.Phi()-GENJet2.Phi());
                 GENdPhij1j2=deltaPhi(GENJet1.Phi(),GENJet2.Phi());
@@ -6902,7 +6917,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                 GENJet2_2p5.SetPtEtaPhiM(GENjet_pt[GENjet2index_2p5],GENjet_eta[GENjet2index_2p5],GENjet_phi[GENjet2index_2p5],GENjet_mass[GENjet2index_2p5]);
                 GENpTj2_2p5=GENJet2_2p5.Pt();
                 GENyj2_2p5=GENJet2.Rapidity();
-                GENDijetMass_2p5=(GENJet1_2p5+GENJet2_2p5).M();
+                GENmj1j2_2p5=(GENJet1_2p5+GENJet2_2p5).M();
                 GENdEtaj1j2_2p5=TMath::Abs(GENJet1_2p5.Eta()-GENJet2_2p5.Eta());
                 //GENdPhij1j2_2p5=TMath::Abs(GENJet1_2p5.Phi()-GENJet2_2p5.Phi());
                 GENdPhij1j2_2p5=deltaPhi(GENJet1_2p5.Phi(),GENJet2_2p5.Phi());
@@ -6912,7 +6927,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             }
             
             GENpTj1_VBF=-1.0; GENdPhij1j2_VBF=-1.0; GENdPhiHj1j2_VBF=-1.0;
-            if (GENnjets_pt30_eta4p7>1 && GENdEtaj1j2>3.5 && GENDijetMass>200.0) {
+            if (GENnjets_pt30_eta4p7>1 && GENdEtaj1j2>3.5 && GENmj1j2>200.0) {
                 GENpTj1_VBF=GENpTj1; GENdPhij1j2_VBF=GENdPhij1j2; GENdPhiHj1j2_VBF=GENdPhiHj1j2;
             }
 
@@ -6921,34 +6936,34 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
 //            GENmela = new Mela(13.0, 125.0, TVar::SILENT);
 //            GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
             //mela->setInputEvent(&daughters, &associated, 0, 0);
-            GENmela->setInputEvent(&GENdaughters, &GENassociated, &GENmothers, 1);
+            mela->setInputEvent(&GENdaughters, &GENassociated, &GENmothers, 1);
             //GENmela->setInputEvent(&daughters, &associated, &mothers, 1);
-            GENmela->setCurrentCandidateFromIndex(0);
+            mela->setCurrentCandidateFromIndex(0);
             
-            GENmela->setProcess(TVar::HSMHiggs, TVar::JHUGen, TVar::ZZGG);
-            GENmela->computeP(GENme_0plus_JHU, false);
+            mela->setProcess(TVar::HSMHiggs, TVar::JHUGen, TVar::ZZGG);
+            mela->computeP(GENme_0plus_JHU, false);
             
-            GENmela->setProcess(TVar::H0minus, TVar::JHUGen, TVar::ZZGG);
-            GENmela->computeP(GENp0minus_VAJHU, false);
+            mela->setProcess(TVar::H0minus, TVar::JHUGen, TVar::ZZGG);
+            mela->computeP(GENp0minus_VAJHU, false);
             
             GENpg1g4_VAJHU=0.0;
-            GENmela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
-            (GENmela->selfDHggcoupl)[0][0][0]=1.;
-            (GENmela->selfDHzzcoupl)[0][0][0]=1.;
-            (GENmela->selfDHzzcoupl)[0][3][0]=1.;
-            GENmela->computeP(pg1g4_VAJHU, false);
+            mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
+            (mela->selfDHggcoupl)[0][0][0]=1.;
+            (mela->selfDHzzcoupl)[0][0][0]=1.;
+            (mela->selfDHzzcoupl)[0][3][0]=1.;
+            mela->computeP(pg1g4_VAJHU, false);
             GENpg1g4_VAJHU -= GENme_0plus_JHU+GENp0minus_VAJHU;
             
-            GENmela->setProcess(TVar::bkgZZ, TVar::MCFM, TVar::ZZQQB);
-            GENmela->computeP(GENme_qqZZ_MCFM, false);
+            mela->setProcess(TVar::bkgZZ, TVar::MCFM, TVar::ZZQQB);
+            mela->computeP(GENme_qqZZ_MCFM, false);
             
-            GENmela->computeD_gg(TVar::MCFM, TVar::D_gg10, GENDgg10_VAMCFM);  // ??
+            mela->computeD_gg(TVar::MCFM, TVar::D_gg10, GENDgg10_VAMCFM);  // ??
             
-            GENmela->setProcess(TVar::HSMHiggs, TVar::JHUGen, TVar::ZZGG);
-            GENmela->computePM4l(TVar::SMSyst_None, GENp0plus_m4l);
+            mela->setProcess(TVar::HSMHiggs, TVar::JHUGen, TVar::ZZGG);
+            mela->computePM4l(TVar::SMSyst_None, GENp0plus_m4l);
             
-            GENmela->setProcess(TVar::bkgZZ, TVar::JHUGen, TVar::ZZGG);
-            GENmela->computePM4l(TVar::SMSyst_None, GENbkg_m4l);
+            mela->setProcess(TVar::bkgZZ, TVar::JHUGen, TVar::ZZGG);
+            mela->computePM4l(TVar::SMSyst_None, GENbkg_m4l);
             
 /*            GEND_bkg_kin = me_0plus_JHU/(me_0plus_JHU+me_qqZZ_MCFM*helper.getDbkgkinConstant(idL1*idL2*idL3*idL3,mass4l));
             GEND_bkg_kin_vtx_BS = me_0plus_JHU/(me_0plus_JHU+me_qqZZ_MCFM*helper.getDbkgkinConstant(idL1*idL2*idL3*idL3,mass4l_vtxFSR_BS));
@@ -6957,8 +6972,8 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
 */   // FIXME
             GEND_g4 = GENme_0plus_JHU/(GENme_0plus_JHU+pow(2.521, 2)*GENp0minus_VAJHU); // GEND_0-
             GEND_g1g4 = GENpg1g4_VAJHU*2.521/(GENme_0plus_JHU+pow(2.521, 2)*GENp0minus_VAJHU); // GEND_CP, 2.521 since g1=1 and g4=1 is used
+	    mela->resetInputEvent();
             //TJe
-            //} //shift endjetloop
             
         } //passedFiducialSelection
         
