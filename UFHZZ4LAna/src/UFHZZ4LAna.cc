@@ -246,7 +246,9 @@ private:
                           std::vector<pat::Jet> goodJets, std::vector<float> goodJetQGTagger,
                           std::vector<float> goodJetaxis2, std::vector<float> goodJetptD, std::vector<int> goodJetmult,
                           std::vector<pat::Jet> selectedMergedJets,
-                          std::map<unsigned int, TLorentzVector> selectedFsrMap);
+                          std::map<unsigned int, TLorentzVector> selectedFsrMap,
+                          edm::Handle<pat::PackedCandidateCollection> &pfcands,
+                          edm::Handle<edm::View<pat::Jet> > &jets);
     void setGENVariables(edm::Handle<reco::GenParticleCollection> prunedgenParticles,
                          edm::Handle<edm::View<pat::PackedGenParticle> > packedgenParticles,
                          edm::Handle<edm::View<reco::GenJet> > genJets);
@@ -461,9 +463,9 @@ private:
     float TauCnoHRapidity_Inc_2j_CorrRapidity;
 
     float Tau0;
-    float GeneralTau1;
-    float GeneralTau2;
-    float GeneralTau3;
+    float GeneralizedTau0;
+    float GeneralizedTau1;
+    float GeneralizedTau2;
     
     // new nominal
     float pTj1=-10.0; float pTj2=-10.0;
@@ -1566,9 +1568,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     TauCnoHRapidity_Inc_2j_CorrRapidity = -9999.0;
 
     Tau0=-9999.0;
-    GeneralTau1=-9999.0;
-    GeneralTau2=-9999.0;
-    GeneralTau3=-9999.0;
+    GeneralizedTau0=-9999.0;
+    GeneralizedTau1=-9999.0;
+    GeneralizedTau2=-9999.0;
     
     mergedjet_iscleanH4l.clear();
     mergedjet_pt.clear(); mergedjet_eta.clear(); mergedjet_phi.clear(); mergedjet_mass.clear();
@@ -2831,7 +2833,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 
                 //Set All the Variables for Saved Trees (after finding higgs candidate)
                 if (verbose) cout<<"begin setting tree variables"<<endl;
-                setTreeVariables(iEvent, iSetup, selectedMuons, selectedElectrons, recoMuons, recoElectrons, goodJets, goodJetQGTagger,goodJetaxis2, goodJetptD, goodJetmult, selectedMergedJets, selectedFsrMap);
+                setTreeVariables(iEvent, iSetup, selectedMuons, selectedElectrons, recoMuons, recoElectrons, goodJets, goodJetQGTagger,goodJetaxis2, goodJetptD, goodJetmult, selectedMergedJets, selectedFsrMap, pfCands, jets);
                 if (verbose) cout<<"finshed setting tree variables"<<endl;
                 
                 
@@ -4077,7 +4079,7 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                     massZ1 = Z1Vec.M(); massZ2 = Z2Vec.M(); mass4l = HVec.M();
                     // NJettiness CalculateNJettinessVar;
                     // double Taub1 = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, sqrt(mass4l), HVec.Eta());
-                    // GeneralTau1 = Taub1;
+                    // GeneralizedTau0 = Taub1;
                     
                     if (verbose) cout<<" new best candidate SR: mass4l: "<<HVec.M()<<endl;
                     if (HVec.M()>m4lLowCut)  { //m4lLowCut move forward
@@ -4111,7 +4113,7 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                     massZ1 = Z1Vec.M(); massZ2 = Z2Vec.M(); mass4l = HVec.M();
                     // NJettiness CalculateNJettinessVar;
                     // double Taub2 = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, sqrt(mass4l), HVec.Eta());
-                    // GeneralTau2 = Taub2;
+                    // GeneralizedTau1 = Taub2;
                     if (verbose) cout<<" new best candidate CR: mass4l: "<<HVec.M()<<endl;
                     if (HVec.M()>m4lLowCut){//m4lLowCut move forward
                         foundHiggsCandidate=true;
@@ -5267,9 +5269,9 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("TauCnoHRapidity_Inc_2j_CorrRapidity",&TauCnoHRapidity_Inc_2j_CorrRapidity,"TauCnoHRapidity_Inc_2j_CorrRapidity/F");
 
     tree->Branch("Tau0",&Tau0,"Tau0/F");
-    tree->Branch("GeneralTau1",&GeneralTau1,"GeneralTau1/F");
-    tree->Branch("GeneralTau2",&GeneralTau2,"GeneralTau2/F");
-    tree->Branch("GeneralTau3",&GeneralTau3,"GeneralTau3/F");
+    tree->Branch("GeneralizedTau0",&GeneralizedTau0,"GeneralizedTau0/F");
+    tree->Branch("GeneralizedTau1",&GeneralizedTau1,"GeneralizedTau1/F");
+    tree->Branch("GeneralizedTau2",&GeneralizedTau2,"GeneralizedTau2/F");
 
     // merged jets
     tree->Branch("mergedjet_iscleanH4l",&mergedjet_iscleanH4l);
@@ -5602,7 +5604,9 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                                   std::vector<pat::Jet> goodJets, std::vector<float> goodJetQGTagger,
                                   std::vector<float> goodJetaxis2, std::vector<float> goodJetptD, std::vector<int> goodJetmult,
                                   std::vector<pat::Jet> selectedMergedJets,
-                                  std::map<unsigned int, TLorentzVector> selectedFsrMap)
+                                  std::map<unsigned int, TLorentzVector> selectedFsrMap,
+                                  edm::Handle<pat::PackedCandidateCollection> &pfcands,
+                                  edm::Handle<edm::View<pat::Jet> > &jets)
 {
     
     //    std::string DATAPATH = std::getenv( "CMSSW_BASE" );
@@ -6334,8 +6338,38 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         // std::cout << "Number of tight leptons: " << ntight << "\tskimTightLeptons = " << skimTightLeptons << std::endl;
         // std::cout << "Taub = " << Taub << std::endl;
 
-        Tau0 = CalculateNJettinessVar.Tau0(pfCands, sqrt((HVec.M())^2 + (HVec.Pt())^2), HVec.Rapidity(),
-                                                    Lep1, Lep2, Lep3, Lep4);
+        Tau0 = CalculateNJettinessVar.Tau0(pfcands,
+                                           sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+                                           // HVec.Rapidity(),
+                                           0.0,
+                                           Lep1, Lep2, Lep3, Lep4);
+
+        GeneralizedTau0 = CalculateNJettinessVar.GeneralizedTaunN(
+            0,
+            pfcands,
+            goodJets,   // Fixed don't change
+            sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+            HVec.Rapidity(),
+            Lep1, Lep2, Lep3, Lep4
+            );
+
+        GeneralizedTau1 = CalculateNJettinessVar.GeneralizedTaunN(
+            1,
+            pfcands,
+            goodJets,   // Fixed don't change
+            sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+            HVec.Rapidity(),
+            Lep1, Lep2, Lep3, Lep4
+            );
+
+        GeneralizedTau2 = CalculateNJettinessVar.GeneralizedTaunN(
+            2,
+            pfcands,
+            goodJets,   // Fixed don't change
+            sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+            HVec.Rapidity(),
+            Lep1, Lep2, Lep3, Lep4
+            );
 
         // NJettiness CalculateNJettinessVar;
         CalculateNJettinessVar.GetRapidityWeightedValues_pTWeighted_UsingEnergy(

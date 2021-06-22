@@ -2,7 +2,7 @@
 // Reference: PRL 105, 092002 (2010)
 // Implementing equation number 9 from the above paper.
 #include "DataFormats/Math/interface/deltaR.h"
-// #include "DataFormats/Math/interface/deltaPhi.h"
+#include "DataFormats/Math/interface/deltaPhi.h"
 #ifndef NJETTINESS_H
 #define NJETTINESS_H
 class NJettiness {
@@ -12,10 +12,16 @@ public:
 	~NJettiness() {};
 	
     double GeneralizedTaunN(
+        unsigned int NJettiness,
         edm::Handle<pat::PackedCandidateCollection> pfcands,
-        edm::Handle<edm::View<pat::Jet> > jets,
+        // edm::Handle<edm::View<pat::Jet> > jets,
+        std::vector<pat::Jet> goodJets,
         double Q,
-        double Y
+        double Y,
+        TLorentzVector Lep1,
+        TLorentzVector Lep2,
+        TLorentzVector Lep3,
+        TLorentzVector Lep4
         );
 
     double Tau0(
@@ -100,24 +106,40 @@ public:
  * @param[in]  Q        square root of total invariant mass of the selected particles. Here it should be the invariant mass of 4 selected leptons.
  * @param[in]  Y        Rapidity of the vector sum of selected particles (4 selected leptons).
  */
-double NJettiness::GeneralizedTaunN(edm::Handle<pat::PackedCandidateCollection> pfcands, edm::Handle<edm::View<pat::Jet> > jets, double Q, double Y)
+double NJettiness::GeneralizedTaunN(
+    unsigned int NJettiness,
+    edm::Handle<pat::PackedCandidateCollection> pfcands,
+    std::vector<pat::Jet> goodJets,
+    double Q,   double Y,
+    TLorentzVector Lep1,    TLorentzVector Lep2,
+    TLorentzVector Lep3,    TLorentzVector Lep4
+    )
 {
-    double tauN = -999.0;
-    // FIXME: Remember to remove the selected particles from the collection of pfCandidates.
+    double tauN = 0.0;
+    double temp_tauN;
+    if (goodJets.size() <= NJettiness) return -999.0;
+
     for (const pat::PackedCandidate &pfc : *pfcands)
     {
-        double dA = (pfc.pt()*TMath::Exp(Y-pfc.eta()))/Q;
-        double dB = (pfc.pt()*TMath::Exp(-Y+pfc.eta()))/Q;
+        if (deltaR(pfc.eta(), pfc.phi(), Lep1.Eta(), Lep1.Phi())<0.1) continue;
+        if (deltaR(pfc.eta(), pfc.phi(), Lep2.Eta(), Lep2.Phi())<0.1) continue;
+        if (deltaR(pfc.eta(), pfc.phi(), Lep3.Eta(), Lep3.Phi())<0.1) continue;
+        if (deltaR(pfc.eta(), pfc.phi(), Lep4.Eta(), Lep4.Phi())<0.1) continue;
 
-        tauN = TMath::Min(dA,dB);
+        double dA = (abs(pfc.pt())/Q)*TMath::Exp(Y-pfc.eta());
+        double dB = (abs(pfc.pt())/Q)*TMath::Exp(-Y+pfc.eta());
 
-        for (const pat::Jet &jet : *jets)
+        temp_tauN = TMath::Min(dA,dB);
+
+        for (unsigned int JetCounter = 0; JetCounter < NJettiness; ++JetCounter)
         {
-            double dEta = pfc.eta() - jet.eta();
-            double dPhi = pfc.phi() - jet.phi();
-            double dJ = ( pfc.pt() * ( 2*TMath::CosH(dEta) - 2*TMath::Cos(dPhi) ) )/Q;
-            tauN = TMath::Min(tauN, dJ);
-        }   // END: for (const pat::Jet &jet : *jets)
+            double dEta = pfc.eta() - goodJets[JetCounter].eta();
+            double dPhi = deltaPhi(pfc.phi(),goodJets[JetCounter].phi());
+            double dJ = (abs(pfc.pt())/Q)*( 2*TMath::CosH(dEta) - 2*TMath::Cos(dPhi) );
+            temp_tauN = TMath::Min(temp_tauN, dJ);
+        }
+
+        tauN = tauN + temp_tauN;
     }   // END: for (const pat::PackedCandidate &pfc : *pfcands)
 
     return tauN;
@@ -136,30 +158,31 @@ double NJettiness::Tau0(edm::Handle<pat::PackedCandidateCollection> pfcands, dou
     {
         // double dA = (pfc.pt()*TMath::Exp(Y-pfc.eta()))/Q;
         // double dB = (pfc.pt()*TMath::Exp(-Y+pfc.eta()))/Q;
-        if (deltaR(pfc.eta(), pfc(phi), Lep1.Eta(), Lep1.Phi())<0.1)
+        if (deltaR(pfc.eta(), pfc.phi(), Lep1.Eta(), Lep1.Phi())<0.1)
             {
-                std::cout << "#L141: Found selected lepton." << std::endl;
+                // std::cout << "#L141: Found selected lepton." << std::endl;
                 continue;
             }
-        if (deltaR(pfc.eta(), pfc(phi), Lep2.Eta(), Lep2.Phi())<0.1)
+        if (deltaR(pfc.eta(), pfc.phi(), Lep2.Eta(), Lep2.Phi())<0.1)
             {
-                std::cout << "#L146: Found selected lepton." << std::endl;
+                // std::cout << "#L146: Found selected lepton." << std::endl;
                 continue;
             }
-        if (deltaR(pfc.eta(), pfc(phi), Lep3.Eta(), Lep3.Phi())<0.1)
+        if (deltaR(pfc.eta(), pfc.phi(), Lep3.Eta(), Lep3.Phi())<0.1)
             {
-                std::cout << "#L151: Found selected lepton." << std::endl;
+                // std::cout << "#L151: Found selected lepton." << std::endl;
                 continue;
             }
-        if (deltaR(pfc.eta(), pfc(phi), Lep4.Eta(), Lep4.Phi())<0.1)
+        if (deltaR(pfc.eta(), pfc.phi(), Lep4.Eta(), Lep4.Phi())<0.1)
             {
-                std::cout << "#L156: Found selected lepton." << std::endl;
+                // std::cout << "#L156: Found selected lepton." << std::endl;
                 continue;
             }
-        double Tau0i += (abs(pfc.pt()) * TMath::Min( TMath::Exp(Y-pfc.eta()), TMath::Exp(-Y + pfc.eta())))/Q;
+        // Tau0i += abs(pfc.pt()) * TMath::Min( TMath::Exp(Y-pfc.eta()), TMath::Exp(-Y + pfc.eta()));
+        Tau0i += abs(pfc.pt()) * TMath::Min( TMath::Exp(-pfc.eta()), TMath::Exp(pfc.eta()));
     }   // END: for (const pat::PackedCandidate &pfc : *pfcands)
 
-    return tauN;
+    return Tau0i/Q;
 }
 
 /**
