@@ -2930,14 +2930,15 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     mela->setProcess(TVar::H0minus, TVar::JHUGen, TVar::ZZGG);
                     mela->computeP(p0minus_VAJHU, true);
                     
-                    pg1g4_VAJHU=0.0;
+//                    pg1g4_VAJHU=0.0;
                     mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
                     (mela->selfDHggcoupl)[0][0][0]=1.;
                     (mela->selfDHzzcoupl)[0][0][0]=1.;
                     (mela->selfDHzzcoupl)[0][3][0]=1.;
                     mela->computeP(pg1g4_VAJHU, true);
+//		    cout<<"me_0plus_JHU: "<<me_0plus_JHU<<"    p0minus_VAJHU: "<<p0minus_VAJHU<<endl;
                     pg1g4_VAJHU -= me_0plus_JHU+p0minus_VAJHU;
-                    
+                    cout<<"pg1g4_VAJHU: "<<pg1g4_VAJHU<<endl;
                     mela->setProcess(TVar::bkgZZ, TVar::MCFM, TVar::ZZQQB);
                     mela->computeP(me_qqZZ_MCFM, true);
                     
@@ -2955,7 +2956,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     
                     D_bkg = me_0plus_JHU*p0plus_m4l/(me_0plus_JHU*p0plus_m4l+me_qqZZ_MCFM*bkg_m4l*helper.getDbkgConstant(idL1*idL2*idL3*idL4,mass4l)); // superMELA
                     D_g4 = me_0plus_JHU/(me_0plus_JHU+pow(2.521, 2)*p0minus_VAJHU); // D_0-
+//		    cout<<"Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" D_g4 /  D_0-  : "<<D_g4<<endl;
                     D_g1g4 = pg1g4_VAJHU*2.521/(me_0plus_JHU+pow(2.521, 2)*p0minus_VAJHU); // D_CP, 2.521 since g1=1 and g4=1 is used
+//		    cout<<"Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" D_g1g4 /  D_CP  : "<<D_g1g4<<endl;
                     
                     TUtil::computeAngles(cosThetaStar,cosTheta1,cosTheta2,Phi,Phi1, \
                                          Lep1, lep_id[lep_Hindex[0]], Lep2, lep_id[lep_Hindex[1]], \
@@ -5384,7 +5387,7 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("GEND_bkg", &GEND_bkg, "GEND_bkg/F");
     tree->Branch("GENDgg10_VAMCFM", &GENDgg10_VAMCFM, "GENDgg10_VAMCFM/F");
     tree->Branch("GEND_g4", &GEND_g4, "GEND_g4/F");
-    tree->Branch("GEND_g1g4", &GEND_g4, "GEND_g1g4/F");
+    tree->Branch("GEND_g1g4", &GEND_g1g4, "GEND_g1g4/F");
     tree->Branch("GEND_VBF",&GEND_VBF,"GEND_VBF/F");
     tree->Branch("GEND_VBF1j",&GEND_VBF1j,"GEND_VBF1j/F");
     tree->Branch("GEND_HadWH",&GEND_HadWH,"GEND_HadWH/F");
@@ -5518,7 +5521,7 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("D_bkg", &D_bkg, "D_bkg/F");
     tree->Branch("Dgg10_VAMCFM", &Dgg10_VAMCFM, "Dgg10_VAMCFM/F");
     tree->Branch("D_g4", &D_g4, "D_g4/F");
-    tree->Branch("D_g1g4", &D_g4, "D_g1g4/F");
+    tree->Branch("D_g1g4", &D_g1g4, "D_g1g4/F");
     tree->Branch("D_VBF",&D_VBF,"D_VBF/F");
     tree->Branch("D_VBF1j",&D_VBF1j,"D_VBF1j/F");
     tree->Branch("D_HadWH",&D_HadWH,"D_HadWH/F");
@@ -6933,8 +6936,6 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
 
 // start filling GEN mela variables 
 
-//            GENmela = new Mela(13.0, 125.0, TVar::SILENT);
-//            GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
             //mela->setInputEvent(&daughters, &associated, 0, 0);
             mela->setInputEvent(&GENdaughters, &GENassociated, &GENmothers, 1);
             //GENmela->setInputEvent(&daughters, &associated, &mothers, 1);
@@ -6946,14 +6947,15 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             mela->setProcess(TVar::H0minus, TVar::JHUGen, TVar::ZZGG);
             mela->computeP(GENp0minus_VAJHU, false);
             
-            GENpg1g4_VAJHU=0.0;
+//            GENpg1g4_VAJHU=0.0;
             mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
             (mela->selfDHggcoupl)[0][0][0]=1.;
             (mela->selfDHzzcoupl)[0][0][0]=1.;
             (mela->selfDHzzcoupl)[0][3][0]=1.;
-            mela->computeP(pg1g4_VAJHU, false);
+            //mela->computeP(pg1g4_VAJHU, false);
+            mela->computeP(GENpg1g4_VAJHU, false);
             GENpg1g4_VAJHU -= GENme_0plus_JHU+GENp0minus_VAJHU;
-            
+            //cout<<"GENpg1g4_VAJHU:"<<GENpg1g4_VAJHU<<"   GENme_0plus_JHU:"<<GENme_0plus_JHU<<"    GENp0minus_VAJHU:"<<GENp0minus_VAJHU<<endl; 
             mela->setProcess(TVar::bkgZZ, TVar::MCFM, TVar::ZZQQB);
             mela->computeP(GENme_qqZZ_MCFM, false);
             
