@@ -1505,7 +1505,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     yj1=-9999.0; yj2=-9999.0;
     phij1=-9999.0; phij2=-9999.0;
     dPhiHj1=-9999.0; dyHj1=-9999.0;
-    dPhij1j2=-9999.0; dPhiHj1j2=-1.0;
+    dPhij1j2=-9999.0; dPhiHj1j2=-9999.0;
     dPhij1j2_VBF=-9999.0;
     yj1_2p5=-9999.0; yj2_2p5=-9999.0;
 
@@ -6066,10 +6066,13 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         Jet1.SetPtEtaPhiM(jet_pt[jet1index2],jet_eta[jet1index2],jet_phi[jet1index2],jet_mass[jet1index2]);
         associated.push_back(SimpleParticle_t(0, Jet1));
         pTj1=Jet1.Pt();
+	pT4lj=pT4l+pTj1;
+	mass4lj = mass4l+Jet1.M();
         //pt_leadingjet_pt30_eta4p7=Jet1.Pt();
     //    cout<<"njet0 condition  Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" pTj1: "<<pTj1<<endl;
         etaj1=Jet1.Eta();
         yj1=Jet1.Rapidity();
+        mj1=Jet1.M();
         qgj1=jet_QGTagger[jet1index2];
         qgj1=jet_QGTagger[jet1index2];
         csvj1=jet_csvv2[jet1index2];
@@ -6084,12 +6087,14 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         pTj2=Jet2.Pt();
         etaj2=Jet2.Eta();
         yj2=Jet2.Rapidity();
+        mj2=Jet2.M();
         qgj2=jet_QGTagger[jet2index2];
         csvj2=jet_csvv2[jet2index2];
         mj1j2=(Jet1+Jet2).M();
         mass4ljj=mass4l+mj1j2;
+        pT4ljj=pT4l+(Jet1+Jet2).Pt();
         dEtaj1j2=TMath::Abs(Jet1.Eta()-Jet2.Eta());
-        dPhij1j2=TMath::Abs(Jet1.Phi()-Jet2.Phi());
+        //dPhij1j2=TMath::Abs(Jet1.Phi()-Jet2.Phi());
         dPhij1j2=deltaPhi(Jet1.Phi(),Jet2.Phi());
       //  dPhiHj1j2=TMath::Abs(HVec.Phi()-(Jet1+Jet2).Phi());
         dPhiHj1j2=deltaPhi(HVec.Phi(),(Jet1+Jet2).Phi());
@@ -6880,6 +6885,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                 GENyj1=GENJet1.Rapidity();
                 //GENdPhiHj1=TMath::Abs((LS3_Z1_1+LS3_Z1_2+LS3_Z2_1+LS3_Z2_2).Phi()-GENJet1.Phi());
                 //GENdPhiHj1=TMath::Abs(GENphi4l-GENJet1.Phi());
+		GENmass4lj=GENmass4l+GENJet1.M();;
                 GENdPhiHj1=deltaPhi(GENphi4l,GENJet1.Phi());
                 //GENdyHj1=TMath::Abs(GENy4l-GENyj1);
                 GENdyHj1=TMath::Abs(GENrapidity4l-GENyj1);
