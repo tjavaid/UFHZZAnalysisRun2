@@ -12,7 +12,8 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load('Configuration.StandardSequences.Services_cff')
-process.GlobalTag.globaltag='102X_upgrade2018_realistic_v18'
+#process.GlobalTag.globaltag='102X_upgrade2018_realistic_v18'
+process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16'
 
 process.Timing = cms.Service("Timing",
                              summaryOnly = cms.untracked.bool(True)
@@ -20,16 +21,19 @@ process.Timing = cms.Service("Timing",
 
 
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100000) )
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
-#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20000) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(30000) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(50000) )
 #process.maxEvents = 1000 #cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
-'/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/280000/03291F3D-A219-DE42-A529-A5BAF3CB25EA.root',
-'/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/280000/401674DC-F144-2845-BF35-CDE428720731.root',
-'/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/280000/8E2576D5-B139-F042-8A6D-171D0C9149F2.root',
-'/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/280000/95E69570-7383-1749-8A9A-C8FD9024D519.root',
+'/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/100000/6F55BD76-D3BE-7047-91C0-686CD0620413.root',
+'/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/230000/1A550E4D-07E5-A341-9578-DB5CEC81A574.root',
+'/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/230000/2A9312BD-B908-974D-A532-52678B8F1320.root',
+'/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/230000/2AB33D4E-D797-1043-B3BC-599F77D01849.root',
+'/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/30000/8E58CC61-61A4-7A4C-8DF2-D079E2A880BC.root',
 #'/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/30000/D5965022-AF5A-9941-88ED-3C8CBB3E47E5.root',
 )
 
@@ -38,7 +42,11 @@ process.source = cms.Source("PoolSource",fileNames = myfilelist,
 
 process.TFileService = cms.Service("TFileService",
                                   #fileName = cms.string("Sync_1031_2018_ttH_v2.root")##
-                                  fileName = cms.string("Sync_2406_2018_VBF_100.root")##
+                                  #fileName = cms.string("Sync_2406_2018_VBF_30K.root")##
+                                  #fileName = cms.string("Sync_0107_2018_VBF_50K.root")##
+                                  #fileName = cms.string("Sync_0607_2018_ggH_50K.root")##
+#                                  fileName = cms.string("Sync_0607_2018_ggH_10K.root")##
+                                  fileName = cms.string("Sync_2507_2021_ggH_1M.root")##
                                   #fileName = cms.string("Sync_2406_2018_VBFH_100.root")##
 )
 
