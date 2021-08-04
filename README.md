@@ -36,6 +36,10 @@ git clone -b v2.3.5 https://github.com/JHUGen/JHUGenMELA
 
 sh JHUGenMELA/MELA/setup.sh -j 8
 
+scramv1 b -j 8
+
+voms-proxy-init --rfc --voms cms
+
 cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2018_UL_cfg_3K-VBF.py
 
 ==============================================================
