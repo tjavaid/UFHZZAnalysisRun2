@@ -5,26 +5,41 @@ HZZ Analyzer for CMS Run2 UL
 To install:
 
 SCRAM_ARCH=slc7_amd64_gcc700; export SCRAM_ARCH
+
 cmsrel CMSSW_10_6_20
+
 cd CMSSW_10_6_20/src/
+
 cmsenv
+
 git cms-init
-git cms-init
+
 git clone -b 10_6_12_DifXSAddVars https://github.com/tjavaid/UFHZZAnalysisRun2.git
+
 git cms-merge-topic asculac:Electron_XGBoost_MVA_16UL_17UL
+
 git cms-addpkg GeneratorInterface/RivetInterface
+
 git cms-addpkg SimDataFormats/HTXS
+
 git cms-addpkg RecoEgamma/EgammaTools
+
 git cms-addpkg RecoEgamma/PhotonIdentification
+
 git cms-addpkg RecoEgamma/ElectronIdentification
+
 git cms-merge-topic cms-egamma:EgammaPostRecoTools
+
 git cms-addpkg PhysicsTools/PatAlgos/
 
 git clone -b v2.3.5 https://github.com/JHUGen/JHUGenMELA
+
 sh JHUGenMELA/MELA/setup.sh -j 8
 
 cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2018_Legacy_cfg.py
+
 cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2017_Legacy_cfg.py
+
 cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2016_Legacy_cfg.py
 
 cp UFHZZAnalysisRun2/Utilities/crab/* .
