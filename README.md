@@ -36,11 +36,13 @@ git clone -b v2.3.5 https://github.com/JHUGen/JHUGenMELA
 
 sh JHUGenMELA/MELA/setup.sh -j 8
 
-cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2018_Legacy_cfg.py
+cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2018_UL_cfg_3K-VBF.py
 
-cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2017_Legacy_cfg.py
+==============================================================
 
-cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2016_Legacy_cfg.py
+#cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2017_Legacy_cfg.py
+
+#cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2016_Legacy_cfg.py
 
 cp UFHZZAnalysisRun2/Utilities/crab/* .
 
