@@ -14,7 +14,7 @@ cmsenv
 
 git cms-init
 
-git clone -b 10_6_12_DifXSAddVars https://github.com/tjavaid/UFHZZAnalysisRun2.git
+git clone -b 10_6_20_UL https://github.com/tjavaid/UFHZZAnalysisRun2.git
 
 git cms-merge-topic asculac:Electron_XGBoost_MVA_16UL_17UL
 
