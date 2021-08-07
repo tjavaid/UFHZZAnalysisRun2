@@ -1,28 +1,52 @@
-HZZ Analyzer for CMS Run2
+HZZ Analyzer for CMS Run2 UL
 
 ------
 
 To install:
 
-export SCRAM_ARCH=slc7_amd64_gcc700
+SCRAM_ARCH=slc7_amd64_gcc700; export SCRAM_ARCH
 
-cmsrel CMSSW_10_6_12
+cmsrel CMSSW_10_6_20
 
-cd CMSSW_10_6_12/src
+cd CMSSW_10_6_20/src/
 
 cmsenv
 
 git cms-init
 
-git clone -b 10_6_12 https://ferrico@github.com/ferrico/UFHZZAnalysisRun2.git
+git clone -b 10_6_20_UL https://github.com/tjavaid/UFHZZAnalysisRun2.git
 
-cp UFHZZAnalysisRun2/install*.sh .
+git cms-merge-topic asculac:Electron_XGBoost_MVA_16UL_17UL
 
-./install_2.sh
+git cms-addpkg GeneratorInterface/RivetInterface
 
-cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2018_Legacy_cfg.py
-cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2017_Legacy_cfg.py
-cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2016_Legacy_cfg.py
+git cms-addpkg SimDataFormats/HTXS
+
+git cms-addpkg RecoEgamma/EgammaTools
+
+git cms-addpkg RecoEgamma/PhotonIdentification
+
+git cms-addpkg RecoEgamma/ElectronIdentification
+
+git cms-merge-topic cms-egamma:EgammaPostRecoTools
+
+git cms-addpkg PhysicsTools/PatAlgos/
+
+git clone -b v2.3.5 https://github.com/JHUGen/JHUGenMELA
+
+sh JHUGenMELA/MELA/setup.sh -j 8
+
+scramv1 b -j 8
+
+voms-proxy-init --rfc --voms cms
+
+cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2018_UL_cfg_3K-VBF.py
+
+==============================================================
+
+#cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2017_Legacy_cfg.py
+
+#cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2016_Legacy_cfg.py
 
 cp UFHZZAnalysisRun2/Utilities/crab/* .
 
