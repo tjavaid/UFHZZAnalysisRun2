@@ -828,6 +828,29 @@ bool HZZ4LHelper::passTight_Id_SUS(pat::Electron electron, std::string elecID, c
 	mvaVal = electron.userFloat("ElectronMVAEstimatorRun2Summer18ULIdIsoValues");
     }
     if(year==2017)
+    {    
+        if(electron.pt()<=10){
+            //if(fSCeta < 0.8) cutVal = 0.85216885148;
+            if(fSCeta < 0.8) cutVal = 0.9128577458;
+            //if(fSCeta >= 0.8 && fSCeta < 1.479) cutVal = 0.82684550976;
+            if(fSCeta >= 0.8 && fSCeta < 1.479) cutVal = 0.9056792368;
+            //if(fSCeta >= 1.479) cutVal = 0.86937630022;
+            if(fSCeta >= 1.479) cutVal = 0.9439440575;
+        }
+        else {
+            //if(fSCeta < 0.8) cutVal = 0.98248928759;
+            if(fSCeta < 0.8) cutVal = 0.1559788054;
+            //if(fSCeta >= 0.8 && fSCeta < 1.479) cutVal = 0.96919224579;
+            if(fSCeta >= 0.8 && fSCeta < 1.479) cutVal = 0.0273863727;
+            //if(fSCeta >= 1.479) cutVal = 0.79349796445;
+            if(fSCeta >= 1.479) cutVal = -0.5532483665;
+        }
+        //mvaVal = electron.userFloat("ElectronMVAEstimatorRun2Fall17IsoV2Values");
+        mvaVal = electron.userFloat("ElectronMVAEstimatorRun2Summer17ULIdIsoValues");
+    }
+
+/*
+    if(year==2017)
     {
         if(electron.pt()<=10){
             if(fSCeta < 0.8) cutVal = 0.85216885148;
@@ -841,6 +864,31 @@ bool HZZ4LHelper::passTight_Id_SUS(pat::Electron electron, std::string elecID, c
         }
         mvaVal = electron.userFloat("ElectronMVAEstimatorRun2Fall17IsoV2Values");
     }
+*/
+
+    if(year==2016)
+    {
+        if(electron.pt()<=10){
+            //if(fSCeta < 0.8) cutVal = 0.95034841889;
+            if(fSCeta < 0.8) cutVal = 0.9557993256;
+            //if(fSCeta >= 0.8 && fSCeta < 1.479) cutVal = 0.94606270058;
+            if(fSCeta >= 0.8 && fSCeta < 1.479) cutVal = 0.9475406570;
+            //if(fSCeta >= 1.479) cutVal = 0.93872558098;
+            if(fSCeta >= 1.479) cutVal = 0.9285158721;
+        }
+        else {
+            //if(fSCeta < 0.8) cutVal = 0.3782357877;
+            if(fSCeta < 0.8) cutVal = 0.3272075608;
+            //if(fSCeta >= 0.8 && fSCeta < 1.479) cutVal = 0.35871320305;
+            if(fSCeta >= 0.8 && fSCeta < 1.479) cutVal = 0.2468345995;
+            //if(fSCeta >= 1.479) cutVal = -0.57451499543;
+            if(fSCeta >= 1.479) cutVal = -0.5955762814;
+        }
+        //mvaVal = electron.userFloat("ElectronMVAEstimatorRun2Summer16IdIsoValues");
+        mvaVal = electron.userFloat("ElectronMVAEstimatorRun2Summer16ULIdIsoValues");
+    }
+
+/*
     if(year==2016)
     {
         if(electron.pt()<=10){
@@ -855,7 +903,7 @@ bool HZZ4LHelper::passTight_Id_SUS(pat::Electron electron, std::string elecID, c
         }
         mvaVal = electron.userFloat("ElectronMVAEstimatorRun2Summer16IdIsoValues");
     }
-
+*/
     //if (electron.userFloat("ElectronMVAEstimatorRun2Autumn18IdIsoValues") <= cutVal ) return false;
     if( mvaVal <= cutVal ) return false;
 
