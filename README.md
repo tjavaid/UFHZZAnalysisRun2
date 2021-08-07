@@ -43,7 +43,10 @@ voms-proxy-init --rfc --voms cms
 cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_106X_2018UL_cfg.py
 
 cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_106X_2017UL_cfg.py
+
 ==============================================================
+
+# pre-existing
 
 #cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2017_Legacy_cfg.py
 
