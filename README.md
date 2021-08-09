@@ -14,7 +14,7 @@ cmsenv
 
 git cms-init
 
-git clone -b 10_6_12 https://ferrico@github.com/ferrico/UFHZZAnalysisRun2.git
+git clone -b 10_6_12_DifXSAddVars git@github.com:tjavaid/UFHZZAnalysisRun2.git
 
 cp UFHZZAnalysisRun2/install*.sh .
 
