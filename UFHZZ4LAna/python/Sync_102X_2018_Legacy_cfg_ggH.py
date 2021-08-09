@@ -46,7 +46,8 @@ process.TFileService = cms.Service("TFileService",
                                   #fileName = cms.string("Sync_0107_2018_VBF_50K.root")##
                                   #fileName = cms.string("Sync_0607_2018_ggH_50K.root")##
 #                                  fileName = cms.string("Sync_0607_2018_ggH_10K.root")##
-                                  fileName = cms.string("Sync_2507_2021_ggH_1M.root")##
+                                  #fileName = cms.string("Sync_2507_2021_ggH_1M.root")##
+                                  fileName = cms.string("Sync_0908_2021_ggH_1M.root")##
                                   #fileName = cms.string("Sync_2406_2018_VBFH_100.root")##
 )
 
