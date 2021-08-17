@@ -4,30 +4,37 @@ from FWCore.ParameterSet.VarParsing import VarParsing
 process = cms.Process("UFHZZ4LAnalysis")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
-# process.MessageLogger.cerr.FwkReport.reportEvery = 5000
-process.MessageLogger.cerr.FwkReport.reportEvery = 1
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+#process.MessageLogger.cerr.FwkReport.reportEvery = 1
 process.MessageLogger.categories.append('UFHZZ4LAna')
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load('Configuration.StandardSequences.Services_cff')
-process.GlobalTag.globaltag='102X_upgrade2018_realistic_v18'
+#process.GlobalTag.globaltag='102X_upgrade2018_realistic_v18'
+process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16'
 
 process.Timing = cms.Service("Timing",
                              summaryOnly = cms.untracked.bool(True)
                              )
 
-# process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
-# process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20000) )
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
+
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100000) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(30000) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(50000) )
+#process.maxEvents = 1000 #cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 myfilelist = cms.untracked.vstring(
-    '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/DCB7927B-269F-3B4B-9DA3-EFE07A37FC9E.root',
-    '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/05933D5F-F49B-7B4B-B501-F5A280937195.root',
-    '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/4ED18418-4F58-FA4A-8845-DE9DBA78601D.root',
-    '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/4F49C66B-89D4-9949-B0C2-401D30F58919.root',
-    '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/D7C6FB93-D3BA-DF47-8C37-2E57A3438EFB.root'
+'/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/100000/6F55BD76-D3BE-7047-91C0-686CD0620413.root',
+'/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/230000/1A550E4D-07E5-A341-9578-DB5CEC81A574.root',
+'/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/230000/2A9312BD-B908-974D-A532-52678B8F1320.root',
+'/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/230000/2AB33D4E-D797-1043-B3BC-599F77D01849.root',
+'/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/30000/8E58CC61-61A4-7A4C-8DF2-D079E2A880BC.root',
+#'/store/mc/RunIISummer20UL18MiniAOD/VBF_HToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/30000/D5965022-AF5A-9941-88ED-3C8CBB3E47E5.root',
 )
 
 process.source = cms.Source("PoolSource",fileNames = myfilelist,
@@ -35,7 +42,13 @@ process.source = cms.Source("PoolSource",fileNames = myfilelist,
 
 process.TFileService = cms.Service("TFileService",
                                   #fileName = cms.string("Sync_1031_2018_ttH_v2.root")##
-                                  fileName = cms.string("Sync_2206_2021_ttH_20K.root")##
+                                  #fileName = cms.string("Sync_2406_2018_VBF_30K.root")##
+                                  #fileName = cms.string("Sync_0107_2018_VBF_50K.root")##
+                                  #fileName = cms.string("Sync_0607_2018_ggH_50K.root")##
+#                                  fileName = cms.string("Sync_0607_2018_ggH_10K.root")##
+                                  #fileName = cms.string("Sync_2507_2021_ggH_1M.root")##
+                                  fileName = cms.string("Sync_0908_2021_ggH_1M.root")##
+                                  #fileName = cms.string("Sync_2406_2018_VBFH_100.root")##
 )
 
 # clean muons by segments 
@@ -303,10 +316,10 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                                   'HLT_Mu8_DiEle12_CaloIdL_TrackIdL_v', 
                                   'HLT_Mu8_DiEle12_CaloIdL_TrackIdL_DZ_v', 
                               ),
-                              # verbose = cms.untracked.bool(False),              
-                              verbose = cms.untracked.bool(True),
+                              verbose = cms.untracked.bool(False),              
                               skimLooseLeptons = cms.untracked.int32(4),              
                               skimTightLeptons = cms.untracked.int32(4),              
+#                              verbose = cms.untracked.bool(True),              
                               year = cms.untracked.int32(2018),####for year put 2016,2017, or 2018 to select correct Muon training and electron MVA
                              )
 

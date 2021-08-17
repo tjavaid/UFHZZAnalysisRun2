@@ -10,7 +10,9 @@ cmsrel CMSSW_10_6_12
 cd CMSSW_10_6_12/src
 cmsenv
 git cms-init
-git clone -b 10_6_12 https://ferrico@github.com/ferrico/UFHZZAnalysisRun2.git
+
+git clone -b 10_6_12_DifXSAddVars git@github.com:tjavaid/UFHZZAnalysisRun2.git
+
 cp UFHZZAnalysisRun2/install*.sh .
 ./install_2.sh
 
@@ -42,6 +44,7 @@ nohup python -u manageCrabTask.py -t resultsAna_Data_M17_Feb19 -r -l >& manageda
 
 This will start an infinite loop of running crab resubmit on all of your tasks, then sleep for 30min. You should kill the process once all of your tasks are done. Once all of your tasks are done, you should run the following command to purge your crab cache so that it doesn't fill up:
 
+```bash
 python manageCrabTask.py -t resultsAna_Data_M17_Feb19 -p
 
 UFHZZ4LAna/python/templateMC_102X_Legacy16_4l_cfg.py
@@ -50,3 +53,4 @@ UFHZZ4LAna/python/templateMC_102X_Legacy18_4l_cfg.py
 UFHZZ4LAna/python/templateData_102X_Legacy16_3l_cfg.py
 UFHZZ4LAna/python/templateData_102X_Legacy17_3l_cfg.py
 UFHZZ4LAna/python/templateData_102X_Legacy18_3l_cfg.py
+```
