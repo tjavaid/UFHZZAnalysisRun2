@@ -8123,6 +8123,7 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
 // start filling GEN mela variables 
 
             // UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA using splines
+            // gconstants using splines
             TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
             TSpline *spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
             gConstant_g4->Close();
