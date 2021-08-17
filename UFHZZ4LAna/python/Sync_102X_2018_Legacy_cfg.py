@@ -4,8 +4,7 @@ from FWCore.ParameterSet.VarParsing import VarParsing
 process = cms.Process("UFHZZ4LAnalysis")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
-# process.MessageLogger.cerr.FwkReport.reportEvery = 1000
-process.MessageLogger.cerr.FwkReport.reportEvery = 100
+process.MessageLogger.cerr.FwkReport.reportEvery = 5000
 process.MessageLogger.categories.append('UFHZZ4LAna')
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
@@ -28,18 +27,13 @@ myfilelist = cms.untracked.vstring(
 '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/D7C6FB93-D3BA-DF47-8C37-2E57A3438EFB.root',
 '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/91C4C08A-6D32-424F-B8CB-1D519499778A.root',
 '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/60000/4F73A9F0-E8AD-7C48-AC97-3ABED3BEE7AA.root',
-'/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/3D8334E9-DC43-FC4C-8E03-C7A40234D74A.root',
-'/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/40483F05-74DE-F143-A833-64C1AD8016E3.root',
-'/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/11AC3FB3-2CF0-F94D-94FE-F62667F18860.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/3D8334E9-DC43-FC4C-8E03-C7A40234D74A.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/40483F05-74DE-F143-A833-64C1AD8016E3.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/11AC3FB3-2CF0-F94D-94FE-F62667F18860.root',
 # /GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1/MINIAODSIM
 #
 # NOT oppened '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/230000/5792C7B4-DA68-3C4E-BC65-C6F875BC5530.root',
 # on lxplus766
-# 'file:/tmp/rasharma/69A19159-825A-F645-805E-6894E417C86F.root',
-# 'file:/tmp/rasharma/0593E6EE-55E1-B64B-B145-4784A60269E0.root',
-# 'file:/tmp/rasharma/06161B10-2C38-D741-B7A6-58A3DC3D7F1C.root',
-# 'file:/tmp/rasharma/573E3E9A-CE34-F84D-A932-14FB1439E553.root',
-# 'file:/tmp/rasharma/7AA54970-61A0-6E48-A488-7F3BADF4B2E1.root'
 # '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/230000/69A19159-825A-F645-805E-6894E417C86F.root',
 # '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/100000/0593E6EE-55E1-B64B-B145-4784A60269E0.root',
 # '/store/mc/RunIISummer20UL18MiniAODv2/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/100000/7AA54970-61A0-6E48-A488-7F3BADF4B2E1.root',
@@ -76,8 +70,7 @@ process.source = cms.Source("PoolSource",fileNames = myfilelist,
                             )
 
 process.TFileService = cms.Service("TFileService",
-                                  # fileName = cms.string("GluGluHToZZTo4L_M125_Summer20_2018.root")##
-                                  # fileName = cms.string("GluGluHToZZTo4L_M125-4784A60269E0.root")##
+                                  # fileName = cms.string("GluGluHToZZTo4L_M125.root")##
                                   # fileName = cms.string("VBF_HToZZTo4L_M125.root")##
                                   # fileName = cms.string("WplusH_HToZZTo4L_M125.root")##
                                   fileName = cms.string("ttH_HToZZ_4L_M125.root")##
