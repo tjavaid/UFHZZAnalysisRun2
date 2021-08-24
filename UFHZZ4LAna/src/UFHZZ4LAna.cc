@@ -8831,277 +8831,277 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
 //             LS3_Z1_1, LS3_Z1_2, LS3_Z2_1, LS3_Z2_2
 //             );
 
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
-//              0,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              GEN_HVec.Rapidity(),
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
 
-//              // TauB
-//              GEN_TauB_Inc_0j,
-//              GEN_TauB_JetConstituents_0j,
+             // TauB
+             GEN_TauB_Inc_0j,
+             GEN_TauB_JetConstituents_0j,
 
-//              // TauB's rapidity
-//              GEN_TauB_Inc_0j_CorrRapidity,
-//              GEN_TauB_JetConstituents_0j_CorrRapidity,
+             // TauB's rapidity
+             GEN_TauB_Inc_0j_CorrRapidity,
+             GEN_TauB_JetConstituents_0j_CorrRapidity,
 
-//              // TauC
-//              GEN_TauC_Inc_0j,
-//              GEN_TauC_JetConstituents_0j,
+             // TauC
+             GEN_TauC_Inc_0j,
+             GEN_TauC_JetConstituents_0j,
 
-//              // TauC's rapidity
-//              GEN_TauC_Inc_0j_CorrRapidity,
-//              GEN_TauC_JetConstituents_0j_CorrRapidity,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
-//              0,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              0.0,
+             // TauC's rapidity
+             GEN_TauC_Inc_0j_CorrRapidity,
+             GEN_TauC_JetConstituents_0j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
 
-//              // TauB
-//              GEN_TauBnoHRapidity_Inc_0j,
-//              GEN_TauBnoHRapidity_JetConstituents_0j,
+             // TauB
+             GEN_TauBnoHRapidity_Inc_0j,
+             GEN_TauBnoHRapidity_JetConstituents_0j,
 
-//              // TauB's rapidity
-//              GEN_TauBnoHRapidity_Inc_0j_CorrRapidity,
-//              GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity,
+             // TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_0j_CorrRapidity,
+             GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity,
 
-//              // TauC
-//              GEN_TauCnoHRapidity_Inc_0j,
-//              GEN_TauCnoHRapidity_JetConstituents_0j,
+             // TauC
+             GEN_TauCnoHRapidity_Inc_0j,
+             GEN_TauCnoHRapidity_JetConstituents_0j,
 
-//              // TauC's rapidity
-//              GEN_TauCnoHRapidity_Inc_0j_CorrRapidity,
-//              GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
+             // TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_0j_CorrRapidity,
+             GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
 
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
-//              1,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              GEN_HVec.Rapidity(),
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
 
-//              // TauB
-//              GEN_TauB_Inc_1j,
-//              GEN_TauB_JetConstituents_1j,
+             // TauB
+             GEN_TauB_Inc_1j,
+             GEN_TauB_JetConstituents_1j,
 
-//              // TauB's rapidity
-//              GEN_TauB_Inc_1j_CorrRapidity,
-//              GEN_TauB_JetConstituents_1j_CorrRapidity,
+             // TauB's rapidity
+             GEN_TauB_Inc_1j_CorrRapidity,
+             GEN_TauB_JetConstituents_1j_CorrRapidity,
 
-//              // TauC
-//              GEN_TauC_Inc_1j,
-//              GEN_TauC_JetConstituents_1j,
+             // TauC
+             GEN_TauC_Inc_1j,
+             GEN_TauC_JetConstituents_1j,
 
-//              // TauC's rapidity
-//              GEN_TauC_Inc_1j_CorrRapidity,
-//              GEN_TauC_JetConstituents_1j_CorrRapidity,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
-//              1,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              0.0,
+             // TauC's rapidity
+             GEN_TauC_Inc_1j_CorrRapidity,
+             GEN_TauC_JetConstituents_1j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
 
-//              // TauB
-//              GEN_TauBnoHRapidity_Inc_1j,
-//              GEN_TauBnoHRapidity_JetConstituents_1j,
+             // TauB
+             GEN_TauBnoHRapidity_Inc_1j,
+             GEN_TauBnoHRapidity_JetConstituents_1j,
 
-//              // TauB's rapidity
-//              GEN_TauBnoHRapidity_Inc_1j_CorrRapidity,
-//              GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity,
+             // TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_1j_CorrRapidity,
+             GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity,
 
-//              // TauC
-//              GEN_TauCnoHRapidity_Inc_1j,
-//              GEN_TauCnoHRapidity_JetConstituents_1j,
+             // TauC
+             GEN_TauCnoHRapidity_Inc_1j,
+             GEN_TauCnoHRapidity_JetConstituents_1j,
 
-//              // TauC's rapidity
-//              GEN_TauCnoHRapidity_Inc_1j_CorrRapidity,
-//              GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
+             // TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_1j_CorrRapidity,
+             GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
 
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
-//              2,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              GEN_HVec.Rapidity(),
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
 
-//              // TauB
-//              GEN_TauB_Inc_2j,
-//              GEN_TauB_JetConstituents_2j,
+             // TauB
+             GEN_TauB_Inc_2j,
+             GEN_TauB_JetConstituents_2j,
 
-//              // GEN_TauB's rapidity
-//              GEN_TauB_Inc_2j_CorrRapidity,
-//              GEN_TauB_JetConstituents_2j_CorrRapidity,
+             // GEN_TauB's rapidity
+             GEN_TauB_Inc_2j_CorrRapidity,
+             GEN_TauB_JetConstituents_2j_CorrRapidity,
 
-//              // GEN_TauC
-//              GEN_TauC_Inc_2j,
-//              GEN_TauC_JetConstituents_2j,
+             // GEN_TauC
+             GEN_TauC_Inc_2j,
+             GEN_TauC_JetConstituents_2j,
 
-//              // GEN_TauC's rapidity
-//              GEN_TauC_Inc_2j_CorrRapidity,
-//              GEN_TauC_JetConstituents_2j_CorrRapidity,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
-//              2,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              0.0,
+             // GEN_TauC's rapidity
+             GEN_TauC_Inc_2j_CorrRapidity,
+             GEN_TauC_JetConstituents_2j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
 
-//              // GEN_TauB
-//              GEN_TauBnoHRapidity_Inc_2j,
-//              GEN_TauBnoHRapidity_JetConstituents_2j,
+             // GEN_TauB
+             GEN_TauBnoHRapidity_Inc_2j,
+             GEN_TauBnoHRapidity_JetConstituents_2j,
 
-//              // GEN_TauB's rapidity
-//              GEN_TauBnoHRapidity_Inc_2j_CorrRapidity,
-//              GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity,
+             // GEN_TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_2j_CorrRapidity,
+             GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity,
 
-//              // GEN_TauC
-//              GEN_TauCnoHRapidity_Inc_2j,
-//              GEN_TauCnoHRapidity_JetConstituents_2j,
+             // GEN_TauC
+             GEN_TauCnoHRapidity_Inc_2j,
+             GEN_TauCnoHRapidity_JetConstituents_2j,
 
-//              // GEN_TauC's rapidity
-//              GEN_TauCnoHRapidity_Inc_2j_CorrRapidity,
-//              GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
+             // GEN_TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_2j_CorrRapidity,
+             GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
 
-// //***************************************
+//***************************************
 
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
-//              0,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              GEN_HVec.Rapidity(),
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
 
-//              // GEN_TauB
-//              GEN_TauB_Inc_0j_pTWgt,
-//              GEN_TauB_JetConstituents_0j_pTWgt,
+             // GEN_TauB
+             GEN_TauB_Inc_0j_pTWgt,
+             GEN_TauB_JetConstituents_0j_pTWgt,
 
-//              // GEN_TauB's rapidity
-//              GEN_TauB_Inc_0j_CorrRapidity_pTWgt,
-//              GEN_TauB_JetConstituents_0j_CorrRapidity_pTWgt,
+             // GEN_TauB's rapidity
+             GEN_TauB_Inc_0j_CorrRapidity_pTWgt,
+             GEN_TauB_JetConstituents_0j_CorrRapidity_pTWgt,
 
-//              // GEN_TauC
-//              GEN_TauC_Inc_0j_pTWgt,
-//              GEN_TauC_JetConstituents_0j_pTWgt,
+             // GEN_TauC
+             GEN_TauC_Inc_0j_pTWgt,
+             GEN_TauC_JetConstituents_0j_pTWgt,
 
-//              // GEN_TauC's rapidity
-//              GEN_TauC_Inc_0j_CorrRapidity_pTWgt,
-//              GEN_TauC_JetConstituents_0j_CorrRapidity_pTWgt,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
-//              0,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              0.0,
+             // GEN_TauC's rapidity
+             GEN_TauC_Inc_0j_CorrRapidity_pTWgt,
+             GEN_TauC_JetConstituents_0j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
 
-//              // GEN_TauB
-//              GEN_TauBnoHRapidity_Inc_0j_pTWgt,
-//              GEN_TauBnoHRapidity_JetConstituents_0j_pTWgt,
+             // GEN_TauB
+             GEN_TauBnoHRapidity_Inc_0j_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_0j_pTWgt,
 
-//              // GEN_TauB's rapidity
-//              GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt,
-//              GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,
+             // GEN_TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,
 
-//              // GEN_TauC
-//              GEN_TauCnoHRapidity_Inc_0j_pTWgt,
-//              GEN_TauCnoHRapidity_JetConstituents_0j_pTWgt,
+             // GEN_TauC
+             GEN_TauCnoHRapidity_Inc_0j_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_0j_pTWgt,
 
-//              // GEN_TauC's rapidity
-//              GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt,
-//              GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
+             // GEN_TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
 
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
-//              1,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              GEN_HVec.Rapidity(),
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
 
-//              // GEN_TauB
-//              GEN_TauB_Inc_1j_pTWgt,
-//              GEN_TauB_JetConstituents_1j_pTWgt,
+             // GEN_TauB
+             GEN_TauB_Inc_1j_pTWgt,
+             GEN_TauB_JetConstituents_1j_pTWgt,
 
-//              // GEN_TauB's rapidity
-//              GEN_TauB_Inc_1j_CorrRapidity_pTWgt,
-//              GEN_TauB_JetConstituents_1j_CorrRapidity_pTWgt,
+             // GEN_TauB's rapidity
+             GEN_TauB_Inc_1j_CorrRapidity_pTWgt,
+             GEN_TauB_JetConstituents_1j_CorrRapidity_pTWgt,
 
-//              // GEN_TauC
-//              GEN_TauC_Inc_1j_pTWgt,
-//              GEN_TauC_JetConstituents_1j_pTWgt,
+             // GEN_TauC
+             GEN_TauC_Inc_1j_pTWgt,
+             GEN_TauC_JetConstituents_1j_pTWgt,
 
-//              // GEN_TauC's rapidity
-//              GEN_TauC_Inc_1j_CorrRapidity_pTWgt,
-//              GEN_TauC_JetConstituents_1j_CorrRapidity_pTWgt,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
-//              1,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              0.0,
+             // GEN_TauC's rapidity
+             GEN_TauC_Inc_1j_CorrRapidity_pTWgt,
+             GEN_TauC_JetConstituents_1j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
 
-//              // GEN_TauB
-//              GEN_TauBnoHRapidity_Inc_1j_pTWgt,
-//              GEN_TauBnoHRapidity_JetConstituents_1j_pTWgt,
+             // GEN_TauB
+             GEN_TauBnoHRapidity_Inc_1j_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_1j_pTWgt,
 
-//              // GEN_TauB's rapidity
-//              GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt,
-//              GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,
+             // GEN_TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,
 
-//              // GEN_TauC
-//              GEN_TauCnoHRapidity_Inc_1j_pTWgt,
-//              GEN_TauCnoHRapidity_JetConstituents_1j_pTWgt,
+             // GEN_TauC
+             GEN_TauCnoHRapidity_Inc_1j_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_1j_pTWgt,
 
-//              // GEN_TauC's rapidity
-//              GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt,
-//              GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
+             // GEN_TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
 
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
-//              2,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              GEN_HVec.Rapidity(),
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
 
-//              // GEN_TauB
-//              GEN_TauB_Inc_2j_pTWgt,
-//              GEN_TauB_JetConstituents_2j_pTWgt,
+             // GEN_TauB
+             GEN_TauB_Inc_2j_pTWgt,
+             GEN_TauB_JetConstituents_2j_pTWgt,
 
-//              // GEN_TauB's rapidity
-//              GEN_TauB_Inc_2j_CorrRapidity_pTWgt,
-//              GEN_TauB_JetConstituents_2j_CorrRapidity_pTWgt,
+             // GEN_TauB's rapidity
+             GEN_TauB_Inc_2j_CorrRapidity_pTWgt,
+             GEN_TauB_JetConstituents_2j_CorrRapidity_pTWgt,
 
-//              // GEN_TauC
-//              GEN_TauC_Inc_2j_pTWgt,
-//              GEN_TauC_JetConstituents_2j_pTWgt,
+             // GEN_TauC
+             GEN_TauC_Inc_2j_pTWgt,
+             GEN_TauC_JetConstituents_2j_pTWgt,
 
-//              // GEN_TauC's rapidity
-//              GEN_TauC_Inc_2j_CorrRapidity_pTWgt,
-//              GEN_TauC_JetConstituents_2j_CorrRapidity_pTWgt,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
-//         CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
-//              2,  // NJettiness, // this depends on the jettiness that we would like to use
-//              goodJets,   // Fixed don't change
-//              0.0,
+             // GEN_TauC's rapidity
+             GEN_TauC_Inc_2j_CorrRapidity_pTWgt,
+             GEN_TauC_JetConstituents_2j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
 
-//              // GEN_TauB
-//              GEN_TauBnoHRapidity_Inc_2j_pTWgt,
-//              GEN_TauBnoHRapidity_JetConstituents_2j_pTWgt,
+             // GEN_TauB
+             GEN_TauBnoHRapidity_Inc_2j_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_2j_pTWgt,
 
-//              // GEN_TauB's rapidity
-//              GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt,
-//              GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,
+             // GEN_TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,
 
-//              // GEN_TauC
-//              GEN_TauCnoHRapidity_Inc_2j_pTWgt,
-//              GEN_TauCnoHRapidity_JetConstituents_2j_pTWgt,
+             // GEN_TauC
+             GEN_TauCnoHRapidity_Inc_2j_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_2j_pTWgt,
 
-//              // GEN_TauC's rapidity
-//              GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt,
-//              GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,
-//              0 // nJettinessSize_temp; use this if don't want to use all available good jets
-//             );
+             // GEN_TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
 
 
 //***************************************
