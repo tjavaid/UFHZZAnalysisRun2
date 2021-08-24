@@ -9103,7 +9103,6 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
              0 // nJettinessSize_temp; use this if don't want to use all available good jets
             );
 
-
 //***************************************
 
         CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
