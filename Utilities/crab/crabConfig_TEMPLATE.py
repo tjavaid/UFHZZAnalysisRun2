@@ -1,6 +1,8 @@
 import cjson
 import json
 from WMCore.Configuration import Configuration
+from CRABClient.UserUtilities import config, getUsernameFromCRIC
+#from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 
 config = Configuration()
 
@@ -15,7 +17,8 @@ import os
 config.section_('JobType')
 config.JobType.scriptExe = 'submitFileCrab.sh'
 #config.JobType.inputFiles = [os.environ.get('CMSSW_BASE')+'/src/ZZMatrixElement/MEKD',os.environ.get('CMSSW_BASE')+'/src/KinZfitter/KinZfitter/ParamZ1',os.environ.get('CMSSW_BASE')+'/src/KinZfitter/HelperFunction/hists',os.environ.get('CMSSW_BASE')+'/src/ZZMatrixElement/MELA']
-config.JobType.inputFiles = [os.environ.get('CMSSW_BASE')+'/src/ZZMatrixElement/MEKD',os.environ.get('CMSSW_BASE')+'/src/KinZfitter/KinZfitter/ParamZ1',os.environ.get('CMSSW_BASE')+'/src/KinZfitter/HelperFunction/hists']
+#config.JobType.inputFiles = [os.environ.get('CMSSW_BASE')+'/src/ZZMatrixElement/MEKD',os.environ.get('CMSSW_BASE')+'/src/KinZfitter/KinZfitter/ParamZ1',os.environ.get('CMSSW_BASE')+'/src/KinZfitter/HelperFunction/hists']
+config.JobType.inputFiles = [os.environ.get('CMSSW_BASE')+'/src/JHUGenMELA/MELA',os.environ.get('CMSSW_BASE')+'/src/KinZfitter/KinZfitter/ParamZ1',os.environ.get('CMSSW_BASE')+'/src/KinZfitter/HelperFunction/hists']
 config.JobType.psetName = 'CFGFILE'
 config.JobType.pluginName = 'Analysis'
 config.JobType.disableAutomaticOutputCollection = True
@@ -46,16 +49,17 @@ else:
   elif (('GluGlu' in 'DATASETNAME') and ('MCFM701' in 'DATASETNAME') and ('tau' in 'DATASETNAME')): config.Data.unitsPerJob = 1
   elif (('GluGlu' in 'DATASETNAME') and (not 'MCFM701' in 'DATASETNAME')): config.Data.unitsPerJob = 1
   elif ('HToZZ' in 'DATASETNAME'): config.Data.unitsPerJob = 1
-  elif ('ZZ' in 'DATASETNAME'): config.Data.unitsPerJob = 2
-  elif ('TT' in 'DATASETNAME'): config.Data.unitsPerJob = 2
-  else: config.Data.unitsPerJob = 2
+  elif ('ZZ' in 'DATASETNAME'): config.Data.unitsPerJob = 4
+  elif ('TT' in 'DATASETNAME'): config.Data.unitsPerJob = 5
+  else: config.Data.unitsPerJob = 5
 
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/user/ferrico/VxBS_withRochester/UFHZZAnalysisRun2/JOBTAG/'
+#config.Data.outLFNDirBase = '/store/user/%s/2018data/UFHZZAnalysisRun2/JOBTAG/' % (getUsernameFromSiteDB())
+config.Data.outLFNDirBase = '/store/user/qguo/newNTuple/2017/UFHZZAnalysisRun2/JOBTAG/'
 config.Data.ignoreLocality = True
 config.Data.allowNonValidInputDataset = True
 
 config.section_('User')
 config.section_('Site')
-config.Site.storageSite = 'T2_US_Florida'
+config.Site.storageSite = 'T2_CN_Beijing'
 config.Site.whitelist = ['T2_US_*']

@@ -16,6 +16,15 @@ git clone -b 10_6_12_DifXSAddVars git@github.com:tjavaid/UFHZZAnalysisRun2.git
 cp UFHZZAnalysisRun2/install*.sh .
 ./install_2.sh
 
+rm -rf ZZMatrixElement
+git clone -b v2.3.5 https://github.com/JHUGen/JHUGenMELA
+sh JHUGenMELA/MELA/setup.sh -j 8
+sed -i "s/ZZMatrixElement/JHUGenMELA/g" ./MelaAnalytics/CandidateLOCaster/BuildFile.xml
+sed -i "s/ZZMatrixElement/JHUGenMELA/g" ./MelaAnalytics/EventContainer/BuildFile.xml
+sed -i "s/ZZMatrixElement/JHUGenMELA/g" ./MelaAnalytics/GenericMEComputer/BuildFile.xml
+sed -i "s/ZZMatrixElement/JHUGenMELA/g" ./UFHZZAnalysisRun2/UFHZZ4LAna/BuildFile.xml
+
+scram b -j 8
 
 cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2018_Legacy_cfg.py
 cmsRun UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_102X_2017_Legacy_cfg.py

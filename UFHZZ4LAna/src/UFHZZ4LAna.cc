@@ -106,7 +106,7 @@
 #include "RecoVertex/VertexTools/interface/VertexDistance3D.h"
 
 // KD's
-#include "ZZMatrixElement/MELA/interface/Mela.h"
+#include "JHUGenMELA/MELA/interface/Mela.h"
 
 //Helper
 #include "UFHZZAnalysisRun2/UFHZZ4LAna/interface/HZZ4LHelper.h"
@@ -1205,29 +1205,6 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
         // GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
     }
 
-/*
-// UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA using splines
-    TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
-    TSpline *spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
-    gConstant_g4->Close();
-    delete gConstant_g4;
-
-    TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g2.root");
-    TSpline *spline_g2 = (TSpline*) gConstant_g2->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g2");
-    gConstant_g2->Close();
-    delete gConstant_g2;
-
-    TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1.root");
-    TSpline *spline_L1 = (TSpline*) gConstant_L1->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_L1");
-    gConstant_L1->Close();
-    delete gConstant_L1;
-
-    TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1Zgs.root");
-    TSpline *spline_L1Zgs = (TSpline*) gConstant_L1Zgs->Get("sp_tgfinal_HZZ2e2mu_SM_photoncut_over_tgfinal_HZZ2e2mu_L1Zgs");
-    gConstant_L1Zgs->Close();
-    delete gConstant_L1Zgs;
-*/
-    
     //string elec_scalefac_Cracks_name_161718[3] = {"egammaEffi.txt_EGM2D_cracks.root", "egammaEffi.txt_EGM2D_Moriond2018v1_gap.root", "egammaEffi.txt_EGM2D_Moriond2019_v1_gap.root"};
     string elec_scalefac_Cracks_name_161718[3] = {"ElectronSF_Legacy_2016_Gap.root", "ElectronSF_Legacy_2017_Gap.root", "ElectronSF_Legacy_2018_Gap.root"};
     edm::FileInPath elec_scalefacFileInPathCracks(("UFHZZAnalysisRun2/UFHZZ4LAna/data/"+elec_scalefac_Cracks_name_161718[year-2016]).c_str());
@@ -3507,33 +3484,13 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 if(isCode4l && doMela && foundHiggsCandidate) {
                     //                 if(doMela && foundHiggsCandidate) {
 		    // UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA using splines
-		    //TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
-		    TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
-		    TSpline *spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
-		    gConstant_g4->Close();
-	            delete gConstant_g4;
-
-		    TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g2.root");
-		    TSpline *spline_g2 = (TSpline*) gConstant_g2->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g2");
-	 	    gConstant_g2->Close();
-	            delete gConstant_g2;
-
-		    TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1.root");
-		    TSpline *spline_L1 = (TSpline*) gConstant_L1->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_L1");
-		    gConstant_L1->Close();
-	            delete gConstant_L1;
-
-		    TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1Zgs.root");
-		    TSpline *spline_L1Zgs = (TSpline*) gConstant_L1Zgs->Get("sp_tgfinal_HZZ2e2mu_SM_photoncut_over_tgfinal_HZZ2e2mu_L1Zgs");
-		    gConstant_L1Zgs->Close();
-	            delete gConstant_L1Zgs;
                     
-                    TLorentzVector Lep1, Lep2, Lep3, Lep4,  Jet1, Jet2;
-                    if (foundHiggsCandidate) {
-                        Lep1.SetPtEtaPhiM(lepFSR_pt[lep_Hindex[0]],lepFSR_eta[lep_Hindex[0]],lepFSR_phi[lep_Hindex[0]],lepFSR_mass[lep_Hindex[0]]);
-                        Lep2.SetPtEtaPhiM(lepFSR_pt[lep_Hindex[1]],lepFSR_eta[lep_Hindex[1]],lepFSR_phi[lep_Hindex[1]],lepFSR_mass[lep_Hindex[1]]);
-                        Lep3.SetPtEtaPhiM(lepFSR_pt[lep_Hindex[2]],lepFSR_eta[lep_Hindex[2]],lepFSR_phi[lep_Hindex[2]],lepFSR_mass[lep_Hindex[2]]);
-                        Lep4.SetPtEtaPhiM(lepFSR_pt[lep_Hindex[3]],lepFSR_eta[lep_Hindex[3]],lepFSR_phi[lep_Hindex[3]],lepFSR_mass[lep_Hindex[3]]);
+            TLorentzVector Lep1, Lep2, Lep3, Lep4,  Jet1, Jet2;
+            if (foundHiggsCandidate) {
+                    Lep1.SetPtEtaPhiM(lepFSR_pt[lep_Hindex[0]],lepFSR_eta[lep_Hindex[0]],lepFSR_phi[lep_Hindex[0]],lepFSR_mass[lep_Hindex[0]]);
+                    Lep2.SetPtEtaPhiM(lepFSR_pt[lep_Hindex[1]],lepFSR_eta[lep_Hindex[1]],lepFSR_phi[lep_Hindex[1]],lepFSR_mass[lep_Hindex[1]]);
+                    Lep3.SetPtEtaPhiM(lepFSR_pt[lep_Hindex[2]],lepFSR_eta[lep_Hindex[2]],lepFSR_phi[lep_Hindex[2]],lepFSR_mass[lep_Hindex[2]]);
+                    Lep4.SetPtEtaPhiM(lepFSR_pt[lep_Hindex[3]],lepFSR_eta[lep_Hindex[3]],lepFSR_phi[lep_Hindex[3]],lepFSR_mass[lep_Hindex[3]]);
                     } else {
                         Lep1.SetPtEtaPhiM(lepFSR_pt[0],lepFSR_eta[0],lepFSR_phi[0],lepFSR_mass[0]);
                         Lep2.SetPtEtaPhiM(lepFSR_pt[1],lepFSR_eta[1],lepFSR_phi[1],lepFSR_mass[1]);
@@ -3574,7 +3531,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     mela->setProcess(TVar::H0minus, TVar::JHUGen, TVar::ZZGG);
                     mela->computeP(p0minus_VAJHU, true);
                     // additional probabilities   GG_SIG_ghg2_1_ghz2_1_JHUGen
-		    mela->setProcess(TVar::H0hplus, TVar::JHUGen, TVar::ZZGG);
+		            mela->setProcess(TVar::H0hplus, TVar::JHUGen, TVar::ZZGG);
                     mela->computeP(p0plus_VAJHU, true); 
 	
 		    // p_GG_SIG_ghg2_1_ghz1_1_ghz2_1_JHUGen, Couplings:ghg2=1,0;ghz1=1,0;ghz2=1,0 Options:SubtractP=GG_SIG_ghg2_1_ghz1_1_JHUGen,GG_SIG_ghg2_1_ghz2_1_JHUGen
@@ -3589,14 +3546,14 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 		    // p_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen
 		    //  Couplings:ghg2=1,0;ghz1_prime2=10000,0
-		    mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
+		            mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
                     (mela->selfDHggcoupl)[0][gHIGGS_GG_2][0]=1.;
                     (mela->selfDHzzcoupl)[0][gHIGGS_VV_1_PRIME2][0]=10000.;
                    // (mela->selfDHzzcoupl)[0][3][0]=1.;
                     mela->computeP(p_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen, true);    //FIXME
 
 		    // p_GG_SIG_ghg2_1_ghz1_1_ghz1prime2_1E4_JHUGen/1e8, ghg2=1,0;ghz1=1,0;ghz1_prime2=10000,0, Options:SubtractP=GG_SIG_ghg2_1_ghz1_1_JHUGen,GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen
-		    mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
+		            mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
                     (mela->selfDHggcoupl)[0][gHIGGS_GG_2][0]=1.;
                     (mela->selfDHzzcoupl)[0][gHIGGS_VV_1][0]=1.;
                     (mela->selfDHzzcoupl)[0][gHIGGS_VV_1_PRIME2][0]=10000.;
@@ -3605,20 +3562,20 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     p_GG_SIG_ghg2_1_ghz1_1_ghz1prime2_1E4_JHUGen -= p_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen+me_0plus_JHU;
 //next
 		    // p_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen, ghg2=1,0;ghzgs1_prime2=10000,0	
-		    mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
+		            mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
                     (mela->selfDHggcoupl)[0][gHIGGS_GG_2][0]=1.;
                     (mela->selfDHzzcoupl)[0][gHIGGS_ZA_1_PRIME2][0]=10000.;
                    // (mela->selfDHzzcoupl)[0][3][0]=1.;
                     mela->computeP(p_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen, true);    //FIXME
 
 		    // p_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen, ghg2=1,0;ghzgs1_prime2=10000,0
-		    mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
+		            mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
                     (mela->selfDHggcoupl)[0][gHIGGS_GG_2][0]=1.;
                     (mela->selfDHzzcoupl)[0][gHIGGS_VV_1][0]=1.;
                     (mela->selfDHzzcoupl)[0][gHIGGS_ZA_1_PRIME2][0]=10000.;
                     mela->computeP(p_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen, true);    //FIXME
 
-		    p_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen -= me_0plus_JHU+p_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen;
+		            p_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen -= me_0plus_JHU+p_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen;
 
 
 		    //                    pg1g4_VAJHU=0.0;
@@ -3646,20 +3603,24 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     D_bkg_kin_vtx_BS = me_0plus_JHU/(me_0plus_JHU+me_qqZZ_MCFM*helper.getDbkgkinConstant(idL1*idL2*idL3*idL3,mass4l_vtxFSR_BS));
                     
                     D_bkg = me_0plus_JHU*p0plus_m4l/(me_0plus_JHU*p0plus_m4l+me_qqZZ_MCFM*bkg_m4l*helper.getDbkgConstant(idL1*idL2*idL3*idL4,mass4l)); // superMELA
-		    D_0m = me_0plus_JHU / (me_0plus_JHU + (p0minus_VAJHU * pow(spline_g4->Eval(mass4l),2)));
+		            //D_0m = me_0plus_JHU / (me_0plus_JHU + (p0minus_VAJHU * pow(spline_g4->Eval(mass4l),2)));
+		            D_0m = me_0plus_JHU / (me_0plus_JHU + (p0minus_VAJHU * pow(helper.getDg4Constant(mass4l),2)));
                     D_g4 = me_0plus_JHU/(me_0plus_JHU+pow(2.521, 2)*p0minus_VAJHU); // D_0-
 //		    cout<<"Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" D_g4 /  D_0-  : "<<D_g4<<endl;
-		    D_CP = pg1g4_VAJHU / (2 * sqrt(me_0plus_JHU * p0minus_VAJHU ));
+		            D_CP = pg1g4_VAJHU / (2 * sqrt(me_0plus_JHU * p0minus_VAJHU ));
                     D_g1g4 = pg1g4_VAJHU*2.521/(me_0plus_JHU+pow(2.521, 2)*p0minus_VAJHU); // D_CP, 2.521 since g1=1 and g4=1 is used
 //		    cout<<"Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" D_g1g4 /  D_CP  : "<<D_g1g4<<endl;
 		    // additional mela
-		    D_0hp = me_0plus_JHU / (me_0plus_JHU + (p0plus_VAJHU * pow(spline_g2->Eval(mass4l),2)));
+		    //D_0hp = me_0plus_JHU / (me_0plus_JHU + (p0plus_VAJHU * pow(spline_g2->Eval(mass4l),2)));
+		    D_0hp = me_0plus_JHU / (me_0plus_JHU + (p0plus_VAJHU * pow(helper.getDg2Constant(mass4l),2)));
 		    D_int = p_GG_SIG_ghg2_1_ghz1_1_ghz2_1_JHUGen / (2 * sqrt(me_0plus_JHU * p0plus_VAJHU));
 
-		    D_L1 = me_0plus_JHU / (me_0plus_JHU + ((p_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen/1e8) * pow(spline_L1->Eval(mass4l),2)));
+		    //D_L1 = me_0plus_JHU / (me_0plus_JHU + ((p_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen/1e8) * pow(spline_L1->Eval(mass4l),2)));
+		    D_L1 = me_0plus_JHU / (me_0plus_JHU + ((p_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen/1e8) * pow(helper.getDL1Constant(mass4l),2)));
 		    D_L1_int = (p_GG_SIG_ghg2_1_ghz1_1_ghz1prime2_1E4_JHUGen/1e4) / (2 * sqrt(me_0plus_JHU * (p_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen/1e8)));
 
-		    D_L1Zg = me_0plus_JHU / (me_0plus_JHU + ((p_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen/1e8) * pow(spline_L1Zgs->Eval(mass4l),2)));
+		    //D_L1Zg = me_0plus_JHU / (me_0plus_JHU + ((p_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen/1e8) * pow(spline_L1Zgs->Eval(mass4l),2)));
+		    D_L1Zg = me_0plus_JHU / (me_0plus_JHU + ((p_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen/1e8) * pow(helper.getDL1ZgsConstant(mass4l),2)));
 		    D_L1Zgint = (p_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen/1e4) / (2 * sqrt(me_0plus_JHU * (p_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen/1e8)));
 		    
 
@@ -8621,32 +8582,13 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
 
             // UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA using splines
             // gconstants using splines
-            TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
-            TSpline *spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
-            gConstant_g4->Close();
-            delete gConstant_g4;
-
-            TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g2.root");
-            TSpline *spline_g2 = (TSpline*) gConstant_g2->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g2");
-            gConstant_g2->Close();
-            delete gConstant_g2;
-
-            TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1.root");
-            TSpline *spline_L1 = (TSpline*) gConstant_L1->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_L1");
-            gConstant_L1->Close();
-            delete gConstant_L1;
-
-            TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1Zgs.root");
-            TSpline *spline_L1Zgs = (TSpline*) gConstant_L1Zgs->Get("sp_tgfinal_HZZ2e2mu_SM_photoncut_over_tgfinal_HZZ2e2mu_L1Zgs");
-            gConstant_L1Zgs->Close();
-            delete gConstant_L1Zgs;
      
             //mela->setInputEvent(&daughters, &associated, 0, 0);
             mela->setInputEvent(&GENdaughters, &GENassociated, &GENmothers, 1);
             //GENmela->setInputEvent(&daughters, &associated, &mothers, 1);
             mela->setCurrentCandidateFromIndex(0);
 
-	    mela->setProcess(TVar::HSMHiggs, TVar::JHUGen, TVar::ZZGG);
+	        mela->setProcess(TVar::HSMHiggs, TVar::JHUGen, TVar::ZZGG);
             mela->computeP(GENme_0plus_JHU, false);
 
             mela->setProcess(TVar::H0minus, TVar::JHUGen, TVar::ZZGG);
@@ -8674,39 +8616,39 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             mela->computeP(GENp_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen, false);    //FIXME
 
                     // p_GG_SIG_ghg2_1_ghz1_1_ghz1prime2_1E4_JHUGen/1e8, ghg2=1,0;ghz1=1,0;ghz1_prime2=10000,0, Options:SubtractP=GG_SIG_ghg2_1_ghz1_1_JHUGen,GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen
-             mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
-             (mela->selfDHggcoupl)[0][gHIGGS_GG_2][0]=1.;
-             (mela->selfDHzzcoupl)[0][gHIGGS_VV_1][0]=1.;
-             (mela->selfDHzzcoupl)[0][gHIGGS_VV_1_PRIME2][0]=10000.;
-             mela->computeP(GENp_GG_SIG_ghg2_1_ghz1_1_ghz1prime2_1E4_JHUGen, false);    //FIXME 
+            mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
+            (mela->selfDHggcoupl)[0][gHIGGS_GG_2][0]=1.;
+            (mela->selfDHzzcoupl)[0][gHIGGS_VV_1][0]=1.;
+            (mela->selfDHzzcoupl)[0][gHIGGS_VV_1_PRIME2][0]=10000.;
+            mela->computeP(GENp_GG_SIG_ghg2_1_ghz1_1_ghz1prime2_1E4_JHUGen, false);    //FIXME 
 
-             GENp_GG_SIG_ghg2_1_ghz1_1_ghz1prime2_1E4_JHUGen -= GENp_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen+GENme_0plus_JHU;
+            GENp_GG_SIG_ghg2_1_ghz1_1_ghz1prime2_1E4_JHUGen -= GENp_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen+GENme_0plus_JHU;
 // 
 	     // p_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen, ghg2=1,0;ghzgs1_prime2=10000,0   
-              mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
-              (mela->selfDHggcoupl)[0][gHIGGS_GG_2][0]=1.;
-              (mela->selfDHzzcoupl)[0][gHIGGS_ZA_1_PRIME2][0]=10000.;
-                   // (mela->selfDHzzcoupl)[0][3][0]=1.;
-              mela->computeP(GENp_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen, false);    //FIXME
+            mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
+            (mela->selfDHggcoupl)[0][gHIGGS_GG_2][0]=1.;
+            (mela->selfDHzzcoupl)[0][gHIGGS_ZA_1_PRIME2][0]=10000.;
+                 // (mela->selfDHzzcoupl)[0][3][0]=1.;
+            mela->computeP(GENp_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen, false);    //FIXME
 
-                    // p_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen, ghg2=1,0;ghzgs1_prime2=10000,0
-              mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
-              (mela->selfDHggcoupl)[0][gHIGGS_GG_2][0]=1.;
-              (mela->selfDHzzcoupl)[0][gHIGGS_VV_1][0]=1.;
-              (mela->selfDHzzcoupl)[0][gHIGGS_ZA_1_PRIME2][0]=10000.;
-              mela->computeP(GENp_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen, false);    //FIXME
+                  // p_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen, ghg2=1,0;ghzgs1_prime2=10000,0
+            mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
+            (mela->selfDHggcoupl)[0][gHIGGS_GG_2][0]=1.;
+            (mela->selfDHzzcoupl)[0][gHIGGS_VV_1][0]=1.;
+            (mela->selfDHzzcoupl)[0][gHIGGS_ZA_1_PRIME2][0]=10000.;
+            mela->computeP(GENp_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen, false);    //FIXME
 
-              GENp_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen -= GENme_0plus_JHU+GENp_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen;
+            GENp_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen -= GENme_0plus_JHU+GENp_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen;
 
 
-//                    pg1g4_VAJHU=0.0;
-              mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
-              (mela->selfDHggcoupl)[0][0][0]=1.;
-              (mela->selfDHzzcoupl)[0][0][0]=1.;
-              (mela->selfDHzzcoupl)[0][3][0]=1.;
-              mela->computeP(GENpg1g4_VAJHU, false);
-//                  cout<<"me_0plus_JHU: "<<me_0plus_JHU<<"    p0minus_VAJHU: "<<p0minus_VAJHU<<endl;
-              GENpg1g4_VAJHU -= GENme_0plus_JHU+GENp0minus_VAJHU;
+//                  pg1g4_VAJHU=0.0;
+            mela->setProcess(TVar::SelfDefine_spin0, TVar::JHUGen, TVar::ZZGG);
+            (mela->selfDHggcoupl)[0][0][0]=1.;
+            (mela->selfDHzzcoupl)[0][0][0]=1.;
+            (mela->selfDHzzcoupl)[0][3][0]=1.;
+            mela->computeP(GENpg1g4_VAJHU, false);
+//                cout<<"me_0plus_JHU: "<<me_0plus_JHU<<"    p0minus_VAJHU: "<<p0minus_VAJHU<<endl;
+            GENpg1g4_VAJHU -= GENme_0plus_JHU+GENp0minus_VAJHU;
 // next
 
             //cout<<"GENpg1g4_VAJHU:"<<GENpg1g4_VAJHU<<"   GENme_0plus_JHU:"<<GENme_0plus_JHU<<"    GENp0minus_VAJHU:"<<GENp0minus_VAJHU<<endl; 
@@ -8727,20 +8669,24 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             GEND_bkg = me_0plus_JHU*p0plus_m4l/(me_0plus_JHU*p0plus_m4l+me_qqZZ_MCFM*bkg_m4l*helper.getDbkgConstant(idL1*idL2*idL3*idL4,mass4l)); // superMELA
 */   // FIXME
 
-	    GEND_0m = GENme_0plus_JHU / (GENme_0plus_JHU + (GENp0minus_VAJHU * pow(spline_g4->Eval(GENmass4l),2)));
+	        //GEND_0m = GENme_0plus_JHU / (GENme_0plus_JHU + (GENp0minus_VAJHU * pow(spline_g4->Eval(GENmass4l),2)));
+	        GEND_0m = GENme_0plus_JHU / (GENme_0plus_JHU + (GENp0minus_VAJHU * pow(helper.getDg4Constant(GENmass4l),2)));
             GEND_g4 = GENme_0plus_JHU/(GENme_0plus_JHU+pow(2.521, 2)*GENp0minus_VAJHU); // D_0-
 //                  cout<<"Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" D_g4 /  D_0-  : "<<D_g4<<endl;
             GEND_CP = GENpg1g4_VAJHU / (2 * sqrt(GENme_0plus_JHU * GENp0minus_VAJHU ));
             GEND_g1g4 = GENpg1g4_VAJHU*2.521/(GENme_0plus_JHU+pow(2.521, 2)*GENp0minus_VAJHU); // D_CP, 2.521 since g1=1 and g4=1 is used
 //                  cout<<"Run: "<<Run<<" LumiSect: "<<LumiSect<<" Event: "<<Event<<" D_g1g4 /  D_CP  : "<<D_g1g4<<endl;
                     // additional mela
-            GEND_0hp = GENme_0plus_JHU / (GENme_0plus_JHU + (GENp0plus_VAJHU * pow(spline_g2->Eval(GENmass4l),2)));
+            //GEND_0hp = GENme_0plus_JHU / (GENme_0plus_JHU + (GENp0plus_VAJHU * pow(spline_g2->Eval(GENmass4l),2)));
+            GEND_0hp = GENme_0plus_JHU / (GENme_0plus_JHU + (GENp0plus_VAJHU * pow(helper.getDg2Constant(GENmass4l),2)));
             GEND_int = GENp_GG_SIG_ghg2_1_ghz1_1_ghz2_1_JHUGen / (2 * sqrt(GENme_0plus_JHU * GENp0plus_VAJHU));
 
-            GEND_L1 = GENme_0plus_JHU / (GENme_0plus_JHU + ((GENp_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen/1e8) * pow(spline_L1->Eval(GENmass4l),2)));
+            //GEND_L1 = GENme_0plus_JHU / (GENme_0plus_JHU + ((GENp_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen/1e8) * pow(spline_L1->Eval(GENmass4l),2)));
+            GEND_L1 = GENme_0plus_JHU / (GENme_0plus_JHU + ((GENp_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen/1e8) * pow(helper.getDL1Constant(GENmass4l),2)));
             GEND_L1_int = (GENp_GG_SIG_ghg2_1_ghz1_1_ghz1prime2_1E4_JHUGen/1e4) / (2 * sqrt(GENme_0plus_JHU * (GENp_GG_SIG_ghg2_1_ghz1prime2_1E4_JHUGen/1e8)));
 
-            GEND_L1Zg = GENme_0plus_JHU / (GENme_0plus_JHU + ((GENp_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen/1e8) * pow(spline_L1Zgs->Eval(GENmass4l),2)));
+            //GEND_L1Zg = GENme_0plus_JHU / (GENme_0plus_JHU + ((GENp_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen/1e8) * pow(spline_L1Zgs->Eval(GENmass4l),2)));
+            GEND_L1Zg = GENme_0plus_JHU / (GENme_0plus_JHU + ((GENp_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen/1e8) * pow(helper.getDL1ZgsConstant(GENmass4l),2)));
             GEND_L1Zgint = (GENp_GG_SIG_ghg2_1_ghz1_1_ghza1prime2_1E4_JHUGen/1e4) / (2 * sqrt(GENme_0plus_JHU * (GENp_GG_SIG_ghg2_1_ghza1prime2_1E4_JHUGen/1e8)));
 
 
