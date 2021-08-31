@@ -1207,22 +1207,22 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
 
 /*
 // UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA using splines
-    TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
+    TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_g4.root");
     TSpline *spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
     gConstant_g4->Close();
     delete gConstant_g4;
 
-    TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g2.root");
+    TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_g2.root");
     TSpline *spline_g2 = (TSpline*) gConstant_g2->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g2");
     gConstant_g2->Close();
     delete gConstant_g2;
 
-    TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1.root");
+    TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_L1.root");
     TSpline *spline_L1 = (TSpline*) gConstant_L1->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_L1");
     gConstant_L1->Close();
     delete gConstant_L1;
 
-    TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1Zgs.root");
+    TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_L1Zgs.root");
     TSpline *spline_L1Zgs = (TSpline*) gConstant_L1Zgs->Get("sp_tgfinal_HZZ2e2mu_SM_photoncut_over_tgfinal_HZZ2e2mu_L1Zgs");
     gConstant_L1Zgs->Close();
     delete gConstant_L1Zgs;
@@ -3507,23 +3507,23 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 if(isCode4l && doMela && foundHiggsCandidate) {
                     //                 if(doMela && foundHiggsCandidate) {
 		    // UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA using splines
-		    //TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
-		    TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
+		    //TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_g4.root");
+		    TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_g4.root");
 		    TSpline *spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
 		    gConstant_g4->Close();
 	            delete gConstant_g4;
 
-		    TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g2.root");
+		    TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_g2.root");
 		    TSpline *spline_g2 = (TSpline*) gConstant_g2->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g2");
 	 	    gConstant_g2->Close();
 	            delete gConstant_g2;
 
-		    TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1.root");
+		    TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_L1.root");
 		    TSpline *spline_L1 = (TSpline*) gConstant_L1->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_L1");
 		    gConstant_L1->Close();
 	            delete gConstant_L1;
 
-		    TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1Zgs.root");
+		    TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_L1Zgs.root");
 		    TSpline *spline_L1Zgs = (TSpline*) gConstant_L1Zgs->Get("sp_tgfinal_HZZ2e2mu_SM_photoncut_over_tgfinal_HZZ2e2mu_L1Zgs");
 		    gConstant_L1Zgs->Close();
 	            delete gConstant_L1Zgs;
@@ -8621,22 +8621,22 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
 
             // UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA using splines
             // gconstants using splines
-            TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
+            TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_g4.root");
             TSpline *spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
             gConstant_g4->Close();
             delete gConstant_g4;
 
-            TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g2.root");
+            TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_g2.root");
             TSpline *spline_g2 = (TSpline*) gConstant_g2->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g2");
             gConstant_g2->Close();
             delete gConstant_g2;
 
-            TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1.root");
+            TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_L1.root");
             TSpline *spline_L1 = (TSpline*) gConstant_L1->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_L1");
             gConstant_L1->Close();
             delete gConstant_L1;
 
-            TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1Zgs.root");
+            TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/gConstant_HZZ2e2mu_L1Zgs.root");
             TSpline *spline_L1Zgs = (TSpline*) gConstant_L1Zgs->Get("sp_tgfinal_HZZ2e2mu_SM_photoncut_over_tgfinal_HZZ2e2mu_L1Zgs");
             gConstant_L1Zgs->Close();
             delete gConstant_L1Zgs;
