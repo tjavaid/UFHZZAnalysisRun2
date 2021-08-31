@@ -155,6 +155,11 @@ public:
     float getDbkgkinConstant(int ZZflav, float ZZMass);
     float getDbkgConstant(int ZZflav, float ZZMass);
 
+    float getDg4Constant(float ZZMass);
+    float getDg2Constant(float ZZMass);
+    float getDL1Constant(float ZZMass);
+    float getDL1ZgsConstant(float ZZMass);
+
     enum MuonEffectiveAreaType {
         kMuTrkIso03, 
         kMuEcalIso03, 
@@ -238,6 +243,10 @@ public:
     TSpline3 *DjjZHSpline;
     TSpline3 *DjjWHSpline;
 
+    TSpline *spline_g4;
+    TSpline *spline_g2;
+    TSpline *spline_L1;
+    TSpline *spline_L1Zgs;
 
 };
 
@@ -321,6 +330,29 @@ HZZ4LHelper::HZZ4LHelper()
     fDjjWHSpline->Close();
     delete fDjjWHSpline;
 
+    edm::FileInPath Dg4SplinefileInPath("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
+    TFile *gConstant_g4 = TFile::Open(Dg4SplinefileInPath.fullPath().c_str());
+    spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
+    gConstant_g4->Close();
+    delete gConstant_g4;
+
+    edm::FileInPath Dg2SplinefileInPath("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g2.root");
+    TFile *gConstant_g2 = TFile::Open(Dg2SplinefileInPath.fullPath().c_str());
+    spline_g2 = (TSpline*) gConstant_g2->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g2");
+    gConstant_g2->Close();
+    delete gConstant_g2;
+
+    edm::FileInPath DL1SplinefileInPath("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1.root");
+    TFile *gConstant_L1 = TFile::Open(DL1SplinefileInPath.fullPath().c_str());
+    spline_L1 = (TSpline*) gConstant_L1->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_L1");
+    gConstant_L1->Close();
+    delete gConstant_L1;
+
+    edm::FileInPath DL1ZgsSplinefileInPath("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1Zgs.root");
+    TFile *gConstant_L1Zgs = TFile::Open(DL1ZgsSplinefileInPath.fullPath().c_str());
+    spline_L1Zgs = (TSpline*) gConstant_L1Zgs->Get("sp_tgfinal_HZZ2e2mu_SM_photoncut_over_tgfinal_HZZ2e2mu_L1Zgs");
+    gConstant_L1Zgs->Close();
+    delete gConstant_L1Zgs;
 
 }
 
@@ -1918,6 +1950,23 @@ float HZZ4LHelper::getDbkgVHdecConstant(int ZZflav, float ZZMass) { // ZZflav==i
     if (abs(ZZflav)==13*13*13*13 || abs(ZZflav)==2*13*13*13*13 || abs(ZZflav)==2*13*13*2*13*13) return DbkgVHdecSpline4l->Eval(ZZMass);
     return 0.0;
 }
+
+float HZZ4LHelper::getDg4Constant(float ZZMass){
+    return spline_g4->Eval(ZZMass);
+}
+
+float HZZ4LHelper::getDg2Constant(float ZZMass){
+    return spline_g2->Eval(ZZMass);
+}
+
+float HZZ4LHelper::getDL1Constant(float ZZMass){
+    return spline_L1->Eval(ZZMass);
+}
+
+float HZZ4LHelper::getDL1ZgsConstant(float ZZMass){
+    return spline_L1Zgs->Eval(ZZMass);
+}
+
 
 double HZZ4LHelper::photonPfIso03(pat::PFParticle pho, edm::Handle<pat::PackedCandidateCollection> pfcands) {
 
