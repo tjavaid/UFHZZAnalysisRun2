@@ -79,7 +79,7 @@ int HZZ4LJets::patjetID(const pat::Jet& jet, int year)
   double CEMF = jet.chargedEmEnergyFraction();
   double NumConst = jet.chargedMultiplicity()+jet.neutralMultiplicity();
   double NumNeutralParticle =jet.neutralMultiplicity();
-
+  double MUF = jet.muonEnergyFraction();   //MUF  = pfjet->muonEnergyFraction();
 
   bool looseJetID=false;
   bool tightJetID=false;
@@ -131,6 +131,7 @@ int HZZ4LJets::patjetID(const pat::Jet& jet, int year)
 
   }
   */
+/*
   if(year==2018)
   {
       if (eta<=2.6) {
@@ -180,6 +181,48 @@ int HZZ4LJets::patjetID(const pat::Jet& jet, int year)
     
       }
   }
+*/
+// ============================ UL, same for 2017-18
+  if(year==2017 || year==2018)
+  {
+      if (eta<=2.6) {
+
+          //looseJetID = ( CHM>0 && CHF>0 && NumConst>1 && NEMF<0.9 && NHF < 0.9 );
+          looseJetID = ( CEMF<0.8 && CHM>0 && CHF>0 && NumConst>1 && NEMF<0.9 && MUF <0.8 && NHF < 0.9 );
+          //tightJetID = ( CHM>0 && CHF>0 && NumConst>1 && NEMF<0.9 && NHF < 0.9 );
+          tightJetID = ( CEMF<0.8 && CHM>0 && CHF>0 && NumConst>1 && NEMF<0.9 && MUF <0.8 && NHF < 0.9 );
+
+      } else if (eta>2.6 && eta<=2.7) {
+
+          //looseJetID = ( CHM>0 && NEMF<0.99 && NHF < 0.9 );
+          looseJetID = ( CEMF<0.8 && CHM>0 && NEMF<0.99 && MUF <0.8 && NHF < 0.9 );
+          //tightJetID = ( CHM>0 && NEMF<0.99 && NHF < 0.9 );
+          tightJetID = ( CEMF<0.8 && CHM>0 && NEMF<0.99 && MUF <0.8 && NHF < 0.9 );
+
+      } else if (eta>2.7 && eta<=3.0) {
+
+          //looseJetID = ( NEMF>0.02 && NEMF<0.99 && NumNeutralParticle>2 );
+          looseJetID = ( NEMF>0.01 && NEMF<0.99 && NumNeutralParticle>1 );
+          //tightJetID = ( NEMF>0.02 && NEMF<0.99 && NumNeutralParticle>2 );
+          tightJetID = ( NEMF>0.01 && NEMF<0.99 && NumNeutralParticle>1 );
+
+      } else if (eta>3.0) {
+
+          looseJetID = (NEMF<0.90 && NHF>0.2 && NumNeutralParticle>10 );
+          tightJetID = (NEMF<0.90 && NHF>0.2 && NumNeutralParticle>10 );
+
+      }
+  //tightJetID = ( abs(eta)<=2.6 && CEMF<0.8 && CHM>0 && CHF>0 && NumConst>1 && NEMF<0.9 && MUF <0.8 && NHF < 0.9);
+  //tightJetID = ( abs(eta)>2.6 && abs(eta)<=2.7 && CEMF<0.8 && CHM>0 && NEMF<0.99 && MUF <0.8 && NHF < 0.9 );
+  //tightJetID = ( NEMF>0.02 && NEMF<0.99 && NumNeutralParticle>2 && abs(eta)>2.7 && abs(eta)<=3.0 );
+  //tightJetID = ( NEMF<0.90 && NHF>0.2 && NumNeutralParticle>10 && abs(eta)>3.0 )
+
+  }
+
+
+
+
+
 
   if(year==2016)
   {

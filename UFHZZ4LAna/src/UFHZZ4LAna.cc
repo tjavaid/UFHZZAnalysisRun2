@@ -133,6 +133,9 @@
 //VBF Jets
 #include "UFHZZAnalysisRun2/UFHZZ4LAna/interface/HZZ4LJets.h"
 
+//nJettiness
+#include "UFHZZAnalysisRun2/UFHZZ4LAna/interface/NJettiness.h"
+
 // Jet energy correction
 #include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
@@ -197,7 +200,9 @@ private:
     virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
     virtual void endLuminosityBlock(edm::LuminosityBlock const& lumiSeg,edm::EventSetup const& eSetup);
     
-    void findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vector< pat::Electron > &selectedElectrons, const edm::Event& iEvent, const edm::EventSetup& iSetup);
+//    void findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vector< pat::Electron > &selectedElectrons, const edm::Event& iEvent, const edm::EventSetup& iSetup); // orig
+    void findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vector< pat::Electron > &selectedElectrons, const edm::Event& iEvent, const edm::EventSetup& iSetup, edm::Handle<pat::PackedCandidateCollection> &pfcands, edm::Handle<edm::View<pat::Jet> > &jets); // Ram
+
     void findZ1LCandidate(const edm::Event& iEvent);
     
     RoccoR  *calibrator;
@@ -244,7 +249,9 @@ private:
                           std::vector<pat::Jet> goodJets, std::vector<float> goodJetQGTagger,
                           std::vector<float> goodJetaxis2, std::vector<float> goodJetptD, std::vector<int> goodJetmult,
                           std::vector<pat::Jet> selectedMergedJets,
-                          std::map<unsigned int, TLorentzVector> selectedFsrMap);
+                          std::map<unsigned int, TLorentzVector> selectedFsrMap,
+			  edm::Handle<pat::PackedCandidateCollection> &pfcands,
+                          edm::Handle<edm::View<pat::Jet> > &jets);
     void setGENVariables(edm::Handle<reco::GenParticleCollection> prunedgenParticles,
                          edm::Handle<edm::View<pat::PackedGenParticle> > packedgenParticles,
                          edm::Handle<edm::View<reco::GenJet> > genJets);
@@ -428,6 +435,248 @@ private:
     float absdeltarapidity_hleadingjet_pt30_eta4p7_jesup; float absdeltarapidity_hleadingjet_pt30_eta4p7_jesdn;
     float absdeltarapidity_hleadingjet_pt30_eta4p7_jerup; float absdeltarapidity_hleadingjet_pt30_eta4p7_jerdn;
     float DijetMass, DijetDEta, DijetFisher;
+
+    // n-jettiness for additional ak4 jets
+    float TauC_Inc_0j, TauC_JetConstituents_0j, TauCnoHRapidity_JetConstituents_0j, TauCnoHRapidity_Inc_0j;
+    float TauB_Inc_0j, TauB_JetConstituents_0j, TauBnoHRapidity_JetConstituents_0j, TauBnoHRapidity_Inc_0j;
+    float TauC_Inc_1j, TauC_JetConstituents_1j, TauCnoHRapidity_JetConstituents_1j, TauCnoHRapidity_Inc_1j;
+    float TauB_Inc_1j, TauB_JetConstituents_1j, TauBnoHRapidity_JetConstituents_1j, TauBnoHRapidity_Inc_1j;
+    float TauC_Inc_2j, TauC_JetConstituents_2j, TauCnoHRapidity_JetConstituents_2j, TauCnoHRapidity_Inc_2j;
+    float TauB_Inc_2j, TauB_JetConstituents_2j, TauBnoHRapidity_JetConstituents_2j, TauBnoHRapidity_Inc_2j;
+
+
+    float TauC_Inc_0j_pTWgt, TauC_JetConstituents_0j_pTWgt, TauCnoHRapidity_JetConstituents_0j_pTWgt, TauCnoHRapidity_Inc_0j_pTWgt;
+    float TauB_Inc_0j_pTWgt, TauB_JetConstituents_0j_pTWgt, TauBnoHRapidity_JetConstituents_0j_pTWgt, TauBnoHRapidity_Inc_0j_pTWgt;
+    float TauC_Inc_1j_pTWgt, TauC_JetConstituents_1j_pTWgt, TauCnoHRapidity_JetConstituents_1j_pTWgt, TauCnoHRapidity_Inc_1j_pTWgt;
+    float TauB_Inc_1j_pTWgt, TauB_JetConstituents_1j_pTWgt, TauBnoHRapidity_JetConstituents_1j_pTWgt, TauBnoHRapidity_Inc_1j_pTWgt;
+    float TauC_Inc_2j_pTWgt, TauC_JetConstituents_2j_pTWgt, TauCnoHRapidity_JetConstituents_2j_pTWgt, TauCnoHRapidity_Inc_2j_pTWgt;
+    float TauB_Inc_2j_pTWgt, TauB_JetConstituents_2j_pTWgt, TauBnoHRapidity_JetConstituents_2j_pTWgt, TauBnoHRapidity_Inc_2j_pTWgt;
+
+    float TauC_Inc_0j_EnergyWgt, TauC_JetConstituents_0j_EnergyWgt, TauCnoHRapidity_JetConstituents_0j_EnergyWgt, TauCnoHRapidity_Inc_0j_EnergyWgt;
+    float TauB_Inc_0j_EnergyWgt, TauB_JetConstituents_0j_EnergyWgt, TauBnoHRapidity_JetConstituents_0j_EnergyWgt, TauBnoHRapidity_Inc_0j_EnergyWgt;
+    float TauC_Inc_1j_EnergyWgt, TauC_JetConstituents_1j_EnergyWgt, TauCnoHRapidity_JetConstituents_1j_EnergyWgt, TauCnoHRapidity_Inc_1j_EnergyWgt;
+    float TauB_Inc_1j_EnergyWgt, TauB_JetConstituents_1j_EnergyWgt, TauBnoHRapidity_JetConstituents_1j_EnergyWgt, TauBnoHRapidity_Inc_1j_EnergyWgt;
+    float TauC_Inc_2j_EnergyWgt, TauC_JetConstituents_2j_EnergyWgt, TauCnoHRapidity_JetConstituents_2j_EnergyWgt, TauCnoHRapidity_Inc_2j_EnergyWgt;
+    float TauB_Inc_2j_EnergyWgt, TauB_JetConstituents_2j_EnergyWgt, TauBnoHRapidity_JetConstituents_2j_EnergyWgt, TauBnoHRapidity_Inc_2j_EnergyWgt;
+
+    float TauC_Inc_0j_CorrRapidity;
+    float TauB_Inc_0j_CorrRapidity;
+    float TauBnoHRapidity_Inc_0j_CorrRapidity;
+    float TauB_JetConstituents_0j_CorrRapidity;
+    float TauBnoHRapidity_JetConstituents_0j_CorrRapidity;
+    float TauC_JetConstituents_0j_CorrRapidity;
+    float TauCnoHRapidity_JetConstituents_0j_CorrRapidity;
+    float TauCnoHRapidity_Inc_0j_CorrRapidity;
+
+    float TauC_Inc_1j_CorrRapidity;
+    float TauB_Inc_1j_CorrRapidity;
+    float TauBnoHRapidity_Inc_1j_CorrRapidity;
+    float TauB_JetConstituents_1j_CorrRapidity;
+    float TauBnoHRapidity_JetConstituents_1j_CorrRapidity;
+    float TauC_JetConstituents_1j_CorrRapidity;
+    float TauCnoHRapidity_JetConstituents_1j_CorrRapidity;
+    float TauCnoHRapidity_Inc_1j_CorrRapidity;
+
+    float TauC_Inc_2j_CorrRapidity;
+    float TauB_Inc_2j_CorrRapidity;
+    float TauBnoHRapidity_Inc_2j_CorrRapidity;
+    float TauB_JetConstituents_2j_CorrRapidity;
+    float TauBnoHRapidity_JetConstituents_2j_CorrRapidity;
+    float TauC_JetConstituents_2j_CorrRapidity;
+    float TauCnoHRapidity_JetConstituents_2j_CorrRapidity;
+    float TauCnoHRapidity_Inc_2j_CorrRapidity;
+
+/**
+_EnergyWgt
+ * { item_description }
+ */
+    float TauC_Inc_0j_CorrRapidity_pTWgt;
+    float TauB_Inc_0j_CorrRapidity_pTWgt;
+    float TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt;
+    float TauB_JetConstituents_0j_CorrRapidity_pTWgt;
+    float TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt;
+    float TauC_JetConstituents_0j_CorrRapidity_pTWgt;
+    float TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt;
+    float TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt;
+
+    float TauC_Inc_1j_CorrRapidity_pTWgt;
+    float TauB_Inc_1j_CorrRapidity_pTWgt;
+    float TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt;
+    float TauB_JetConstituents_1j_CorrRapidity_pTWgt;
+    float TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt;
+    float TauC_JetConstituents_1j_CorrRapidity_pTWgt;
+    float TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt;
+    float TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt;
+
+    float TauC_Inc_2j_CorrRapidity_pTWgt;
+    float TauB_Inc_2j_CorrRapidity_pTWgt;
+    float TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt;
+    float TauB_JetConstituents_2j_CorrRapidity_pTWgt;
+    float TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt;
+    float TauC_JetConstituents_2j_CorrRapidity_pTWgt;
+    float TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt;
+    float TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt;
+
+//
+
+    float TauC_Inc_0j_CorrRapidity_EnergyWgt;
+    float TauB_Inc_0j_CorrRapidity_EnergyWgt;
+    float TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt;
+    float TauB_JetConstituents_0j_CorrRapidity_EnergyWgt;
+    float TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt;
+    float TauC_JetConstituents_0j_CorrRapidity_EnergyWgt;
+    float TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt;
+    float TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt;
+    float TauC_Inc_1j_CorrRapidity_EnergyWgt;
+    float TauB_Inc_1j_CorrRapidity_EnergyWgt;
+    float TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt;
+    float TauB_JetConstituents_1j_CorrRapidity_EnergyWgt;
+    float TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt;
+    float TauC_JetConstituents_1j_CorrRapidity_EnergyWgt;
+    float TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt;
+    float TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt;
+    float TauC_Inc_2j_CorrRapidity_EnergyWgt;
+    float TauB_Inc_2j_CorrRapidity_EnergyWgt;
+    float TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt;
+    float TauB_JetConstituents_2j_CorrRapidity_EnergyWgt;
+    float TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt;
+    float TauC_JetConstituents_2j_CorrRapidity_EnergyWgt;
+    float TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt;
+    float TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt;
+
+    float Tau0;
+    float GeneralizedTau0;
+    float GeneralizedTau1;
+    float GeneralizedTau2;
+    
+    float Tau0_noHRapidity;
+    float GeneralizedTau0_noHRapidity;
+    float GeneralizedTau1_noHRapidity;
+    float GeneralizedTau2_noHRapidity;    
+
+    /**
+ *  GEN n-jettiness variables
+ */
+
+ // n-jettiness for additional ak4 jets
+    float GEN_TauC_Inc_0j, GEN_TauC_JetConstituents_0j, GEN_TauCnoHRapidity_JetConstituents_0j, GEN_TauCnoHRapidity_Inc_0j;
+    float GEN_TauB_Inc_0j, GEN_TauB_JetConstituents_0j, GEN_TauBnoHRapidity_JetConstituents_0j, GEN_TauBnoHRapidity_Inc_0j;
+    float GEN_TauC_Inc_1j, GEN_TauC_JetConstituents_1j, GEN_TauCnoHRapidity_JetConstituents_1j, GEN_TauCnoHRapidity_Inc_1j;
+    float GEN_TauB_Inc_1j, GEN_TauB_JetConstituents_1j, GEN_TauBnoHRapidity_JetConstituents_1j, GEN_TauBnoHRapidity_Inc_1j;
+    float GEN_TauC_Inc_2j, GEN_TauC_JetConstituents_2j, GEN_TauCnoHRapidity_JetConstituents_2j, GEN_TauCnoHRapidity_Inc_2j;
+    float GEN_TauB_Inc_2j, GEN_TauB_JetConstituents_2j, GEN_TauBnoHRapidity_JetConstituents_2j, GEN_TauBnoHRapidity_Inc_2j;
+
+
+    float GEN_TauC_Inc_0j_pTWgt, GEN_TauC_JetConstituents_0j_pTWgt, GEN_TauCnoHRapidity_JetConstituents_0j_pTWgt, GEN_TauCnoHRapidity_Inc_0j_pTWgt;
+    float GEN_TauB_Inc_0j_pTWgt, GEN_TauB_JetConstituents_0j_pTWgt, GEN_TauBnoHRapidity_JetConstituents_0j_pTWgt, GEN_TauBnoHRapidity_Inc_0j_pTWgt;
+    float GEN_TauC_Inc_1j_pTWgt, GEN_TauC_JetConstituents_1j_pTWgt, GEN_TauCnoHRapidity_JetConstituents_1j_pTWgt, GEN_TauCnoHRapidity_Inc_1j_pTWgt;
+    float GEN_TauB_Inc_1j_pTWgt, GEN_TauB_JetConstituents_1j_pTWgt, GEN_TauBnoHRapidity_JetConstituents_1j_pTWgt, GEN_TauBnoHRapidity_Inc_1j_pTWgt;
+    float GEN_TauC_Inc_2j_pTWgt, GEN_TauC_JetConstituents_2j_pTWgt, GEN_TauCnoHRapidity_JetConstituents_2j_pTWgt, GEN_TauCnoHRapidity_Inc_2j_pTWgt;
+    float GEN_TauB_Inc_2j_pTWgt, GEN_TauB_JetConstituents_2j_pTWgt, GEN_TauBnoHRapidity_JetConstituents_2j_pTWgt, GEN_TauBnoHRapidity_Inc_2j_pTWgt;
+
+    float GEN_TauC_Inc_0j_EnergyWgt, GEN_TauC_JetConstituents_0j_EnergyWgt, GEN_TauCnoHRapidity_JetConstituents_0j_EnergyWgt, GEN_TauCnoHRapidity_Inc_0j_EnergyWgt;
+    float GEN_TauB_Inc_0j_EnergyWgt, GEN_TauB_JetConstituents_0j_EnergyWgt, GEN_TauBnoHRapidity_JetConstituents_0j_EnergyWgt, GEN_TauBnoHRapidity_Inc_0j_EnergyWgt;
+    float GEN_TauC_Inc_1j_EnergyWgt, GEN_TauC_JetConstituents_1j_EnergyWgt, GEN_TauCnoHRapidity_JetConstituents_1j_EnergyWgt, GEN_TauCnoHRapidity_Inc_1j_EnergyWgt;
+    float GEN_TauB_Inc_1j_EnergyWgt, GEN_TauB_JetConstituents_1j_EnergyWgt, GEN_TauBnoHRapidity_JetConstituents_1j_EnergyWgt, GEN_TauBnoHRapidity_Inc_1j_EnergyWgt;
+    float GEN_TauC_Inc_2j_EnergyWgt, GEN_TauC_JetConstituents_2j_EnergyWgt, GEN_TauCnoHRapidity_JetConstituents_2j_EnergyWgt, GEN_TauCnoHRapidity_Inc_2j_EnergyWgt;
+    float GEN_TauB_Inc_2j_EnergyWgt, GEN_TauB_JetConstituents_2j_EnergyWgt, GEN_TauBnoHRapidity_JetConstituents_2j_EnergyWgt, GEN_TauBnoHRapidity_Inc_2j_EnergyWgt;
+
+    float GEN_TauC_Inc_0j_CorrRapidity;
+    float GEN_TauB_Inc_0j_CorrRapidity;
+    float GEN_TauBnoHRapidity_Inc_0j_CorrRapidity;
+    float GEN_TauB_JetConstituents_0j_CorrRapidity;
+    float GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity;
+    float GEN_TauC_JetConstituents_0j_CorrRapidity;
+    float GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity;
+    float GEN_TauCnoHRapidity_Inc_0j_CorrRapidity;
+
+    float GEN_TauC_Inc_1j_CorrRapidity;
+    float GEN_TauB_Inc_1j_CorrRapidity;
+    float GEN_TauBnoHRapidity_Inc_1j_CorrRapidity;
+    float GEN_TauB_JetConstituents_1j_CorrRapidity;
+    float GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity;
+    float GEN_TauC_JetConstituents_1j_CorrRapidity;
+    float GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity;
+    float GEN_TauCnoHRapidity_Inc_1j_CorrRapidity;
+
+    float GEN_TauC_Inc_2j_CorrRapidity;
+    float GEN_TauB_Inc_2j_CorrRapidity;
+    float GEN_TauBnoHRapidity_Inc_2j_CorrRapidity;
+    float GEN_TauB_JetConstituents_2j_CorrRapidity;
+    float GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity;
+    float GEN_TauC_JetConstituents_2j_CorrRapidity;
+    float GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity;
+    float GEN_TauCnoHRapidity_Inc_2j_CorrRapidity;
+
+/**
+_EnergyWgt
+ * { item_description }
+ */
+    float GEN_TauC_Inc_0j_CorrRapidity_pTWgt;
+    float GEN_TauB_Inc_0j_CorrRapidity_pTWgt;
+    float GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt;
+    float GEN_TauB_JetConstituents_0j_CorrRapidity_pTWgt;
+    float GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt;
+    float GEN_TauC_JetConstituents_0j_CorrRapidity_pTWgt;
+    float GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt;
+    float GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt;
+
+    float GEN_TauC_Inc_1j_CorrRapidity_pTWgt;
+    float GEN_TauB_Inc_1j_CorrRapidity_pTWgt;
+    float GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt;
+    float GEN_TauB_JetConstituents_1j_CorrRapidity_pTWgt;
+    float GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt;
+    float GEN_TauC_JetConstituents_1j_CorrRapidity_pTWgt;
+    float GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt;
+    float GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt;
+
+    float GEN_TauC_Inc_2j_CorrRapidity_pTWgt;
+    float GEN_TauB_Inc_2j_CorrRapidity_pTWgt;
+    float GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt;
+    float GEN_TauB_JetConstituents_2j_CorrRapidity_pTWgt;
+    float GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt;
+    float GEN_TauC_JetConstituents_2j_CorrRapidity_pTWgt;
+    float GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt;
+    float GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt;
+
+//
+
+    float GEN_TauC_Inc_0j_CorrRapidity_EnergyWgt;
+    float GEN_TauB_Inc_0j_CorrRapidity_EnergyWgt;
+    float GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt;
+    float GEN_TauB_JetConstituents_0j_CorrRapidity_EnergyWgt;
+    float GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt;
+    float GEN_TauC_JetConstituents_0j_CorrRapidity_EnergyWgt;
+    float GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt;
+    float GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt;
+    float GEN_TauC_Inc_1j_CorrRapidity_EnergyWgt;
+    float GEN_TauB_Inc_1j_CorrRapidity_EnergyWgt;
+    float GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt;
+    float GEN_TauB_JetConstituents_1j_CorrRapidity_EnergyWgt;
+    float GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt;
+    float GEN_TauC_JetConstituents_1j_CorrRapidity_EnergyWgt;
+    float GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt;
+    float GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt;
+    float GEN_TauC_Inc_2j_CorrRapidity_EnergyWgt;
+    float GEN_TauB_Inc_2j_CorrRapidity_EnergyWgt;
+    float GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt;
+    float GEN_TauB_JetConstituents_2j_CorrRapidity_EnergyWgt;
+    float GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt;
+    float GEN_TauC_JetConstituents_2j_CorrRapidity_EnergyWgt;
+    float GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt;
+    float GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt;
+
+    float GEN_Tau0;
+    float GEN_GeneralizedTau0;
+    float GEN_GeneralizedTau1;
+    float GEN_GeneralizedTau2;
+
+    float GEN_Tau0_noHRapidity;
+    float GEN_GeneralizedTau0_noHRapidity;
+    float GEN_GeneralizedTau1_noHRapidity;
+    float GEN_GeneralizedTau2_noHRapidity;
+
+
     float qgj1; float qgj2;
     float csvj1, csvj2; 
     // new nominal
@@ -958,23 +1207,23 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
     int YEAR = year - 2016;
     if(year == 20165 || year == 20160)	YEAR = 0;
 /*
-// gconstants using splines
-    TFile *gConstant_g4 = new TFile("gconstants/gConstant_HZZ2e2mu_g4.root");
+// UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA using splines
+    TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
     TSpline *spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
     gConstant_g4->Close();
     delete gConstant_g4;
 
-    TFile *gConstant_g2 = new TFile("gconstants/gConstant_HZZ2e2mu_g2.root");
+    TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g2.root");
     TSpline *spline_g2 = (TSpline*) gConstant_g2->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g2");
     gConstant_g2->Close();
     delete gConstant_g2;
 
-    TFile *gConstant_L1 = new TFile("gconstants/gConstant_HZZ2e2mu_L1.root");
+    TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1.root");
     TSpline *spline_L1 = (TSpline*) gConstant_L1->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_L1");
     gConstant_L1->Close();
     delete gConstant_L1;
 
-    TFile *gConstant_L1Zgs = new TFile("gconstants/gConstant_HZZ2e2mu_L1Zgs.root");
+    TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1Zgs.root");
     TSpline *spline_L1Zgs = (TSpline*) gConstant_L1Zgs->Get("sp_tgfinal_HZZ2e2mu_SM_photoncut_over_tgfinal_HZZ2e2mu_L1Zgs");
     gConstant_L1Zgs->Close();
     delete gConstant_L1Zgs;
@@ -1541,7 +1790,346 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     absdeltarapidity_hleadingjet_pt30_eta4p7_jerup=-1.0; absdeltarapidity_hleadingjet_pt30_eta4p7_jerdn=-1.0;
     
     DijetMass=-1.0; DijetDEta=9999.0; DijetFisher=9999.0;
+
+    // n-jettiness for additional ak4 jets
+    // n-jettiness for additional ak4 jets _pTWgt
+    TauC_Inc_0j=-9999.0;
+    TauC_Inc_1j=-9999.0;
+    TauC_Inc_2j=-9999.0;
+    TauC_JetConstituents_0j=-9999.0;
+    TauC_JetConstituents_1j=-9999.0;
+    TauC_JetConstituents_2j=-9999.0;
+    TauCnoHRapidity_JetConstituents_0j=-9999.0;
+    TauCnoHRapidity_JetConstituents_1j=-9999.0;
+    TauCnoHRapidity_JetConstituents_2j=-9999.0;
+    TauCnoHRapidity_Inc_0j=-9999.0;
+    TauCnoHRapidity_Inc_1j=-9999.0;
+    TauCnoHRapidity_Inc_2j=-9999.0;
+    TauB_Inc_0j=-9999.0;
+    TauB_Inc_1j=-9999.0;
+    TauB_Inc_2j=-9999.0;
+
+    TauBnoHRapidity_Inc_0j=-9999.0;
+    TauBnoHRapidity_Inc_1j=-9999.0;
+    TauBnoHRapidity_Inc_2j=-9999.0;
+
+    TauB_JetConstituents_0j=-9999.0;
+    TauB_JetConstituents_1j=-9999.0;
+    TauB_JetConstituents_2j=-9999.0;
+
+    TauBnoHRapidity_JetConstituents_0j=-9999.0;
+    TauBnoHRapidity_JetConstituents_1j=-9999.0;
+    TauBnoHRapidity_JetConstituents_2j=-9999.0;
+
+    TauC_Inc_0j_CorrRapidity = -9999.0;
+    TauB_Inc_0j_CorrRapidity = -9999.0;
+    TauBnoHRapidity_Inc_0j_CorrRapidity = -9999.0;
+    TauB_JetConstituents_0j_CorrRapidity = -9999.0;
+    TauBnoHRapidity_JetConstituents_0j_CorrRapidity = -9999.0;
+    TauC_JetConstituents_0j_CorrRapidity = -9999.0;
+    TauCnoHRapidity_JetConstituents_0j_CorrRapidity = -9999.0;
+    TauCnoHRapidity_Inc_0j_CorrRapidity = -9999.0;
+    TauC_Inc_1j_CorrRapidity = -9999.0;
+    TauB_Inc_1j_CorrRapidity = -9999.0;
+    TauBnoHRapidity_Inc_1j_CorrRapidity = -9999.0;
+    TauB_JetConstituents_1j_CorrRapidity = -9999.0;
+    TauBnoHRapidity_JetConstituents_1j_CorrRapidity = -9999.0;
+    TauC_JetConstituents_1j_CorrRapidity = -9999.0;
+    TauCnoHRapidity_JetConstituents_1j_CorrRapidity = -9999.0;
+    TauCnoHRapidity_Inc_1j_CorrRapidity = -9999.0;
+    TauC_Inc_2j_CorrRapidity = -9999.0;
+    TauB_Inc_2j_CorrRapidity = -9999.0;
+    TauBnoHRapidity_Inc_2j_CorrRapidity = -9999.0;
+    TauB_JetConstituents_2j_CorrRapidity = -9999.0;
+    TauBnoHRapidity_JetConstituents_2j_CorrRapidity = -9999.0;
+    TauC_JetConstituents_2j_CorrRapidity = -9999.0;
+    TauCnoHRapidity_JetConstituents_2j_CorrRapidity = -9999.0;
+    TauCnoHRapidity_Inc_2j_CorrRapidity = -9999.0;
+
+/**
+ * { item_description }
+ */
+
+    TauC_Inc_0j_pTWgt = -9999.0;
+    TauC_Inc_1j_pTWgt = -9999.0;
+    TauC_Inc_2j_pTWgt = -9999.0;
+    TauC_JetConstituents_0j_pTWgt = -9999.0;
+    TauC_JetConstituents_1j_pTWgt = -9999.0;
+    TauC_JetConstituents_2j_pTWgt = -9999.0;
+    TauCnoHRapidity_JetConstituents_0j_pTWgt = -9999.0;
+    TauCnoHRapidity_JetConstituents_1j_pTWgt = -9999.0;
+    TauCnoHRapidity_JetConstituents_2j_pTWgt = -9999.0;
+    TauCnoHRapidity_Inc_0j_pTWgt = -9999.0;
+    TauCnoHRapidity_Inc_1j_pTWgt = -9999.0;
+    TauCnoHRapidity_Inc_2j_pTWgt = -9999.0;
+    TauB_Inc_0j_pTWgt = -9999.0;
+    TauB_Inc_1j_pTWgt = -9999.0;
+    TauB_Inc_2j_pTWgt = -9999.0;
+    TauBnoHRapidity_Inc_0j_pTWgt = -9999.0;
+    TauBnoHRapidity_Inc_1j_pTWgt = -9999.0;
+    TauBnoHRapidity_Inc_2j_pTWgt = -9999.0;
+    TauB_JetConstituents_0j_pTWgt = -9999.0;
+    TauB_JetConstituents_1j_pTWgt = -9999.0;
+    TauB_JetConstituents_2j_pTWgt = -9999.0;
+    TauBnoHRapidity_JetConstituents_0j_pTWgt = -9999.0;
+    TauBnoHRapidity_JetConstituents_1j_pTWgt = -9999.0;
+    TauBnoHRapidity_JetConstituents_2j_pTWgt = -9999.0;
+    TauC_Inc_0j_CorrRapidity_pTWgt   = -9999.0;
+    TauB_Inc_0j_CorrRapidity_pTWgt   = -9999.0;
+    TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt   = -9999.0;
+    TauB_JetConstituents_0j_CorrRapidity_pTWgt   = -9999.0;
+    TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt   = -9999.0;
+    TauC_JetConstituents_0j_CorrRapidity_pTWgt   = -9999.0;
+    TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt   = -9999.0;
+    TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt   = -9999.0;
+    TauC_Inc_1j_CorrRapidity_pTWgt   = -9999.0;
+    TauB_Inc_1j_CorrRapidity_pTWgt   = -9999.0;
+    TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt   = -9999.0;
+    TauB_JetConstituents_1j_CorrRapidity_pTWgt   = -9999.0;
+    TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt   = -9999.0;
+    TauC_JetConstituents_1j_CorrRapidity_pTWgt   = -9999.0;
+    TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt   = -9999.0;
+    TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt   = -9999.0;
+    TauC_Inc_2j_CorrRapidity_pTWgt   = -9999.0;
+    TauB_Inc_2j_CorrRapidity_pTWgt   = -9999.0;
+    TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt   = -9999.0;
+    TauB_JetConstituents_2j_CorrRapidity_pTWgt   = -9999.0;
+    TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt   = -9999.0;
+    TauC_JetConstituents_2j_CorrRapidity_pTWgt   = -9999.0;
+    TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt   = -9999.0;
+    TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt   = -9999.0;
+
+    //
+
+    TauC_Inc_0j_EnergyWgt = -9999.0;
+    TauC_Inc_1j_EnergyWgt = -9999.0;
+    TauC_Inc_2j_EnergyWgt = -9999.0;
+    TauC_JetConstituents_0j_EnergyWgt = -9999.0;
+    TauC_JetConstituents_1j_EnergyWgt = -9999.0;
+    TauC_JetConstituents_2j_EnergyWgt = -9999.0;
+    TauCnoHRapidity_JetConstituents_0j_EnergyWgt = -9999.0;
+    TauCnoHRapidity_JetConstituents_1j_EnergyWgt = -9999.0;
+    TauCnoHRapidity_JetConstituents_2j_EnergyWgt = -9999.0;
+    TauCnoHRapidity_Inc_0j_EnergyWgt = -9999.0;
+    TauCnoHRapidity_Inc_1j_EnergyWgt = -9999.0;
+    TauCnoHRapidity_Inc_2j_EnergyWgt = -9999.0;
+    TauB_Inc_0j_EnergyWgt = -9999.0;
+    TauB_Inc_1j_EnergyWgt = -9999.0;
+    TauB_Inc_2j_EnergyWgt = -9999.0;
+    TauBnoHRapidity_Inc_0j_EnergyWgt = -9999.0;
+    TauBnoHRapidity_Inc_1j_EnergyWgt = -9999.0;
+    TauBnoHRapidity_Inc_2j_EnergyWgt = -9999.0;
+    TauB_JetConstituents_0j_EnergyWgt = -9999.0;
+    TauB_JetConstituents_1j_EnergyWgt = -9999.0;
+    TauB_JetConstituents_2j_EnergyWgt = -9999.0;
+    TauBnoHRapidity_JetConstituents_0j_EnergyWgt = -9999.0;
+    TauBnoHRapidity_JetConstituents_1j_EnergyWgt = -9999.0;
+    TauBnoHRapidity_JetConstituents_2j_EnergyWgt = -9999.0;
+    TauC_Inc_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauB_Inc_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauB_JetConstituents_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauC_JetConstituents_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauC_Inc_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauB_Inc_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauB_JetConstituents_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauC_JetConstituents_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauC_Inc_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauB_Inc_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauB_JetConstituents_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauC_JetConstituents_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt   = -9999.0;
+
+    Tau0=-9999.0;
+    GeneralizedTau0=-9999.0;
+    GeneralizedTau1=-9999.0;
+    GeneralizedTau2=-9999.0;
+
+    Tau0_noHRapidity=-9999.0;
+    GeneralizedTau0_noHRapidity=-9999.0;
+    GeneralizedTau1_noHRapidity=-9999.0;
+    GeneralizedTau2_noHRapidity=-9999.0;
+
+    /***
+ *  GEN n-jettiness variables
+ */
+
+    // n-jettiness for additional ak4 jets _pTWgt
+    GEN_TauC_Inc_0j=-9999.0;
+    GEN_TauC_Inc_1j=-9999.0;
+    GEN_TauC_Inc_2j=-9999.0;
+    GEN_TauC_JetConstituents_0j=-9999.0;
+    GEN_TauC_JetConstituents_1j=-9999.0;
+    GEN_TauC_JetConstituents_2j=-9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_0j=-9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_1j=-9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_2j=-9999.0;
+    GEN_TauCnoHRapidity_Inc_0j=-9999.0;
+    GEN_TauCnoHRapidity_Inc_1j=-9999.0;
+    GEN_TauCnoHRapidity_Inc_2j=-9999.0;
+    GEN_TauB_Inc_0j=-9999.0;
+    GEN_TauB_Inc_1j=-9999.0;
+    GEN_TauB_Inc_2j=-9999.0;
+
+    GEN_TauBnoHRapidity_Inc_0j=-9999.0;
+    GEN_TauBnoHRapidity_Inc_1j=-9999.0;
+    GEN_TauBnoHRapidity_Inc_2j=-9999.0;
+
+    GEN_TauB_JetConstituents_0j=-9999.0;
+    GEN_TauB_JetConstituents_1j=-9999.0;
+    GEN_TauB_JetConstituents_2j=-9999.0;
+
+    GEN_TauBnoHRapidity_JetConstituents_0j=-9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_1j=-9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_2j=-9999.0;
+
+    GEN_TauC_Inc_0j_CorrRapidity = -9999.0;
+    GEN_TauB_Inc_0j_CorrRapidity = -9999.0;
+    GEN_TauBnoHRapidity_Inc_0j_CorrRapidity = -9999.0;
+    GEN_TauB_JetConstituents_0j_CorrRapidity = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity = -9999.0;
+    GEN_TauC_JetConstituents_0j_CorrRapidity = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity = -9999.0;
+    GEN_TauCnoHRapidity_Inc_0j_CorrRapidity = -9999.0;
+    GEN_TauC_Inc_1j_CorrRapidity = -9999.0;
+    GEN_TauB_Inc_1j_CorrRapidity = -9999.0;
+    GEN_TauBnoHRapidity_Inc_1j_CorrRapidity = -9999.0;
+    GEN_TauB_JetConstituents_1j_CorrRapidity = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity = -9999.0;
+    GEN_TauC_JetConstituents_1j_CorrRapidity = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity = -9999.0;
+    GEN_TauCnoHRapidity_Inc_1j_CorrRapidity = -9999.0;
+    GEN_TauC_Inc_2j_CorrRapidity = -9999.0;
+    GEN_TauB_Inc_2j_CorrRapidity = -9999.0;
+    GEN_TauBnoHRapidity_Inc_2j_CorrRapidity = -9999.0;
+    GEN_TauB_JetConstituents_2j_CorrRapidity = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity = -9999.0;
+    GEN_TauC_JetConstituents_2j_CorrRapidity = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity = -9999.0;
+    GEN_TauCnoHRapidity_Inc_2j_CorrRapidity = -9999.0;
+
+    /**
+ * { item_description }
+ */
+
+    GEN_TauC_Inc_0j_pTWgt = -9999.0;
+    GEN_TauC_Inc_1j_pTWgt = -9999.0;
+    GEN_TauC_Inc_2j_pTWgt = -9999.0;
+    GEN_TauC_JetConstituents_0j_pTWgt = -9999.0;
+    GEN_TauC_JetConstituents_1j_pTWgt = -9999.0;
+    GEN_TauC_JetConstituents_2j_pTWgt = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_0j_pTWgt = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_1j_pTWgt = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_2j_pTWgt = -9999.0;
+    GEN_TauCnoHRapidity_Inc_0j_pTWgt = -9999.0;
+    GEN_TauCnoHRapidity_Inc_1j_pTWgt = -9999.0;
+    GEN_TauCnoHRapidity_Inc_2j_pTWgt = -9999.0;
+    GEN_TauB_Inc_0j_pTWgt = -9999.0;
+    GEN_TauB_Inc_1j_pTWgt = -9999.0;
+    GEN_TauB_Inc_2j_pTWgt = -9999.0;
+    GEN_TauBnoHRapidity_Inc_0j_pTWgt = -9999.0;
+    GEN_TauBnoHRapidity_Inc_1j_pTWgt = -9999.0;
+    GEN_TauBnoHRapidity_Inc_2j_pTWgt = -9999.0;
+    GEN_TauB_JetConstituents_0j_pTWgt = -9999.0;
+    GEN_TauB_JetConstituents_1j_pTWgt = -9999.0;
+    GEN_TauB_JetConstituents_2j_pTWgt = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_0j_pTWgt = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_1j_pTWgt = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_2j_pTWgt = -9999.0;
+    GEN_TauC_Inc_0j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauB_Inc_0j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauB_JetConstituents_0j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauC_JetConstituents_0j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauC_Inc_1j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauB_Inc_1j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauB_JetConstituents_1j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauC_JetConstituents_1j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauC_Inc_2j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauB_Inc_2j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauB_JetConstituents_2j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauC_JetConstituents_2j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt   = -9999.0;
+    GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt   = -9999.0;
    
+    GEN_TauC_Inc_0j_EnergyWgt = -9999.0;
+    GEN_TauC_Inc_1j_EnergyWgt = -9999.0;
+    GEN_TauC_Inc_2j_EnergyWgt = -9999.0;
+    GEN_TauC_JetConstituents_0j_EnergyWgt = -9999.0;
+    GEN_TauC_JetConstituents_1j_EnergyWgt = -9999.0;
+    GEN_TauC_JetConstituents_2j_EnergyWgt = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_0j_EnergyWgt = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_1j_EnergyWgt = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_2j_EnergyWgt = -9999.0;
+    GEN_TauCnoHRapidity_Inc_0j_EnergyWgt = -9999.0;
+    GEN_TauCnoHRapidity_Inc_1j_EnergyWgt = -9999.0;
+    GEN_TauCnoHRapidity_Inc_2j_EnergyWgt = -9999.0;
+    GEN_TauB_Inc_0j_EnergyWgt = -9999.0;
+    GEN_TauB_Inc_1j_EnergyWgt = -9999.0;
+    GEN_TauB_Inc_2j_EnergyWgt = -9999.0;
+    GEN_TauBnoHRapidity_Inc_0j_EnergyWgt = -9999.0;
+    GEN_TauBnoHRapidity_Inc_1j_EnergyWgt = -9999.0;
+    GEN_TauBnoHRapidity_Inc_2j_EnergyWgt = -9999.0;
+    GEN_TauB_JetConstituents_0j_EnergyWgt = -9999.0;
+    GEN_TauB_JetConstituents_1j_EnergyWgt = -9999.0;
+    GEN_TauB_JetConstituents_2j_EnergyWgt = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_0j_EnergyWgt = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_1j_EnergyWgt = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_2j_EnergyWgt = -9999.0;
+    GEN_TauC_Inc_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauB_Inc_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauB_JetConstituents_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauC_JetConstituents_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauC_Inc_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauB_Inc_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauB_JetConstituents_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauC_JetConstituents_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauC_Inc_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauB_Inc_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauB_JetConstituents_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauC_JetConstituents_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt   = -9999.0;
+    
+    GEN_Tau0=-9999.0;
+    GEN_GeneralizedTau0=-9999.0;
+    GEN_GeneralizedTau1=-9999.0;
+    GEN_GeneralizedTau2=-9999.0;
+
+    GEN_Tau0_noHRapidity=-9999.0;
+    GEN_GeneralizedTau0_noHRapidity=-9999.0;
+    GEN_GeneralizedTau1_noHRapidity=-9999.0;
+    GEN_GeneralizedTau2_noHRapidity=-9999.0;
+
     // new obs. initialization
         // new nominal
     mj1j2=-1.0; dEtaj1j2=-999.0;
@@ -2659,7 +3247,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 vector<pat::Electron> selectedElectrons;
                 
                 if (verbose) cout<<"begin looking for higgs candidate"<<endl;
-                if(isCode4l) findHiggsCandidate(selectedMuons,selectedElectrons,iEvent, iSetup);
+//                if(isCode4l) findHiggsCandidate(selectedMuons,selectedElectrons,iEvent, iSetup); //orig
+		if(isCode4l) findHiggsCandidate(selectedMuons,selectedElectrons,iEvent, iSetup,pfCands, jets);  //Ram
+		
                 if (verbose) {cout<<"found higgs candidate? "<<foundHiggsCandidate<<endl; }
                 
                 // Jets
@@ -2868,7 +3458,8 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 
                 //Set All the Variables for Saved Trees (after finding higgs candidate)
                 if (verbose) cout<<"begin setting tree variables"<<endl;
-                setTreeVariables(iEvent, iSetup, selectedMuons, selectedElectrons, recoMuons, recoElectrons, goodJets, goodJetQGTagger,goodJetaxis2, goodJetptD, goodJetmult, selectedMergedJets, selectedFsrMap);
+                //setTreeVariables(iEvent, iSetup, selectedMuons, selectedElectrons, recoMuons, recoElectrons, goodJets, goodJetQGTagger,goodJetaxis2, goodJetptD, goodJetmult, selectedMergedJets, selectedFsrMap);
+                setTreeVariables(iEvent, iSetup, selectedMuons, selectedElectrons, recoMuons, recoElectrons, goodJets, goodJetQGTagger,goodJetaxis2, goodJetptD, goodJetmult, selectedMergedJets, selectedFsrMap, pfCands, jets);
                 if (verbose) cout<<"finshed setting tree variables"<<endl;
                 
                 
@@ -2935,23 +3526,23 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 //if (doMela) {
                 if(isCode4l && doMela && foundHiggsCandidate) {
                     //                 if(doMela && foundHiggsCandidate) {
-		    // gconstants using splines
-		    TFile *gConstant_g4 = new TFile("gconstants/gConstant_HZZ2e2mu_g4.root");
+		    // UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA using splines
+		    TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
 		    TSpline *spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
 		    gConstant_g4->Close();
 	            delete gConstant_g4;
 
-		    TFile *gConstant_g2 = new TFile("gconstants/gConstant_HZZ2e2mu_g2.root");
+		    TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g2.root");
 		    TSpline *spline_g2 = (TSpline*) gConstant_g2->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g2");
 	 	    gConstant_g2->Close();
 	            delete gConstant_g2;
 
-		    TFile *gConstant_L1 = new TFile("gconstants/gConstant_HZZ2e2mu_L1.root");
+		    TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1.root");
 		    TSpline *spline_L1 = (TSpline*) gConstant_L1->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_L1");
 		    gConstant_L1->Close();
 	            delete gConstant_L1;
 
-		    TFile *gConstant_L1Zgs = new TFile("gconstants/gConstant_HZZ2e2mu_L1Zgs.root");
+		    TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1Zgs.root");
 		    TSpline *spline_L1Zgs = (TSpline*) gConstant_L1Zgs->Get("sp_tgfinal_HZZ2e2mu_SM_photoncut_over_tgfinal_HZZ2e2mu_L1Zgs");
 		    gConstant_L1Zgs->Close();
 	            delete gConstant_L1Zgs;
@@ -3847,7 +4438,8 @@ UFHZZ4LAna::endLuminosityBlock(edm::LuminosityBlock const& lumiSeg,edm::EventSet
 //Pass empty vectors of pat leptons as selectedMuons and selectedElectrons
 // these will be filled in the function and then useable for more analysis.
 void
-UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vector< pat::Electron > &selectedElectrons,const edm::Event& iEvent, const edm::EventSetup& iSetup)
+//UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vector< pat::Electron > &selectedElectrons,const edm::Event& iEvent, const edm::EventSetup& iSetup) //orig
+UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vector< pat::Electron > &selectedElectrons,const edm::Event& iEvent, const edm::EventSetup& iSetup,edm::Handle<pat::PackedCandidateCollection> &pfCands, edm::Handle<edm::View<pat::Jet> > &jets)  // Ram
 {
     
     using namespace edm;
@@ -5338,7 +5930,352 @@ void UFHZZ4LAna::bookPassedEventTree(TString treeName, TTree *tree)
     tree->Branch("pt_leadingjet_pt30_eta2p5_jesdn",&pt_leadingjet_pt30_eta2p5_jesdn,"pt_leadingjet_pt30_eta2p5_jesdn/F");
     tree->Branch("pt_leadingjet_pt30_eta2p5_jerup",&pt_leadingjet_pt30_eta2p5_jerup,"pt_leadingjet_pt30_eta2p5_jerup/F");
     tree->Branch("pt_leadingjet_pt30_eta2p5_jerdn",&pt_leadingjet_pt30_eta2p5_jerdn,"pt_leadingjet_pt30_eta2p5_jerdn/F");
-    
+
+    // n-jettiness
+    // n-jettiness  noHRapidity _pTWgt
+    tree->Branch("TauB_Inc_0j",&TauB_Inc_0j,"TauB_Inc_0j/F");
+    tree->Branch("TauBnoHRapidity_Inc_0j",&TauBnoHRapidity_Inc_0j,"TauBnoHRapidity_Inc_0j/F");
+    tree->Branch("TauB_JetConstituents_0j",&TauB_JetConstituents_0j,"TauB_JetConstituents_0j/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_0j",&TauBnoHRapidity_JetConstituents_0j,"TauBnoHRapidity_JetConstituents_0j/F");
+    tree->Branch("TauC_Inc_0j",&TauC_Inc_0j,"TauC_Inc_0j/F");
+    tree->Branch("TauC_JetConstituents_0j",&TauC_JetConstituents_0j,"TauC_JetConstituents_0j/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_0j",&TauCnoHRapidity_JetConstituents_0j,"TauCnoHRapidity_JetConstituents_0j/F");
+    tree->Branch("TauCnoHRapidity_Inc_0j",&TauCnoHRapidity_Inc_0j,"TauCnoHRapidity_Inc_0j/F");
+
+    tree->Branch("TauB_Inc_1j",&TauB_Inc_1j,"TauB_Inc_1j/F");
+    tree->Branch("TauBnoHRapidity_Inc_1j",&TauBnoHRapidity_Inc_1j,"TauBnoHRapidity_Inc_1j/F");
+    tree->Branch("TauB_JetConstituents_1j",&TauB_JetConstituents_1j,"TauB_JetConstituents_1j/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_1j",&TauBnoHRapidity_JetConstituents_1j,"TauBnoHRapidity_JetConstituents_1j/F");
+    tree->Branch("TauC_Inc_1j",&TauC_Inc_1j,"TauC_Inc_1j/F");
+    tree->Branch("TauC_JetConstituents_1j",&TauC_JetConstituents_1j,"TauC_JetConstituents_1j/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_1j",&TauCnoHRapidity_JetConstituents_1j,"TauCnoHRapidity_JetConstituents_1j/F");
+    tree->Branch("TauCnoHRapidity_Inc_1j",&TauCnoHRapidity_Inc_1j,"TauCnoHRapidity_Inc_1j/F");
+
+    tree->Branch("TauB_Inc_2j",&TauB_Inc_2j,"TauB_Inc_2j/F");
+    tree->Branch("TauBnoHRapidity_Inc_2j",&TauBnoHRapidity_Inc_2j,"TauBnoHRapidity_Inc_2j/F");
+    tree->Branch("TauB_JetConstituents_2j",&TauB_JetConstituents_2j,"TauB_JetConstituents_2j/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_2j",&TauBnoHRapidity_JetConstituents_2j,"TauBnoHRapidity_JetConstituents_2j/F");
+    tree->Branch("TauC_Inc_2j",&TauC_Inc_2j,"TauC_Inc_2j/F");
+    tree->Branch("TauC_JetConstituents_2j",&TauC_JetConstituents_2j,"TauC_JetConstituents_2j/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_2j",&TauCnoHRapidity_JetConstituents_2j,"TauCnoHRapidity_JetConstituents_2j/F");
+    tree->Branch("TauCnoHRapidity_Inc_2j",&TauCnoHRapidity_Inc_2j,"TauCnoHRapidity_Inc_2j/F");
+
+
+    tree->Branch("TauC_Inc_0j_CorrRapidity",&TauC_Inc_0j_CorrRapidity,"TauC_Inc_0j_CorrRapidity/F");
+    tree->Branch("TauB_Inc_0j_CorrRapidity",&TauB_Inc_0j_CorrRapidity,"TauB_Inc_0j_CorrRapidity/F");
+    tree->Branch("TauBnoHRapidity_Inc_0j_CorrRapidity",&TauBnoHRapidity_Inc_0j_CorrRapidity,"TauBnoHRapidity_Inc_0j_CorrRapidity/F");
+    tree->Branch("TauB_JetConstituents_0j_CorrRapidity",&TauB_JetConstituents_0j_CorrRapidity,"TauB_JetConstituents_0j_CorrRapidity/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_0j_CorrRapidity",&TauBnoHRapidity_JetConstituents_0j_CorrRapidity,"TauBnoHRapidity_JetConstituents_0j_CorrRapidity/F");
+    tree->Branch("TauC_JetConstituents_0j_CorrRapidity",&TauC_JetConstituents_0j_CorrRapidity,"TauC_JetConstituents_0j_CorrRapidity/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_0j_CorrRapidity",&TauCnoHRapidity_JetConstituents_0j_CorrRapidity,"TauCnoHRapidity_JetConstituents_0j_CorrRapidity/F");
+    tree->Branch("TauCnoHRapidity_Inc_0j_CorrRapidity",&TauCnoHRapidity_Inc_0j_CorrRapidity,"TauCnoHRapidity_Inc_0j_CorrRapidity/F");
+
+    tree->Branch("TauC_Inc_1j_CorrRapidity",&TauC_Inc_1j_CorrRapidity,"TauC_Inc_1j_CorrRapidity/F");
+    tree->Branch("TauB_Inc_1j_CorrRapidity",&TauB_Inc_1j_CorrRapidity,"TauB_Inc_1j_CorrRapidity/F");
+    tree->Branch("TauBnoHRapidity_Inc_1j_CorrRapidity",&TauBnoHRapidity_Inc_1j_CorrRapidity,"TauBnoHRapidity_Inc_1j_CorrRapidity/F");
+    tree->Branch("TauB_JetConstituents_1j_CorrRapidity",&TauB_JetConstituents_1j_CorrRapidity,"TauB_JetConstituents_1j_CorrRapidity/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_1j_CorrRapidity",&TauBnoHRapidity_JetConstituents_1j_CorrRapidity,"TauBnoHRapidity_JetConstituents_1j_CorrRapidity/F");
+    tree->Branch("TauC_JetConstituents_1j_CorrRapidity",&TauC_JetConstituents_1j_CorrRapidity,"TauC_JetConstituents_1j_CorrRapidity/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_1j_CorrRapidity",&TauCnoHRapidity_JetConstituents_1j_CorrRapidity,"TauCnoHRapidity_JetConstituents_1j_CorrRapidity/F");
+    tree->Branch("TauCnoHRapidity_Inc_1j_CorrRapidity",&TauCnoHRapidity_Inc_1j_CorrRapidity,"TauCnoHRapidity_Inc_1j_CorrRapidity/F");
+
+    tree->Branch("TauC_Inc_2j_CorrRapidity",&TauC_Inc_2j_CorrRapidity,"TauC_Inc_2j_CorrRapidity/F");
+    tree->Branch("TauB_Inc_2j_CorrRapidity",&TauB_Inc_2j_CorrRapidity,"TauB_Inc_2j_CorrRapidity/F");
+    tree->Branch("TauBnoHRapidity_Inc_2j_CorrRapidity",&TauBnoHRapidity_Inc_2j_CorrRapidity,"TauBnoHRapidity_Inc_2j_CorrRapidity/F");
+    tree->Branch("TauB_JetConstituents_2j_CorrRapidity",&TauB_JetConstituents_2j_CorrRapidity,"TauB_JetConstituents_2j_CorrRapidity/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_2j_CorrRapidity",&TauBnoHRapidity_JetConstituents_2j_CorrRapidity,"TauBnoHRapidity_JetConstituents_2j_CorrRapidity/F");
+    tree->Branch("TauC_JetConstituents_2j_CorrRapidity",&TauC_JetConstituents_2j_CorrRapidity,"TauC_JetConstituents_2j_CorrRapidity/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_2j_CorrRapidity",&TauCnoHRapidity_JetConstituents_2j_CorrRapidity,"TauCnoHRapidity_JetConstituents_2j_CorrRapidity/F");
+    tree->Branch("TauCnoHRapidity_Inc_2j_CorrRapidity",&TauCnoHRapidity_Inc_2j_CorrRapidity,"TauCnoHRapidity_Inc_2j_CorrRapidity/F");
+
+/**
+ * _pTWgt
+ */
+
+    tree->Branch("TauB_Inc_0j_pTWgt",&TauB_Inc_0j_pTWgt,"TauB_Inc_0j_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_0j_pTWgt",&TauBnoHRapidity_Inc_0j_pTWgt,"TauBnoHRapidity_Inc_0j_pTWgt/F");
+    tree->Branch("TauB_JetConstituents_0j_pTWgt",&TauB_JetConstituents_0j_pTWgt,"TauB_JetConstituents_0j_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_0j_pTWgt",&TauBnoHRapidity_JetConstituents_0j_pTWgt,"TauBnoHRapidity_JetConstituents_0j_pTWgt/F");
+    tree->Branch("TauC_Inc_0j_pTWgt",&TauC_Inc_0j_pTWgt,"TauC_Inc_0j_pTWgt/F");
+    tree->Branch("TauC_JetConstituents_0j_pTWgt",&TauC_JetConstituents_0j_pTWgt,"TauC_JetConstituents_0j_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_0j_pTWgt",&TauCnoHRapidity_JetConstituents_0j_pTWgt,"TauCnoHRapidity_JetConstituents_0j_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_0j_pTWgt",&TauCnoHRapidity_Inc_0j_pTWgt,"TauCnoHRapidity_Inc_0j_pTWgt/F");
+    tree->Branch("TauB_Inc_1j_pTWgt",&TauB_Inc_1j_pTWgt,"TauB_Inc_1j_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_1j_pTWgt",&TauBnoHRapidity_Inc_1j_pTWgt,"TauBnoHRapidity_Inc_1j_pTWgt/F");
+    tree->Branch("TauB_JetConstituents_1j_pTWgt",&TauB_JetConstituents_1j_pTWgt,"TauB_JetConstituents_1j_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_1j_pTWgt",&TauBnoHRapidity_JetConstituents_1j_pTWgt,"TauBnoHRapidity_JetConstituents_1j_pTWgt/F");
+    tree->Branch("TauC_Inc_1j_pTWgt",&TauC_Inc_1j_pTWgt,"TauC_Inc_1j_pTWgt/F");
+    tree->Branch("TauC_JetConstituents_1j_pTWgt",&TauC_JetConstituents_1j_pTWgt,"TauC_JetConstituents_1j_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_1j_pTWgt",&TauCnoHRapidity_JetConstituents_1j_pTWgt,"TauCnoHRapidity_JetConstituents_1j_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_1j_pTWgt",&TauCnoHRapidity_Inc_1j_pTWgt,"TauCnoHRapidity_Inc_1j_pTWgt/F");
+    tree->Branch("TauB_Inc_2j_pTWgt",&TauB_Inc_2j_pTWgt,"TauB_Inc_2j_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_2j_pTWgt",&TauBnoHRapidity_Inc_2j_pTWgt,"TauBnoHRapidity_Inc_2j_pTWgt/F");
+    tree->Branch("TauB_JetConstituents_2j_pTWgt",&TauB_JetConstituents_2j_pTWgt,"TauB_JetConstituents_2j_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_2j_pTWgt",&TauBnoHRapidity_JetConstituents_2j_pTWgt,"TauBnoHRapidity_JetConstituents_2j_pTWgt/F");
+    tree->Branch("TauC_Inc_2j_pTWgt",&TauC_Inc_2j_pTWgt,"TauC_Inc_2j_pTWgt/F");
+    tree->Branch("TauC_JetConstituents_2j_pTWgt",&TauC_JetConstituents_2j_pTWgt,"TauC_JetConstituents_2j_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_2j_pTWgt",&TauCnoHRapidity_JetConstituents_2j_pTWgt,"TauCnoHRapidity_JetConstituents_2j_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_2j_pTWgt",&TauCnoHRapidity_Inc_2j_pTWgt,"TauCnoHRapidity_Inc_2j_pTWgt/F");
+    tree->Branch("TauC_Inc_0j_CorrRapidity_pTWgt",&TauC_Inc_0j_CorrRapidity_pTWgt,"TauC_Inc_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauB_Inc_0j_CorrRapidity_pTWgt",&TauB_Inc_0j_CorrRapidity_pTWgt,"TauB_Inc_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt",&TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt,"TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauB_JetConstituents_0j_CorrRapidity_pTWgt",&TauB_JetConstituents_0j_CorrRapidity_pTWgt,"TauB_JetConstituents_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt",&TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,"TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauC_JetConstituents_0j_CorrRapidity_pTWgt",&TauC_JetConstituents_0j_CorrRapidity_pTWgt,"TauC_JetConstituents_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt",&TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,"TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt",&TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt,"TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauC_Inc_1j_CorrRapidity_pTWgt",&TauC_Inc_1j_CorrRapidity_pTWgt,"TauC_Inc_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauB_Inc_1j_CorrRapidity_pTWgt",&TauB_Inc_1j_CorrRapidity_pTWgt,"TauB_Inc_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt",&TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt,"TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauB_JetConstituents_1j_CorrRapidity_pTWgt",&TauB_JetConstituents_1j_CorrRapidity_pTWgt,"TauB_JetConstituents_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt",&TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,"TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauC_JetConstituents_1j_CorrRapidity_pTWgt",&TauC_JetConstituents_1j_CorrRapidity_pTWgt,"TauC_JetConstituents_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt",&TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,"TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt",&TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt,"TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauC_Inc_2j_CorrRapidity_pTWgt",&TauC_Inc_2j_CorrRapidity_pTWgt,"TauC_Inc_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauB_Inc_2j_CorrRapidity_pTWgt",&TauB_Inc_2j_CorrRapidity_pTWgt,"TauB_Inc_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt",&TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt,"TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauB_JetConstituents_2j_CorrRapidity_pTWgt",&TauB_JetConstituents_2j_CorrRapidity_pTWgt,"TauB_JetConstituents_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt",&TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,"TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauC_JetConstituents_2j_CorrRapidity_pTWgt",&TauC_JetConstituents_2j_CorrRapidity_pTWgt,"TauC_JetConstituents_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt",&TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,"TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt",&TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt,"TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt/F");
+
+//
+
+    tree->Branch("TauB_Inc_0j_EnergyWgt",&TauB_Inc_0j_EnergyWgt,"TauB_Inc_0j_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_0j_EnergyWgt",&TauBnoHRapidity_Inc_0j_EnergyWgt,"TauBnoHRapidity_Inc_0j_EnergyWgt/F");
+    tree->Branch("TauB_JetConstituents_0j_EnergyWgt",&TauB_JetConstituents_0j_EnergyWgt,"TauB_JetConstituents_0j_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_0j_EnergyWgt",&TauBnoHRapidity_JetConstituents_0j_EnergyWgt,"TauBnoHRapidity_JetConstituents_0j_EnergyWgt/F");
+    tree->Branch("TauC_Inc_0j_EnergyWgt",&TauC_Inc_0j_EnergyWgt,"TauC_Inc_0j_EnergyWgt/F");
+    tree->Branch("TauC_JetConstituents_0j_EnergyWgt",&TauC_JetConstituents_0j_EnergyWgt,"TauC_JetConstituents_0j_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_0j_EnergyWgt",&TauCnoHRapidity_JetConstituents_0j_EnergyWgt,"TauCnoHRapidity_JetConstituents_0j_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_0j_EnergyWgt",&TauCnoHRapidity_Inc_0j_EnergyWgt,"TauCnoHRapidity_Inc_0j_EnergyWgt/F");
+    tree->Branch("TauB_Inc_1j_EnergyWgt",&TauB_Inc_1j_EnergyWgt,"TauB_Inc_1j_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_1j_EnergyWgt",&TauBnoHRapidity_Inc_1j_EnergyWgt,"TauBnoHRapidity_Inc_1j_EnergyWgt/F");
+    tree->Branch("TauB_JetConstituents_1j_EnergyWgt",&TauB_JetConstituents_1j_EnergyWgt,"TauB_JetConstituents_1j_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_1j_EnergyWgt",&TauBnoHRapidity_JetConstituents_1j_EnergyWgt,"TauBnoHRapidity_JetConstituents_1j_EnergyWgt/F");
+    tree->Branch("TauC_Inc_1j_EnergyWgt",&TauC_Inc_1j_EnergyWgt,"TauC_Inc_1j_EnergyWgt/F");
+    tree->Branch("TauC_JetConstituents_1j_EnergyWgt",&TauC_JetConstituents_1j_EnergyWgt,"TauC_JetConstituents_1j_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_1j_EnergyWgt",&TauCnoHRapidity_JetConstituents_1j_EnergyWgt,"TauCnoHRapidity_JetConstituents_1j_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_1j_EnergyWgt",&TauCnoHRapidity_Inc_1j_EnergyWgt,"TauCnoHRapidity_Inc_1j_EnergyWgt/F");
+    tree->Branch("TauB_Inc_2j_EnergyWgt",&TauB_Inc_2j_EnergyWgt,"TauB_Inc_2j_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_2j_EnergyWgt",&TauBnoHRapidity_Inc_2j_EnergyWgt,"TauBnoHRapidity_Inc_2j_EnergyWgt/F");
+    tree->Branch("TauB_JetConstituents_2j_EnergyWgt",&TauB_JetConstituents_2j_EnergyWgt,"TauB_JetConstituents_2j_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_2j_EnergyWgt",&TauBnoHRapidity_JetConstituents_2j_EnergyWgt,"TauBnoHRapidity_JetConstituents_2j_EnergyWgt/F");
+    tree->Branch("TauC_Inc_2j_EnergyWgt",&TauC_Inc_2j_EnergyWgt,"TauC_Inc_2j_EnergyWgt/F");
+    tree->Branch("TauC_JetConstituents_2j_EnergyWgt",&TauC_JetConstituents_2j_EnergyWgt,"TauC_JetConstituents_2j_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_2j_EnergyWgt",&TauCnoHRapidity_JetConstituents_2j_EnergyWgt,"TauCnoHRapidity_JetConstituents_2j_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_2j_EnergyWgt",&TauCnoHRapidity_Inc_2j_EnergyWgt,"TauCnoHRapidity_Inc_2j_EnergyWgt/F");
+    tree->Branch("TauC_Inc_0j_CorrRapidity_EnergyWgt",&TauC_Inc_0j_CorrRapidity_EnergyWgt,"TauC_Inc_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauB_Inc_0j_CorrRapidity_EnergyWgt",&TauB_Inc_0j_CorrRapidity_EnergyWgt,"TauB_Inc_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt",&TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt,"TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauB_JetConstituents_0j_CorrRapidity_EnergyWgt",&TauB_JetConstituents_0j_CorrRapidity_EnergyWgt,"TauB_JetConstituents_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt",&TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt,"TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauC_JetConstituents_0j_CorrRapidity_EnergyWgt",&TauC_JetConstituents_0j_CorrRapidity_EnergyWgt,"TauC_JetConstituents_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt",&TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt,"TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt",&TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt,"TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauC_Inc_1j_CorrRapidity_EnergyWgt",&TauC_Inc_1j_CorrRapidity_EnergyWgt,"TauC_Inc_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauB_Inc_1j_CorrRapidity_EnergyWgt",&TauB_Inc_1j_CorrRapidity_EnergyWgt,"TauB_Inc_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt",&TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt,"TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauB_JetConstituents_1j_CorrRapidity_EnergyWgt",&TauB_JetConstituents_1j_CorrRapidity_EnergyWgt,"TauB_JetConstituents_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt",&TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt,"TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauC_JetConstituents_1j_CorrRapidity_EnergyWgt",&TauC_JetConstituents_1j_CorrRapidity_EnergyWgt,"TauC_JetConstituents_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt",&TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt,"TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt",&TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt,"TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauC_Inc_2j_CorrRapidity_EnergyWgt",&TauC_Inc_2j_CorrRapidity_EnergyWgt,"TauC_Inc_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauB_Inc_2j_CorrRapidity_EnergyWgt",&TauB_Inc_2j_CorrRapidity_EnergyWgt,"TauB_Inc_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt",&TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt,"TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauB_JetConstituents_2j_CorrRapidity_EnergyWgt",&TauB_JetConstituents_2j_CorrRapidity_EnergyWgt,"TauB_JetConstituents_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt",&TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt,"TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauC_JetConstituents_2j_CorrRapidity_EnergyWgt",&TauC_JetConstituents_2j_CorrRapidity_EnergyWgt,"TauC_JetConstituents_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt",&TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt,"TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt",&TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt,"TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt/F");
+
+    tree->Branch("Tau0",&Tau0,"Tau0/F");
+    tree->Branch("GeneralizedTau0",&GeneralizedTau0,"GeneralizedTau0/F");
+    tree->Branch("GeneralizedTau1",&GeneralizedTau1,"GeneralizedTau1/F");
+    tree->Branch("GeneralizedTau2",&GeneralizedTau2,"GeneralizedTau2/F");
+
+    tree->Branch("Tau0_noHRapidity",&Tau0_noHRapidity,"Tau0_noHRapidity/F");
+    tree->Branch("GeneralizedTau0_noHRapidity",&GeneralizedTau0_noHRapidity,"GeneralizedTau0_noHRapidity/F");
+    tree->Branch("GeneralizedTau1_noHRapidity",&GeneralizedTau1_noHRapidity,"GeneralizedTau1_noHRapidity/F");
+    tree->Branch("GeneralizedTau2_noHRapidity",&GeneralizedTau2_noHRapidity,"GeneralizedTau2_noHRapidity/F");
+
+    /**
+ *  GEN nJettiness
+ */
+
+    // n-jettiness  noHRapidity _pTWgt
+    tree->Branch("GEN_TauB_Inc_0j",&GEN_TauB_Inc_0j,"GEN_TauB_Inc_0j/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_0j",&GEN_TauBnoHRapidity_Inc_0j,"GEN_TauBnoHRapidity_Inc_0j/F");
+    tree->Branch("GEN_TauB_JetConstituents_0j",&GEN_TauB_JetConstituents_0j,"GEN_TauB_JetConstituents_0j/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_0j",&GEN_TauBnoHRapidity_JetConstituents_0j,"GEN_TauBnoHRapidity_JetConstituents_0j/F");
+    tree->Branch("GEN_TauC_Inc_0j",&GEN_TauC_Inc_0j,"GEN_TauC_Inc_0j/F");
+    tree->Branch("GEN_TauC_JetConstituents_0j",&GEN_TauC_JetConstituents_0j,"GEN_TauC_JetConstituents_0j/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_0j",&GEN_TauCnoHRapidity_JetConstituents_0j,"GEN_TauCnoHRapidity_JetConstituents_0j/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_0j",&GEN_TauCnoHRapidity_Inc_0j,"GEN_TauCnoHRapidity_Inc_0j/F");
+
+    tree->Branch("GEN_TauB_Inc_1j",&GEN_TauB_Inc_1j,"GEN_TauB_Inc_1j/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_1j",&GEN_TauBnoHRapidity_Inc_1j,"GEN_TauBnoHRapidity_Inc_1j/F");
+    tree->Branch("GEN_TauB_JetConstituents_1j",&GEN_TauB_JetConstituents_1j,"GEN_TauB_JetConstituents_1j/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_1j",&GEN_TauBnoHRapidity_JetConstituents_1j,"GEN_TauBnoHRapidity_JetConstituents_1j/F");
+    tree->Branch("GEN_TauC_Inc_1j",&GEN_TauC_Inc_1j,"GEN_TauC_Inc_1j/F");
+    tree->Branch("GEN_TauC_JetConstituents_1j",&GEN_TauC_JetConstituents_1j,"GEN_TauC_JetConstituents_1j/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_1j",&GEN_TauCnoHRapidity_JetConstituents_1j,"GEN_TauCnoHRapidity_JetConstituents_1j/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_1j",&GEN_TauCnoHRapidity_Inc_1j,"GEN_TauCnoHRapidity_Inc_1j/F");
+
+    tree->Branch("GEN_TauB_Inc_2j",&GEN_TauB_Inc_2j,"GEN_TauB_Inc_2j/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_2j",&GEN_TauBnoHRapidity_Inc_2j,"GEN_TauBnoHRapidity_Inc_2j/F");
+    tree->Branch("GEN_TauB_JetConstituents_2j",&GEN_TauB_JetConstituents_2j,"GEN_TauB_JetConstituents_2j/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_2j",&GEN_TauBnoHRapidity_JetConstituents_2j,"GEN_TauBnoHRapidity_JetConstituents_2j/F");
+    tree->Branch("GEN_TauC_Inc_2j",&GEN_TauC_Inc_2j,"GEN_TauC_Inc_2j/F");
+    tree->Branch("GEN_TauC_JetConstituents_2j",&GEN_TauC_JetConstituents_2j,"GEN_TauC_JetConstituents_2j/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_2j",&GEN_TauCnoHRapidity_JetConstituents_2j,"GEN_TauCnoHRapidity_JetConstituents_2j/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_2j",&GEN_TauCnoHRapidity_Inc_2j,"GEN_TauCnoHRapidity_Inc_2j/F");
+
+
+    tree->Branch("GEN_TauC_Inc_0j_CorrRapidity",&GEN_TauC_Inc_0j_CorrRapidity,"GEN_TauC_Inc_0j_CorrRapidity/F");
+    tree->Branch("GEN_TauB_Inc_0j_CorrRapidity",&GEN_TauB_Inc_0j_CorrRapidity,"GEN_TauB_Inc_0j_CorrRapidity/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_0j_CorrRapidity",&GEN_TauBnoHRapidity_Inc_0j_CorrRapidity,"GEN_TauBnoHRapidity_Inc_0j_CorrRapidity/F");
+    tree->Branch("GEN_TauB_JetConstituents_0j_CorrRapidity",&GEN_TauB_JetConstituents_0j_CorrRapidity,"GEN_TauB_JetConstituents_0j_CorrRapidity/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity",&GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity,"GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity/F");
+    tree->Branch("GEN_TauC_JetConstituents_0j_CorrRapidity",&GEN_TauC_JetConstituents_0j_CorrRapidity,"GEN_TauC_JetConstituents_0j_CorrRapidity/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity",&GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity,"GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_0j_CorrRapidity",&GEN_TauCnoHRapidity_Inc_0j_CorrRapidity,"GEN_TauCnoHRapidity_Inc_0j_CorrRapidity/F");
+
+    tree->Branch("GEN_TauC_Inc_1j_CorrRapidity",&GEN_TauC_Inc_1j_CorrRapidity,"GEN_TauC_Inc_1j_CorrRapidity/F");
+    tree->Branch("GEN_TauB_Inc_1j_CorrRapidity",&GEN_TauB_Inc_1j_CorrRapidity,"GEN_TauB_Inc_1j_CorrRapidity/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_1j_CorrRapidity",&GEN_TauBnoHRapidity_Inc_1j_CorrRapidity,"GEN_TauBnoHRapidity_Inc_1j_CorrRapidity/F");
+    tree->Branch("GEN_TauB_JetConstituents_1j_CorrRapidity",&GEN_TauB_JetConstituents_1j_CorrRapidity,"GEN_TauB_JetConstituents_1j_CorrRapidity/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity",&GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity,"GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity/F");
+    tree->Branch("GEN_TauC_JetConstituents_1j_CorrRapidity",&GEN_TauC_JetConstituents_1j_CorrRapidity,"GEN_TauC_JetConstituents_1j_CorrRapidity/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity",&GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity,"GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_1j_CorrRapidity",&GEN_TauCnoHRapidity_Inc_1j_CorrRapidity,"GEN_TauCnoHRapidity_Inc_1j_CorrRapidity/F");
+
+    tree->Branch("GEN_TauC_Inc_2j_CorrRapidity",&GEN_TauC_Inc_2j_CorrRapidity,"GEN_TauC_Inc_2j_CorrRapidity/F");
+    tree->Branch("GEN_TauB_Inc_2j_CorrRapidity",&GEN_TauB_Inc_2j_CorrRapidity,"GEN_TauB_Inc_2j_CorrRapidity/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_2j_CorrRapidity",&GEN_TauBnoHRapidity_Inc_2j_CorrRapidity,"GEN_TauBnoHRapidity_Inc_2j_CorrRapidity/F");
+    tree->Branch("GEN_TauB_JetConstituents_2j_CorrRapidity",&GEN_TauB_JetConstituents_2j_CorrRapidity,"GEN_TauB_JetConstituents_2j_CorrRapidity/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity",&GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity,"GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity/F");
+    tree->Branch("GEN_TauC_JetConstituents_2j_CorrRapidity",&GEN_TauC_JetConstituents_2j_CorrRapidity,"GEN_TauC_JetConstituents_2j_CorrRapidity/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity",&GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity,"GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_2j_CorrRapidity",&GEN_TauCnoHRapidity_Inc_2j_CorrRapidity,"GEN_TauCnoHRapidity_Inc_2j_CorrRapidity/F");
+
+/**
+ * _pTWgt
+ */
+
+    tree->Branch("GEN_TauB_Inc_0j_pTWgt",&GEN_TauB_Inc_0j_pTWgt,"GEN_TauB_Inc_0j_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_0j_pTWgt",&GEN_TauBnoHRapidity_Inc_0j_pTWgt,"GEN_TauBnoHRapidity_Inc_0j_pTWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_0j_pTWgt",&GEN_TauB_JetConstituents_0j_pTWgt,"GEN_TauB_JetConstituents_0j_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_0j_pTWgt",&GEN_TauBnoHRapidity_JetConstituents_0j_pTWgt,"GEN_TauBnoHRapidity_JetConstituents_0j_pTWgt/F");
+    tree->Branch("GEN_TauC_Inc_0j_pTWgt",&GEN_TauC_Inc_0j_pTWgt,"GEN_TauC_Inc_0j_pTWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_0j_pTWgt",&GEN_TauC_JetConstituents_0j_pTWgt,"GEN_TauC_JetConstituents_0j_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_0j_pTWgt",&GEN_TauCnoHRapidity_JetConstituents_0j_pTWgt,"GEN_TauCnoHRapidity_JetConstituents_0j_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_0j_pTWgt",&GEN_TauCnoHRapidity_Inc_0j_pTWgt,"GEN_TauCnoHRapidity_Inc_0j_pTWgt/F");
+    tree->Branch("GEN_TauB_Inc_1j_pTWgt",&GEN_TauB_Inc_1j_pTWgt,"GEN_TauB_Inc_1j_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_1j_pTWgt",&GEN_TauBnoHRapidity_Inc_1j_pTWgt,"GEN_TauBnoHRapidity_Inc_1j_pTWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_1j_pTWgt",&GEN_TauB_JetConstituents_1j_pTWgt,"GEN_TauB_JetConstituents_1j_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_1j_pTWgt",&GEN_TauBnoHRapidity_JetConstituents_1j_pTWgt,"GEN_TauBnoHRapidity_JetConstituents_1j_pTWgt/F");
+    tree->Branch("GEN_TauC_Inc_1j_pTWgt",&GEN_TauC_Inc_1j_pTWgt,"GEN_TauC_Inc_1j_pTWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_1j_pTWgt",&GEN_TauC_JetConstituents_1j_pTWgt,"GEN_TauC_JetConstituents_1j_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_1j_pTWgt",&GEN_TauCnoHRapidity_JetConstituents_1j_pTWgt,"GEN_TauCnoHRapidity_JetConstituents_1j_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_1j_pTWgt",&GEN_TauCnoHRapidity_Inc_1j_pTWgt,"GEN_TauCnoHRapidity_Inc_1j_pTWgt/F");
+    tree->Branch("GEN_TauB_Inc_2j_pTWgt",&GEN_TauB_Inc_2j_pTWgt,"GEN_TauB_Inc_2j_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_2j_pTWgt",&GEN_TauBnoHRapidity_Inc_2j_pTWgt,"GEN_TauBnoHRapidity_Inc_2j_pTWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_2j_pTWgt",&GEN_TauB_JetConstituents_2j_pTWgt,"GEN_TauB_JetConstituents_2j_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_2j_pTWgt",&GEN_TauBnoHRapidity_JetConstituents_2j_pTWgt,"GEN_TauBnoHRapidity_JetConstituents_2j_pTWgt/F");
+    tree->Branch("GEN_TauC_Inc_2j_pTWgt",&GEN_TauC_Inc_2j_pTWgt,"GEN_TauC_Inc_2j_pTWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_2j_pTWgt",&GEN_TauC_JetConstituents_2j_pTWgt,"GEN_TauC_JetConstituents_2j_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_2j_pTWgt",&GEN_TauCnoHRapidity_JetConstituents_2j_pTWgt,"GEN_TauCnoHRapidity_JetConstituents_2j_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_2j_pTWgt",&GEN_TauCnoHRapidity_Inc_2j_pTWgt,"GEN_TauCnoHRapidity_Inc_2j_pTWgt/F");
+    tree->Branch("GEN_TauC_Inc_0j_CorrRapidity_pTWgt",&GEN_TauC_Inc_0j_CorrRapidity_pTWgt,"GEN_TauC_Inc_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauB_Inc_0j_CorrRapidity_pTWgt",&GEN_TauB_Inc_0j_CorrRapidity_pTWgt,"GEN_TauB_Inc_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt",&GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt,"GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_0j_CorrRapidity_pTWgt",&GEN_TauB_JetConstituents_0j_CorrRapidity_pTWgt,"GEN_TauB_JetConstituents_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt",&GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,"GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_0j_CorrRapidity_pTWgt",&GEN_TauC_JetConstituents_0j_CorrRapidity_pTWgt,"GEN_TauC_JetConstituents_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt",&GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,"GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt",&GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt,"GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauC_Inc_1j_CorrRapidity_pTWgt",&GEN_TauC_Inc_1j_CorrRapidity_pTWgt,"GEN_TauC_Inc_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauB_Inc_1j_CorrRapidity_pTWgt",&GEN_TauB_Inc_1j_CorrRapidity_pTWgt,"GEN_TauB_Inc_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt",&GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt,"GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_1j_CorrRapidity_pTWgt",&GEN_TauB_JetConstituents_1j_CorrRapidity_pTWgt,"GEN_TauB_JetConstituents_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt",&GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,"GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_1j_CorrRapidity_pTWgt",&GEN_TauC_JetConstituents_1j_CorrRapidity_pTWgt,"GEN_TauC_JetConstituents_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt",&GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,"GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt",&GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt,"GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauC_Inc_2j_CorrRapidity_pTWgt",&GEN_TauC_Inc_2j_CorrRapidity_pTWgt,"GEN_TauC_Inc_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauB_Inc_2j_CorrRapidity_pTWgt",&GEN_TauB_Inc_2j_CorrRapidity_pTWgt,"GEN_TauB_Inc_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt",&GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt,"GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_2j_CorrRapidity_pTWgt",&GEN_TauB_JetConstituents_2j_CorrRapidity_pTWgt,"GEN_TauB_JetConstituents_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt",&GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,"GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_2j_CorrRapidity_pTWgt",&GEN_TauC_JetConstituents_2j_CorrRapidity_pTWgt,"GEN_TauC_JetConstituents_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt",&GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,"GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt",&GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt,"GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt/F");
+        
+    //
+
+    tree->Branch("GEN_TauB_Inc_0j_EnergyWgt",&GEN_TauB_Inc_0j_EnergyWgt,"GEN_TauB_Inc_0j_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_0j_EnergyWgt",&GEN_TauBnoHRapidity_Inc_0j_EnergyWgt,"GEN_TauBnoHRapidity_Inc_0j_EnergyWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_0j_EnergyWgt",&GEN_TauB_JetConstituents_0j_EnergyWgt,"GEN_TauB_JetConstituents_0j_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_0j_EnergyWgt",&GEN_TauBnoHRapidity_JetConstituents_0j_EnergyWgt,"GEN_TauBnoHRapidity_JetConstituents_0j_EnergyWgt/F");
+    tree->Branch("GEN_TauC_Inc_0j_EnergyWgt",&GEN_TauC_Inc_0j_EnergyWgt,"GEN_TauC_Inc_0j_EnergyWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_0j_EnergyWgt",&GEN_TauC_JetConstituents_0j_EnergyWgt,"GEN_TauC_JetConstituents_0j_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_0j_EnergyWgt",&GEN_TauCnoHRapidity_JetConstituents_0j_EnergyWgt,"GEN_TauCnoHRapidity_JetConstituents_0j_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_0j_EnergyWgt",&GEN_TauCnoHRapidity_Inc_0j_EnergyWgt,"GEN_TauCnoHRapidity_Inc_0j_EnergyWgt/F");
+    tree->Branch("GEN_TauB_Inc_1j_EnergyWgt",&GEN_TauB_Inc_1j_EnergyWgt,"GEN_TauB_Inc_1j_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_1j_EnergyWgt",&GEN_TauBnoHRapidity_Inc_1j_EnergyWgt,"GEN_TauBnoHRapidity_Inc_1j_EnergyWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_1j_EnergyWgt",&GEN_TauB_JetConstituents_1j_EnergyWgt,"GEN_TauB_JetConstituents_1j_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_1j_EnergyWgt",&GEN_TauBnoHRapidity_JetConstituents_1j_EnergyWgt,"GEN_TauBnoHRapidity_JetConstituents_1j_EnergyWgt/F");
+    tree->Branch("GEN_TauC_Inc_1j_EnergyWgt",&GEN_TauC_Inc_1j_EnergyWgt,"GEN_TauC_Inc_1j_EnergyWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_1j_EnergyWgt",&GEN_TauC_JetConstituents_1j_EnergyWgt,"GEN_TauC_JetConstituents_1j_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_1j_EnergyWgt",&GEN_TauCnoHRapidity_JetConstituents_1j_EnergyWgt,"GEN_TauCnoHRapidity_JetConstituents_1j_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_1j_EnergyWgt",&GEN_TauCnoHRapidity_Inc_1j_EnergyWgt,"GEN_TauCnoHRapidity_Inc_1j_EnergyWgt/F");
+    tree->Branch("GEN_TauB_Inc_2j_EnergyWgt",&GEN_TauB_Inc_2j_EnergyWgt,"GEN_TauB_Inc_2j_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_2j_EnergyWgt",&GEN_TauBnoHRapidity_Inc_2j_EnergyWgt,"GEN_TauBnoHRapidity_Inc_2j_EnergyWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_2j_EnergyWgt",&GEN_TauB_JetConstituents_2j_EnergyWgt,"GEN_TauB_JetConstituents_2j_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_2j_EnergyWgt",&GEN_TauBnoHRapidity_JetConstituents_2j_EnergyWgt,"GEN_TauBnoHRapidity_JetConstituents_2j_EnergyWgt/F");
+    tree->Branch("GEN_TauC_Inc_2j_EnergyWgt",&GEN_TauC_Inc_2j_EnergyWgt,"GEN_TauC_Inc_2j_EnergyWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_2j_EnergyWgt",&GEN_TauC_JetConstituents_2j_EnergyWgt,"GEN_TauC_JetConstituents_2j_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_2j_EnergyWgt",&GEN_TauCnoHRapidity_JetConstituents_2j_EnergyWgt,"GEN_TauCnoHRapidity_JetConstituents_2j_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_2j_EnergyWgt",&GEN_TauCnoHRapidity_Inc_2j_EnergyWgt,"GEN_TauCnoHRapidity_Inc_2j_EnergyWgt/F");
+    tree->Branch("GEN_TauC_Inc_0j_CorrRapidity_EnergyWgt",&GEN_TauC_Inc_0j_CorrRapidity_EnergyWgt,"GEN_TauC_Inc_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauB_Inc_0j_CorrRapidity_EnergyWgt",&GEN_TauB_Inc_0j_CorrRapidity_EnergyWgt,"GEN_TauB_Inc_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt",&GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt,"GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_0j_CorrRapidity_EnergyWgt",&GEN_TauB_JetConstituents_0j_CorrRapidity_EnergyWgt,"GEN_TauB_JetConstituents_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt",&GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt,"GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_0j_CorrRapidity_EnergyWgt",&GEN_TauC_JetConstituents_0j_CorrRapidity_EnergyWgt,"GEN_TauC_JetConstituents_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt",&GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt,"GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt",&GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt,"GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauC_Inc_1j_CorrRapidity_EnergyWgt",&GEN_TauC_Inc_1j_CorrRapidity_EnergyWgt,"GEN_TauC_Inc_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauB_Inc_1j_CorrRapidity_EnergyWgt",&GEN_TauB_Inc_1j_CorrRapidity_EnergyWgt,"GEN_TauB_Inc_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt",&GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt,"GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_1j_CorrRapidity_EnergyWgt",&GEN_TauB_JetConstituents_1j_CorrRapidity_EnergyWgt,"GEN_TauB_JetConstituents_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt",&GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt,"GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_1j_CorrRapidity_EnergyWgt",&GEN_TauC_JetConstituents_1j_CorrRapidity_EnergyWgt,"GEN_TauC_JetConstituents_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt",&GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt,"GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt",&GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt,"GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauC_Inc_2j_CorrRapidity_EnergyWgt",&GEN_TauC_Inc_2j_CorrRapidity_EnergyWgt,"GEN_TauC_Inc_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauB_Inc_2j_CorrRapidity_EnergyWgt",&GEN_TauB_Inc_2j_CorrRapidity_EnergyWgt,"GEN_TauB_Inc_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt",&GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt,"GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauB_JetConstituents_2j_CorrRapidity_EnergyWgt",&GEN_TauB_JetConstituents_2j_CorrRapidity_EnergyWgt,"GEN_TauB_JetConstituents_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt",&GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt,"GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauC_JetConstituents_2j_CorrRapidity_EnergyWgt",&GEN_TauC_JetConstituents_2j_CorrRapidity_EnergyWgt,"GEN_TauC_JetConstituents_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt",&GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt,"GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt/F");
+    tree->Branch("GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt",&GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt,"GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt/F");
+
+    tree->Branch("GEN_Tau0",&GEN_Tau0,"GEN_Tau0/F");
+    tree->Branch("GEN_GeneralizedTau0",&GEN_GeneralizedTau0,"GEN_GeneralizedTau0/F");
+    tree->Branch("GEN_GeneralizedTau1",&GEN_GeneralizedTau1,"GEN_GeneralizedTau1/F");
+    tree->Branch("GEN_GeneralizedTau2",&GEN_GeneralizedTau2,"GEN_GeneralizedTau2/F");
+
+    tree->Branch("GEN_Tau0_noHRapidity",&GEN_Tau0_noHRapidity,"GEN_Tau0_noHRapidity/F");
+    tree->Branch("GEN_GeneralizedTau0_noHRapidity",&GEN_GeneralizedTau0_noHRapidity,"GEN_GeneralizedTau0_noHRapidity/F");
+    tree->Branch("GEN_GeneralizedTau1_noHRapidity",&GEN_GeneralizedTau1_noHRapidity,"GEN_GeneralizedTau1_noHRapidity/F");
+    tree->Branch("GEN_GeneralizedTau2_noHRapidity",&GEN_GeneralizedTau2_noHRapidity,"GEN_GeneralizedTau2_noHRapidity/F");
+
     
     // merged jets
     tree->Branch("mergedjet_iscleanH4l",&mergedjet_iscleanH4l);
@@ -5733,7 +6670,9 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
                                   std::vector<pat::Jet> goodJets, std::vector<float> goodJetQGTagger,
                                   std::vector<float> goodJetaxis2, std::vector<float> goodJetptD, std::vector<int> goodJetmult,
                                   std::vector<pat::Jet> selectedMergedJets,
-                                  std::map<unsigned int, TLorentzVector> selectedFsrMap)
+                                  std::map<unsigned int, TLorentzVector> selectedFsrMap,
+				  edm::Handle<pat::PackedCandidateCollection> &pfcands,
+                                  edm::Handle<edm::View<pat::Jet> > &jets)
 {
     
     //    std::string DATAPATH = std::getenv( "CMSSW_BASE" );
@@ -5754,7 +6693,7 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
     // jets reco new declaration, TJ
     //int jet1index=-1, jet2index=-1;
     float jet1pt=0.0, jet2pt=0.0;
-    int jet1index2p5=-1.0, jet2index2p5=-1.0;
+    //int jet1index2p5=-1.0, jet2index2p5=-1.0;
     //float jet1pt2p5=0.0, jet2pt2p5=0.0;
     //            float qgj1=-1.0; float qgj2=-1.0;
     //	    float csvj1, csvj2;
@@ -6663,7 +7602,505 @@ void UFHZZ4LAna::setTreeVariables( const edm::Event& iEvent, const edm::EventSet
         
         // 	    std::cout<<" ------------ "<<std::endl;
         
-    }
+	        // /**
+         // /**
+        //  * START: nJettiness variable
+        //  */
+
+        /**
+         * For zero jet scenario
+         */
+
+        NJettiness CalculateNJettinessVar;
+        // double Taub = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, 1.0, 1.0);
+        // Tau0 = Taub;
+        // std::cout << "Number of tight leptons: " << ntight << "\tskimTightLeptons = " << skimTightLeptons << std::endl;
+        // std::cout << "Taub = " << Taub << std::endl;
+
+        Tau0 = CalculateNJettinessVar.Tau0(pfcands,
+                                           sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+                                           HVec.Rapidity(),
+                                           Lep1, Lep2, Lep3, Lep4);
+
+        Tau0_noHRapidity = CalculateNJettinessVar.Tau0(pfcands,
+                                           sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+                                           // HVec.Rapidity(),
+                                           0.0,
+                                           Lep1, Lep2, Lep3, Lep4);
+
+        GeneralizedTau0 = CalculateNJettinessVar.GeneralizedTaunN(
+            0,
+            pfcands,
+            goodJets,   // Fixed don't change
+            sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+            HVec.Rapidity(),
+            Lep1, Lep2, Lep3, Lep4
+            );
+
+        GeneralizedTau1 = CalculateNJettinessVar.GeneralizedTaunN(
+            1,
+            pfcands,
+            goodJets,   // Fixed don't change
+            sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+            HVec.Rapidity(),
+            Lep1, Lep2, Lep3, Lep4
+            );
+
+        GeneralizedTau2 = CalculateNJettinessVar.GeneralizedTaunN(
+            2,
+            pfcands,
+            goodJets,   // Fixed don't change
+            sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+            HVec.Rapidity(),
+            Lep1, Lep2, Lep3, Lep4
+            );
+
+        GeneralizedTau0_noHRapidity = CalculateNJettinessVar.GeneralizedTaunN(
+            0,
+            pfcands,
+            goodJets,   // Fixed don't change
+            sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+            // HVec.Rapidity(),
+            0.0,
+            Lep1, Lep2, Lep3, Lep4
+            );
+
+        GeneralizedTau1_noHRapidity = CalculateNJettinessVar.GeneralizedTaunN(
+            1,
+            pfcands,
+            goodJets,   // Fixed don't change
+            sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+            // HVec.Rapidity(),
+            0.0,
+            Lep1, Lep2, Lep3, Lep4
+            );
+
+        GeneralizedTau2_noHRapidity = CalculateNJettinessVar.GeneralizedTaunN(
+            2,
+            pfcands,
+            goodJets,   // Fixed don't change
+            sqrt((HVec.M()*HVec.M()) + (HVec.Pt()*HVec.Pt())),
+            // HVec.Rapidity(),
+            0.0,
+            Lep1, Lep2, Lep3, Lep4
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             HVec.Rapidity(),
+
+             // TauB
+             TauB_Inc_0j,
+             TauB_JetConstituents_0j,
+
+             // TauB's rapidity
+             TauB_Inc_0j_CorrRapidity,
+             TauB_JetConstituents_0j_CorrRapidity,
+
+             // TauC
+             TauC_Inc_0j,
+             TauC_JetConstituents_0j,
+
+             // TauC's rapidity
+             TauC_Inc_0j_CorrRapidity,
+             TauC_JetConstituents_0j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             0.0,
+
+             // TauB
+             TauBnoHRapidity_Inc_0j,
+             TauBnoHRapidity_JetConstituents_0j,
+
+             // TauB's rapidity
+             TauBnoHRapidity_Inc_0j_CorrRapidity,
+             TauBnoHRapidity_JetConstituents_0j_CorrRapidity,
+
+             // TauC
+             TauCnoHRapidity_Inc_0j,
+             TauCnoHRapidity_JetConstituents_0j,
+
+             // TauC's rapidity
+             TauCnoHRapidity_Inc_0j_CorrRapidity,
+             TauCnoHRapidity_JetConstituents_0j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             HVec.Rapidity(),
+
+             // TauB
+             TauB_Inc_1j,
+             TauB_JetConstituents_1j,
+
+             // TauB's rapidity
+             TauB_Inc_1j_CorrRapidity,
+             TauB_JetConstituents_1j_CorrRapidity,
+
+             // TauC
+             TauC_Inc_1j,
+             TauC_JetConstituents_1j,
+
+             // TauC's rapidity
+             TauC_Inc_1j_CorrRapidity,
+             TauC_JetConstituents_1j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             0.0,
+
+             // TauB
+             TauBnoHRapidity_Inc_1j,
+             TauBnoHRapidity_JetConstituents_1j,
+
+             // TauB's rapidity
+             TauBnoHRapidity_Inc_1j_CorrRapidity,
+             TauBnoHRapidity_JetConstituents_1j_CorrRapidity,
+
+             // TauC
+             TauCnoHRapidity_Inc_1j,
+             TauCnoHRapidity_JetConstituents_1j,
+
+             // TauC's rapidity
+             TauCnoHRapidity_Inc_1j_CorrRapidity,
+             TauCnoHRapidity_JetConstituents_1j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             HVec.Rapidity(),
+
+             // TauB
+             TauB_Inc_2j,
+             TauB_JetConstituents_2j,
+
+             // TauB's rapidity
+             TauB_Inc_2j_CorrRapidity,
+             TauB_JetConstituents_2j_CorrRapidity,
+
+             // TauC
+             TauC_Inc_2j,
+             TauC_JetConstituents_2j,
+
+             // TauC's rapidity
+             TauC_Inc_2j_CorrRapidity,
+             TauC_JetConstituents_2j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             0.0,
+
+             // TauB
+             TauBnoHRapidity_Inc_2j,
+             TauBnoHRapidity_JetConstituents_2j,
+
+             // TauB's rapidity
+             TauBnoHRapidity_Inc_2j_CorrRapidity,
+             TauBnoHRapidity_JetConstituents_2j_CorrRapidity,
+
+             // TauC
+             TauCnoHRapidity_Inc_2j,
+             TauCnoHRapidity_JetConstituents_2j,
+
+             // TauC's rapidity
+             TauCnoHRapidity_Inc_2j_CorrRapidity,
+             TauCnoHRapidity_JetConstituents_2j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+//***************************************
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             HVec.Rapidity(),
+
+             // TauB
+             TauB_Inc_0j_pTWgt,
+             TauB_JetConstituents_0j_pTWgt,
+
+             // TauB's rapidity
+             TauB_Inc_0j_CorrRapidity_pTWgt,
+             TauB_JetConstituents_0j_CorrRapidity_pTWgt,
+
+             // TauC
+             TauC_Inc_0j_pTWgt,
+             TauC_JetConstituents_0j_pTWgt,
+
+             // TauC's rapidity
+             TauC_Inc_0j_CorrRapidity_pTWgt,
+             TauC_JetConstituents_0j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             0.0,
+
+             // TauB
+             TauBnoHRapidity_Inc_0j_pTWgt,
+             TauBnoHRapidity_JetConstituents_0j_pTWgt,
+
+             // TauB's rapidity
+             TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt,
+             TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,
+
+             // TauC
+             TauCnoHRapidity_Inc_0j_pTWgt,
+             TauCnoHRapidity_JetConstituents_0j_pTWgt,
+
+             // TauC's rapidity
+             TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt,
+             TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             HVec.Rapidity(),
+
+             // TauB
+             TauB_Inc_1j_pTWgt,
+             TauB_JetConstituents_1j_pTWgt,
+
+             // TauB's rapidity
+             TauB_Inc_1j_CorrRapidity_pTWgt,
+             TauB_JetConstituents_1j_CorrRapidity_pTWgt,
+
+             // TauC
+             TauC_Inc_1j_pTWgt,
+             TauC_JetConstituents_1j_pTWgt,
+
+             // TauC's rapidity
+             TauC_Inc_1j_CorrRapidity_pTWgt,
+             TauC_JetConstituents_1j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             0.0,
+
+             // TauB
+             TauBnoHRapidity_Inc_1j_pTWgt,
+             TauBnoHRapidity_JetConstituents_1j_pTWgt,
+
+             // TauB's rapidity
+             TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt,
+             TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,
+
+             // TauC
+             TauCnoHRapidity_Inc_1j_pTWgt,
+             TauCnoHRapidity_JetConstituents_1j_pTWgt,
+
+             // TauC's rapidity
+             TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt,
+             TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             HVec.Rapidity(),
+
+             // TauB
+             TauB_Inc_2j_pTWgt,
+             TauB_JetConstituents_2j_pTWgt,
+
+             // TauB's rapidity
+             TauB_Inc_2j_CorrRapidity_pTWgt,
+             TauB_JetConstituents_2j_CorrRapidity_pTWgt,
+
+             // TauC
+             TauC_Inc_2j_pTWgt,
+             TauC_JetConstituents_2j_pTWgt,
+
+             // TauC's rapidity
+             TauC_Inc_2j_CorrRapidity_pTWgt,
+             TauC_JetConstituents_2j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             0.0,
+
+             // TauB
+             TauBnoHRapidity_Inc_2j_pTWgt,
+             TauBnoHRapidity_JetConstituents_2j_pTWgt,
+
+             // TauB's rapidity
+             TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt,
+             TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,
+
+             // TauC
+             TauCnoHRapidity_Inc_2j_pTWgt,
+             TauCnoHRapidity_JetConstituents_2j_pTWgt,
+
+             // TauC's rapidity
+             TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt,
+             TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+
+//***************************************
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             HVec.Rapidity(),
+
+             // TauB
+             TauB_Inc_0j_EnergyWgt,
+             TauB_JetConstituents_0j_EnergyWgt,
+
+             // TauB's rapidity
+             TauB_Inc_0j_CorrRapidity_EnergyWgt,
+             TauB_JetConstituents_0j_CorrRapidity_EnergyWgt,
+
+             // TauC
+             TauC_Inc_0j_EnergyWgt,
+             TauC_JetConstituents_0j_EnergyWgt,
+
+             // TauC's rapidity
+             TauC_Inc_0j_CorrRapidity_EnergyWgt,
+             TauC_JetConstituents_0j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             0.0,
+
+             // TauB
+             TauBnoHRapidity_Inc_0j_EnergyWgt,
+             TauBnoHRapidity_JetConstituents_0j_EnergyWgt,
+
+             // TauB's rapidity
+             TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt,
+             TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt,
+
+             // TauC
+             TauCnoHRapidity_Inc_0j_EnergyWgt,
+             TauCnoHRapidity_JetConstituents_0j_EnergyWgt,
+
+             // TauC's rapidity
+             TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt,
+             TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             HVec.Rapidity(),
+
+             // TauB
+             TauB_Inc_1j_EnergyWgt,
+             TauB_JetConstituents_1j_EnergyWgt,
+
+             // TauB's rapidity
+             TauB_Inc_1j_CorrRapidity_EnergyWgt,
+             TauB_JetConstituents_1j_CorrRapidity_EnergyWgt,
+
+             // TauC
+             TauC_Inc_1j_EnergyWgt,
+             TauC_JetConstituents_1j_EnergyWgt,
+
+             // TauC's rapidity
+             TauC_Inc_1j_CorrRapidity_EnergyWgt,
+             TauC_JetConstituents_1j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             0.0,
+
+             // TauB
+             TauBnoHRapidity_Inc_1j_EnergyWgt,
+             TauBnoHRapidity_JetConstituents_1j_EnergyWgt,
+
+             // TauB's rapidity
+             TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt,
+             TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt,
+
+             // TauC
+             TauCnoHRapidity_Inc_1j_EnergyWgt,
+             TauCnoHRapidity_JetConstituents_1j_EnergyWgt,
+
+             // TauC's rapidity
+             TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt,
+             TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             HVec.Rapidity(),
+
+             // TauB
+             TauB_Inc_2j_EnergyWgt,
+             TauB_JetConstituents_2j_EnergyWgt,
+
+             // TauB's rapidity
+             TauB_Inc_2j_CorrRapidity_EnergyWgt,
+             TauB_JetConstituents_2j_CorrRapidity_EnergyWgt,
+
+             // TauC
+             TauC_Inc_2j_EnergyWgt,
+             TauC_JetConstituents_2j_EnergyWgt,
+
+             // TauC's rapidity
+             TauC_Inc_2j_CorrRapidity_EnergyWgt,
+             TauC_JetConstituents_2j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             goodJets,   // Fixed don't change
+             0.0,
+
+             // TauB
+             TauBnoHRapidity_Inc_2j_EnergyWgt,
+             TauBnoHRapidity_JetConstituents_2j_EnergyWgt,
+
+             // TauB's rapidity
+             TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt,
+             TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt,
+
+             // TauC
+             TauCnoHRapidity_Inc_2j_EnergyWgt,
+             TauCnoHRapidity_JetConstituents_2j_EnergyWgt,
+
+             // TauC's rapidity
+             TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt,
+             TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        /**
+         * END: nJettiness variable
+         */
+
+
+    }  // END:: if (foundHiggsCandidate)
 
 }
 
@@ -6977,11 +8414,36 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
             int GENjet1index=0; int GENjet2index=0; int GENjet1index_2p5=0; int GENjet2index_2p5=0;
             //int GENjet1index=0; int GENjet1index_2p5=0;// int GENjet2index_2p5=0;
             TLorentzVector Lep1, Lep2, Lep3, Lep4,  Jet1, Jet2, GENJet1, GENJet2, GENJet1_2p5, GENJet2_2p5;
+	    vector<reco::GenJet> GEN_goodJets;
+
+            for(unsigned int i = 0; i < genJets->size(); ++i) 
+            {
+                const reco::GenJet & genjet = genJets->at(i);
+                // GEN_goodJets.push_back(genjet);
+
+                double pt = genjet.pt();  double eta = genjet.eta();
+                // double phi = genjet.phi();  double mass = genjet.mass();   // TJ
+
+                if (pt<30.0 || abs(eta)>4.7) continue;
+                unsigned int N=GENlep_pt.size();
+                for(unsigned int i = 0; i<N; i++) 
+                {
+                    if (!(abs(GENlep_id[i])==11 || abs(GENlep_id[i])==13)) continue;
+                    TLorentzVector genlep;
+                    genlep.SetPtEtaPhiM(GENlep_pt[i],GENlep_eta[i],GENlep_phi[i],GENlep_mass[i]);
+                    double dR = deltaR(genlep.Eta(), genlep.Phi(), genjet.eta(),genjet.phi());
+                    if(dR>0.4) {
+                        GEN_goodJets.push_back(genjet);
+                    }
+                }
+
+            }
+
             
             
             for(genjet = genJets->begin(); genjet != genJets->end(); genjet++) {
                 double pt = genjet->pt();  double eta = genjet->eta();
-                double phi = genjet->phi();  double mass = genjet->mass();   // TJ
+            //    double phi = genjet->phi();  double mass = genjet->mass();   // TJ
                 //	int jetid = 999;
                 genjet_id = genjet->pdgId();  // needed for bjets
                 //		TLorentzVector thisGENJet;
@@ -7174,23 +8636,23 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
 
 // start filling GEN mela variables 
 
-            // gconstants using splines
-            TFile *gConstant_g4 = new TFile("gconstants/gConstant_HZZ2e2mu_g4.root");
+            // UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA using splines
+            TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
             TSpline *spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
             gConstant_g4->Close();
             delete gConstant_g4;
 
-            TFile *gConstant_g2 = new TFile("gconstants/gConstant_HZZ2e2mu_g2.root");
+            TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g2.root");
             TSpline *spline_g2 = (TSpline*) gConstant_g2->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g2");
             gConstant_g2->Close();
             delete gConstant_g2;
 
-            TFile *gConstant_L1 = new TFile("gconstants/gConstant_HZZ2e2mu_L1.root");
+            TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1.root");
             TSpline *spline_L1 = (TSpline*) gConstant_L1->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_L1");
             gConstant_L1->Close();
             delete gConstant_L1;
 
-            TFile *gConstant_L1Zgs = new TFile("gconstants/gConstant_HZZ2e2mu_L1Zgs.root");
+            TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1Zgs.root");
             TSpline *spline_L1Zgs = (TSpline*) gConstant_L1Zgs->Get("sp_tgfinal_HZZ2e2mu_SM_photoncut_over_tgfinal_HZZ2e2mu_L1Zgs");
             gConstant_L1Zgs->Close();
             delete gConstant_L1Zgs;
@@ -7300,6 +8762,501 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
 
 	    mela->resetInputEvent();
             //TJe
+
+        // /**
+        //  * START: nJettiness variable
+        //  */
+
+        /**
+         * For zero jet scenario
+         */
+
+        NJettiness CalculateNJettinessVar;
+        // double Taub = CalculateNJettinessVar.GeneralizedTaunN(pfCands, jets, 1.0, 1.0);
+        // Tau0 = Taub; 
+        // std::cout << "Number of tight leptons: " << ntight << "\tskimTightLeptons = " << skimTightLeptons << std::endl;
+        // std::cout << "Taub = " << Taub << std::endl;
+
+        TLorentzVector GEN_HVec = LS3_Z1_1 + LS3_Z1_2 + LS3_Z2_1 + LS3_Z2_2;
+
+        GEN_Tau0 = CalculateNJettinessVar.Tau0(prunedgenParticles,
+                                           sqrt((GEN_HVec.M()*GEN_HVec.M()) + (GEN_HVec.Pt()*GEN_HVec.Pt())),
+                                           GEN_HVec.Rapidity(),
+                                           LS3_Z1_1, LS3_Z1_2, LS3_Z2_1, LS3_Z2_2);
+
+        GEN_Tau0_noHRapidity = CalculateNJettinessVar.Tau0(prunedgenParticles,
+                                           sqrt((GEN_HVec.M()*GEN_HVec.M()) + (GEN_HVec.Pt()*GEN_HVec.Pt())),
+                                           // GEN_HVec.Rapidity(),
+                                           0.0,
+                                           LS3_Z1_1, LS3_Z1_2, LS3_Z2_1, LS3_Z2_2);
+
+        GEN_GeneralizedTau0 = CalculateNJettinessVar.GeneralizedTaunN(
+            0,
+            prunedgenParticles,
+            GEN_goodJets,   // Fixed don't change
+            sqrt((GEN_HVec.M()*GEN_HVec.M()) + (GEN_HVec.Pt()*GEN_HVec.Pt())),
+            GEN_HVec.Rapidity(),
+            LS3_Z1_1, LS3_Z1_2, LS3_Z2_1, LS3_Z2_2
+            );
+
+        GEN_GeneralizedTau1 = CalculateNJettinessVar.GeneralizedTaunN(
+            1,
+            prunedgenParticles,
+            GEN_goodJets,   // Fixed don't change
+            sqrt((GEN_HVec.M()*GEN_HVec.M()) + (GEN_HVec.Pt()*GEN_HVec.Pt())),
+            GEN_HVec.Rapidity(),
+            LS3_Z1_1, LS3_Z1_2, LS3_Z2_1, LS3_Z2_2
+            );
+
+        GEN_GeneralizedTau2 = CalculateNJettinessVar.GeneralizedTaunN(
+            2,
+            prunedgenParticles,
+            GEN_goodJets,   // Fixed don't change
+            sqrt((GEN_HVec.M()*GEN_HVec.M()) + (GEN_HVec.Pt()*GEN_HVec.Pt())),
+            GEN_HVec.Rapidity(),
+            LS3_Z1_1, LS3_Z1_2, LS3_Z2_1, LS3_Z2_2
+            );
+
+        GEN_GeneralizedTau0_noHRapidity = CalculateNJettinessVar.GeneralizedTaunN(
+            0,
+            prunedgenParticles,
+            GEN_goodJets,   // Fixed don't change
+            sqrt((GEN_HVec.M()*GEN_HVec.M()) + (GEN_HVec.Pt()*GEN_HVec.Pt())),
+            // GEN_HVec.Rapidity(),
+            0.0,
+            LS3_Z1_1, LS3_Z1_2, LS3_Z2_1, LS3_Z2_2
+            );
+
+        GEN_GeneralizedTau1_noHRapidity = CalculateNJettinessVar.GeneralizedTaunN(
+            1,
+            prunedgenParticles,
+            GEN_goodJets,   // Fixed don't change
+            sqrt((GEN_HVec.M()*GEN_HVec.M()) + (GEN_HVec.Pt()*GEN_HVec.Pt())),
+            // GEN_HVec.Rapidity(),
+            0.0,
+            LS3_Z1_1, LS3_Z1_2, LS3_Z2_1, LS3_Z2_2
+            );
+
+        GEN_GeneralizedTau2_noHRapidity = CalculateNJettinessVar.GeneralizedTaunN(
+            2,
+            prunedgenParticles,
+            GEN_goodJets,   // Fixed don't change
+            sqrt((GEN_HVec.M()*GEN_HVec.M()) + (GEN_HVec.Pt()*GEN_HVec.Pt())),
+            // GEN_HVec.Rapidity(),
+            0.0,
+            LS3_Z1_1, LS3_Z1_2, LS3_Z2_1, LS3_Z2_2
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
+
+             // TauB
+             GEN_TauB_Inc_0j,
+             GEN_TauB_JetConstituents_0j,
+
+             // TauB's rapidity
+             GEN_TauB_Inc_0j_CorrRapidity,
+             GEN_TauB_JetConstituents_0j_CorrRapidity,
+
+             // TauC
+             GEN_TauC_Inc_0j,
+             GEN_TauC_JetConstituents_0j,
+
+             // TauC's rapidity
+             GEN_TauC_Inc_0j_CorrRapidity,
+             GEN_TauC_JetConstituents_0j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
+
+             // TauB
+             GEN_TauBnoHRapidity_Inc_0j,
+             GEN_TauBnoHRapidity_JetConstituents_0j,
+
+             // TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_0j_CorrRapidity,
+             GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity,
+
+             // TauC
+             GEN_TauCnoHRapidity_Inc_0j,
+             GEN_TauCnoHRapidity_JetConstituents_0j,
+
+             // TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_0j_CorrRapidity,
+             GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
+
+             // TauB
+             GEN_TauB_Inc_1j,
+             GEN_TauB_JetConstituents_1j,
+
+             // TauB's rapidity
+             GEN_TauB_Inc_1j_CorrRapidity,
+             GEN_TauB_JetConstituents_1j_CorrRapidity,
+
+             // TauC
+             GEN_TauC_Inc_1j,
+             GEN_TauC_JetConstituents_1j,
+
+             // TauC's rapidity
+             GEN_TauC_Inc_1j_CorrRapidity,
+             GEN_TauC_JetConstituents_1j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
+
+             // TauB
+             GEN_TauBnoHRapidity_Inc_1j,
+             GEN_TauBnoHRapidity_JetConstituents_1j,
+
+             // TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_1j_CorrRapidity,
+             GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity,
+
+             // TauC
+             GEN_TauCnoHRapidity_Inc_1j,
+             GEN_TauCnoHRapidity_JetConstituents_1j,
+
+             // TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_1j_CorrRapidity,
+             GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
+
+             // TauB
+             GEN_TauB_Inc_2j,
+             GEN_TauB_JetConstituents_2j,
+
+             // GEN_TauB's rapidity
+             GEN_TauB_Inc_2j_CorrRapidity,
+             GEN_TauB_JetConstituents_2j_CorrRapidity,
+
+             // GEN_TauC
+             GEN_TauC_Inc_2j,
+             GEN_TauC_JetConstituents_2j,
+
+             // GEN_TauC's rapidity
+             GEN_TauC_Inc_2j_CorrRapidity,
+             GEN_TauC_JetConstituents_2j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_FunctionOnly(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
+
+             // GEN_TauB
+             GEN_TauBnoHRapidity_Inc_2j,
+             GEN_TauBnoHRapidity_JetConstituents_2j,
+
+             // GEN_TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_2j_CorrRapidity,
+             GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity,
+
+             // GEN_TauC
+             GEN_TauCnoHRapidity_Inc_2j,
+             GEN_TauCnoHRapidity_JetConstituents_2j,
+
+             // GEN_TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_2j_CorrRapidity,
+             GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+//***************************************
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
+
+             // GEN_TauB
+             GEN_TauB_Inc_0j_pTWgt,
+             GEN_TauB_JetConstituents_0j_pTWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauB_Inc_0j_CorrRapidity_pTWgt,
+             GEN_TauB_JetConstituents_0j_CorrRapidity_pTWgt,
+
+             // GEN_TauC
+             GEN_TauC_Inc_0j_pTWgt,
+             GEN_TauC_JetConstituents_0j_pTWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauC_Inc_0j_CorrRapidity_pTWgt,
+             GEN_TauC_JetConstituents_0j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
+
+             // GEN_TauB
+             GEN_TauBnoHRapidity_Inc_0j_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_0j_pTWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,
+
+             // GEN_TauC
+             GEN_TauCnoHRapidity_Inc_0j_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_0j_pTWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
+
+             // GEN_TauB
+             GEN_TauB_Inc_1j_pTWgt,
+             GEN_TauB_JetConstituents_1j_pTWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauB_Inc_1j_CorrRapidity_pTWgt,
+             GEN_TauB_JetConstituents_1j_CorrRapidity_pTWgt,
+
+             // GEN_TauC
+             GEN_TauC_Inc_1j_pTWgt,
+             GEN_TauC_JetConstituents_1j_pTWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauC_Inc_1j_CorrRapidity_pTWgt,
+             GEN_TauC_JetConstituents_1j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
+
+             // GEN_TauB
+             GEN_TauBnoHRapidity_Inc_1j_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_1j_pTWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,
+
+             // GEN_TauC
+             GEN_TauCnoHRapidity_Inc_1j_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_1j_pTWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
+
+             // GEN_TauB
+             GEN_TauB_Inc_2j_pTWgt,
+             GEN_TauB_JetConstituents_2j_pTWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauB_Inc_2j_CorrRapidity_pTWgt,
+             GEN_TauB_JetConstituents_2j_CorrRapidity_pTWgt,
+
+             // GEN_TauC
+             GEN_TauC_Inc_2j_pTWgt,
+             GEN_TauC_JetConstituents_2j_pTWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauC_Inc_2j_CorrRapidity_pTWgt,
+             GEN_TauC_JetConstituents_2j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
+
+             // GEN_TauB
+             GEN_TauBnoHRapidity_Inc_2j_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_2j_pTWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_pTWgt,
+             GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,
+
+             // GEN_TauC
+             GEN_TauCnoHRapidity_Inc_2j_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_2j_pTWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_pTWgt,
+             GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_pTWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+//***************************************
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
+
+             // GEN_TauB
+             GEN_TauB_Inc_0j_EnergyWgt,
+             GEN_TauB_JetConstituents_0j_EnergyWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauB_Inc_0j_CorrRapidity_EnergyWgt,
+             GEN_TauB_JetConstituents_0j_CorrRapidity_EnergyWgt,
+
+             // GEN_TauC
+             GEN_TauC_Inc_0j_EnergyWgt,
+             GEN_TauC_JetConstituents_0j_EnergyWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauC_Inc_0j_CorrRapidity_EnergyWgt,
+             GEN_TauC_JetConstituents_0j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             0,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
+
+             // GEN_TauB
+             GEN_TauBnoHRapidity_Inc_0j_EnergyWgt,
+             GEN_TauBnoHRapidity_JetConstituents_0j_EnergyWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt,
+             GEN_TauBnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt,
+
+             // GEN_TauC
+             GEN_TauCnoHRapidity_Inc_0j_EnergyWgt,
+             GEN_TauCnoHRapidity_JetConstituents_0j_EnergyWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_0j_CorrRapidity_EnergyWgt,
+             GEN_TauCnoHRapidity_JetConstituents_0j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
+
+             // GEN_TauB
+             GEN_TauB_Inc_1j_EnergyWgt,
+             GEN_TauB_JetConstituents_1j_EnergyWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauB_Inc_1j_CorrRapidity_EnergyWgt,
+             GEN_TauB_JetConstituents_1j_CorrRapidity_EnergyWgt,
+
+             // GEN_TauC
+             GEN_TauC_Inc_1j_EnergyWgt,
+             GEN_TauC_JetConstituents_1j_EnergyWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauC_Inc_1j_CorrRapidity_EnergyWgt,
+             GEN_TauC_JetConstituents_1j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             1,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
+
+             // GEN_TauB
+             GEN_TauBnoHRapidity_Inc_1j_EnergyWgt,
+             GEN_TauBnoHRapidity_JetConstituents_1j_EnergyWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt,
+             GEN_TauBnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt,
+
+             // GEN_TauC
+             GEN_TauCnoHRapidity_Inc_1j_EnergyWgt,
+             GEN_TauCnoHRapidity_JetConstituents_1j_EnergyWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_1j_CorrRapidity_EnergyWgt,
+             GEN_TauCnoHRapidity_JetConstituents_1j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             GEN_HVec.Rapidity(),
+
+             // GEN_TauB
+             GEN_TauB_Inc_2j_EnergyWgt,
+             GEN_TauB_JetConstituents_2j_EnergyWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauB_Inc_2j_CorrRapidity_EnergyWgt,
+             GEN_TauB_JetConstituents_2j_CorrRapidity_EnergyWgt,
+
+             // GEN_TauC
+             GEN_TauC_Inc_2j_EnergyWgt,
+             GEN_TauC_JetConstituents_2j_EnergyWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauC_Inc_2j_CorrRapidity_EnergyWgt,
+             GEN_TauC_JetConstituents_2j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+        CalculateNJettinessVar.New_GetRapidityWeightedValues_pTWeighted_UsingEnergy(
+             2,  // NJettiness, // this depends on the jettiness that we would like to use
+             GEN_goodJets,   // Fixed don't change
+             0.0,
+
+             // GEN_TauB
+             GEN_TauBnoHRapidity_Inc_2j_EnergyWgt,
+             GEN_TauBnoHRapidity_JetConstituents_2j_EnergyWgt,
+
+             // GEN_TauB's rapidity
+             GEN_TauBnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt,
+             GEN_TauBnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt,
+
+             // GEN_TauC
+             GEN_TauCnoHRapidity_Inc_2j_EnergyWgt,
+             GEN_TauCnoHRapidity_JetConstituents_2j_EnergyWgt,
+
+             // GEN_TauC's rapidity
+             GEN_TauCnoHRapidity_Inc_2j_CorrRapidity_EnergyWgt,
+             GEN_TauCnoHRapidity_JetConstituents_2j_CorrRapidity_EnergyWgt,
+             0 // nJettinessSize_temp; use this if don't want to use all available good jets
+            );
+
+        /**
+         * END: nJettiness variable
+         */
+
             
         } //passedFiducialSelection
         

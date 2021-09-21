@@ -1,13 +1,14 @@
 import FWCore.ParameterSet.Config as cms
 
 from FWCore.ParameterSet.VarParsing import VarParsing
+
 from datetime import datetime
 now = datetime.now() # current date and time
 #date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
 date = now.strftime("%d%m%Y")
 
-
 run_events=-1
+#run_events=1500
 process = cms.Process("UFHZZ4LAnalysis")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
@@ -20,7 +21,8 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 process.load('Configuration.StandardSequences.Services_cff')
 
 #process.GlobalTag.globaltag='94X_mc2017_realistic_v17'
-process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16'
+#process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16'
+process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16_L1v1'
 
 process.Timing = cms.Service("Timing",
                              summaryOnly = cms.untracked.bool(True)
@@ -154,6 +156,16 @@ process.slimmedJetsAK8JEC = process.updatedPatJets.clone(
 
 
 ### add pileup id and discriminant to patJetsReapplyJEC
+from RecoJets.JetProducers.PileupJetID_cfi import _chsalgos_106X_UL17
+process.load("RecoJets.JetProducers.PileupJetID_cfi")
+process.pileupJetIdUpdated = process.pileupJetId.clone( 
+    jets=cms.InputTag("slimmedJets"),
+    inputIsCorrected=False,
+    applyJec=True,
+    vertexes=cms.InputTag("offlineSlimmedPrimaryVertices"),
+    algos = cms.VPSet(_chsalgos_106X_UL17),
+    )
+'''
 process.load("RecoJets.JetProducers.PileupJetID_cfi")
 process.pileupJetIdUpdated = process.pileupJetId.clone(
     jets=cms.InputTag("slimmedJets"),
@@ -161,6 +173,7 @@ process.pileupJetIdUpdated = process.pileupJetId.clone(
     applyJec=True,
     vertexes=cms.InputTag("offlineSlimmedPrimaryVertices")
 )
+'''
 process.slimmedJetsJEC.userData.userFloats.src += ['pileupJetIdUpdated:fullDiscriminant']
 process.slimmedJetsJEC.userData.userInts.src += ['pileupJetIdUpdated:fullId']
 
@@ -300,6 +313,7 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               doJER = cms.untracked.bool(True),
                               doJEC = cms.untracked.bool(True),
                               doTriggerMatching = cms.untracked.bool(False),
+                              #doTriggerMatching = cms.untracked.bool(True),
                               triggerList = cms.untracked.vstring(
                                   # Single Lepton:
                                   'HLT_Ele35_WPTight_Gsf_v',
@@ -326,6 +340,7 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               verbose = cms.untracked.bool(False),              
                               skimLooseLeptons = cms.untracked.int32(4),              
                               skimTightLeptons = cms.untracked.int32(4),              
+			      bestCandMela = cms.untracked.bool(False),   # for differential measurements
 #                              verbose = cms.untracked.bool(True),              
                               year = cms.untracked.int32(2017)
                              )
