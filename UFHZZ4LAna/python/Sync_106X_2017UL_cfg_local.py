@@ -21,7 +21,8 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 process.load('Configuration.StandardSequences.Services_cff')
 
 #process.GlobalTag.globaltag='94X_mc2017_realistic_v17'
-process.GlobalTag.globaltag='106X_mc2017_realistic_v9'
+#process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16'
+process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16_L1v1'
 
 process.Timing = cms.Service("Timing",
                              summaryOnly = cms.untracked.bool(True)
@@ -84,7 +85,8 @@ setupEgammaPostRecoSeq(process,
                        runVID=True,
 		       eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff','RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff'],   ## test
                        phoIDModules=['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V2_cff'],
-                       era='2017-Nov17ReReco')
+                       #era='2017-Nov17ReReco')
+                       era='2017-UL')
 
 process.load("RecoEgamma.EgammaTools.calibratedEgammas_cff")
 process.calibratedPatElectrons.correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc"  # FIXME

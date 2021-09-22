@@ -30,6 +30,14 @@ git cms-addpkg RecoEgamma/ElectronIdentification
 
 git cms-merge-topic cms-egamma:EgammaPostRecoTools
 
+mv EgammaPostRecoTools/python/EgammaPostRecoTools.py RecoEgamma/EgammaTools/python/.
+
+git clone -b ULSSfiles_correctScaleSysMC https://github.com/jainshilpi/EgammaAnalysis-ElectronTools.git EgammaAnalysis/ElectronTools/data/
+
+git cms-addpkg EgammaAnalysis/ElectronTools
+
+git cms-addpkg  RecoJets/JetProducers
+
 git cms-addpkg PhysicsTools/PatAlgos/
 
 git clone -b v2.3.5 https://github.com/JHUGen/JHUGenMELA
