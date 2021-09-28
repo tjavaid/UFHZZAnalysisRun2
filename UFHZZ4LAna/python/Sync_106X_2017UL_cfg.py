@@ -22,7 +22,8 @@ process.load('Configuration.StandardSequences.Services_cff')
 
 #process.GlobalTag.globaltag='94X_mc2017_realistic_v17'
 #process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16'
-process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16_L1v1'
+#process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16_L1v1'
+process.GlobalTag.globaltag='106X_mc2017_realistic_v9'
 
 process.Timing = cms.Service("Timing",
                              summaryOnly = cms.untracked.bool(True)

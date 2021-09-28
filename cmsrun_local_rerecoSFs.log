@@ -1,0 +1,8 @@
+nohup: ignoring input
+----- Begin Fatal Exception 22-Sep-2021 15:37:47 CEST-----------------------
+An exception of category 'StdException' occurred while
+   [0] Processing the python configuration file named UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_106X_2017UL_cfg_local.py
+Exception Message:
+A std::exception was thrown.
+File "UFHZZAnalysisRun2/UFHZZ4LAna/python/Sync_106X_2017UL_cfg_local.py" could not be opened!
+----- End Fatal Exception -------------------------------------------------
