@@ -24,6 +24,7 @@ process.load('Configuration.StandardSequences.Services_cff')
 #process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16'
 #process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16_L1v1'
 process.GlobalTag.globaltag='106X_mc2017_realistic_v9'
+#process.GlobalTag.globaltag='106X_mc2017_realistic_v6'  ## nanoAOD
 
 process.Timing = cms.Service("Timing",
                              summaryOnly = cms.untracked.bool(True)
@@ -84,13 +85,14 @@ from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 setupEgammaPostRecoSeq(process,
                        runEnergyCorrections=False,
                        runVID=True,
-		       eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff','RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff'],   ## test
+		       eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff','RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff'],   
                        phoIDModules=['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V2_cff'],
                        #era='2017-Nov17ReReco')
                        era='2017-UL')
 
 process.load("RecoEgamma.EgammaTools.calibratedEgammas_cff")
-process.calibratedPatElectrons.correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc"  # FIXME
+#process.calibratedPatElectrons.correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc"  # 
+process.calibratedPatElectrons.correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_24Feb2020_runEtaR9Gain_v2"  # 
 process.calibratedPatElectrons.src = cms.InputTag("slimmedElectrons")
 
 # FSR Photons

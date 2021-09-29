@@ -23,7 +23,8 @@ process.load('Configuration.StandardSequences.Services_cff')
 #process.GlobalTag.globaltag='94X_mc2017_realistic_v17'
 #process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16'
 #process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16_L1v1'
-process.GlobalTag.globaltag='106X_mc2017_realistic_v9'
+#process.GlobalTag.globaltag='106X_mc2017_realistic_v9'
+process.GlobalTag.globaltag='106X_mc2017_realistic_v6'
 
 process.Timing = cms.Service("Timing",
                              summaryOnly = cms.untracked.bool(True)
@@ -84,13 +85,14 @@ from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 setupEgammaPostRecoSeq(process,
                        runEnergyCorrections=False,
                        runVID=True,
-		       eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff','RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff'],   ## test
+		       eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff','RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff'],   
                        phoIDModules=['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V2_cff'],
                        #era='2017-Nov17ReReco')
                        era='2017-UL')
 
 process.load("RecoEgamma.EgammaTools.calibratedEgammas_cff")
-process.calibratedPatElectrons.correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc"  # FIXME
+#process.calibratedPatElectrons.correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc"  # 
+process.calibratedPatElectrons.correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_24Feb2020_runEtaR9Gain_v2"  # 
 process.calibratedPatElectrons.src = cms.InputTag("slimmedElectrons")
 
 # FSR Photons
@@ -102,9 +104,9 @@ from CondCore.DBCommon.CondDBSetup_cfi import *
 #era = "Fall17_17Nov2017_V32_94X_MC"
 era = "Summer19UL17_V5_MC"
 # for HPC
-dBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
+#dBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 # for crab
-#dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
+dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 process.jec = cms.ESSource("PoolDBESSource",
                            CondDBSetup,
                            connect = cms.string("sqlite_file:"+dBFile),
@@ -218,9 +220,9 @@ process.es_prefer_jer = cms.ESPrefer('PoolDBESSource', 'jer')
 process.load("CondCore.CondDB.CondDB_cfi")
 qgDatabaseVersion = 'cmssw8020_v2'
 # for hpc
-QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
+#QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 # for crab
-#QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
+QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 process.QGPoolDBESSource = cms.ESSource("PoolDBESSource",
       DBParameters = cms.PSet(messageLevel = cms.untracked.int32(1)),
       timetype = cms.string('runnumber'),
