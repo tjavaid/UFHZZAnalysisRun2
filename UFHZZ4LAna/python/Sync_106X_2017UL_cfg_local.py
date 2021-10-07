@@ -23,8 +23,8 @@ process.load('Configuration.StandardSequences.Services_cff')
 #process.GlobalTag.globaltag='94X_mc2017_realistic_v17'
 #process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16'
 #process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16_L1v1'
-process.GlobalTag.globaltag='106X_mc2017_realistic_v9'
-#process.GlobalTag.globaltag='106X_mc2017_realistic_v6'  ## nanoAOD
+#process.GlobalTag.globaltag='106X_mc2017_realistic_v9' # MiniAODv2
+process.GlobalTag.globaltag='106X_mc2017_realistic_v6'  ## nanoAOD, miniAOD
 
 process.Timing = cms.Service("Timing",
                              summaryOnly = cms.untracked.bool(True)
@@ -38,6 +38,7 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(run_events) 
 myfilelist = cms.untracked.vstring(
 #'/store/mc/RunIIFall17MiniAODv2/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/3450B123-E8BF-E811-B895-FA163E9604CF.root',
 '/store/mc/RunIISummer20UL17MiniAOD/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_mc2017_realistic_v6-v2/270000/794448BF-6D5B-7149-90C7-2F7D0F3E1DA6.root',
+#'794448BF-6D5B-7149-90C7-2F7D0F3E1DA6.root',
 )
 
 print myfilelist
@@ -83,6 +84,7 @@ process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService
 
 from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 setupEgammaPostRecoSeq(process,
+                       #runEnergyCorrections=True,
                        runEnergyCorrections=False,
                        runVID=True,
 		       eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff','RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff'],   

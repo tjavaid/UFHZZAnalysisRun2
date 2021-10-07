@@ -1145,7 +1145,8 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
     reweightForPU(iConfig.getUntrackedParameter<bool>("reweightForPU",true)),
     PUVersion(iConfig.getUntrackedParameter<std::string>("PUVersion","Summer16_80X")),
     doFsrRecovery(iConfig.getUntrackedParameter<bool>("doFsrRecovery",true)),
-    bestCandMela(iConfig.getUntrackedParameter<bool>("bestCandMela",true)),
+    //bestCandMela(iConfig.getUntrackedParameter<bool>("bestCandMela",true)),  // set it false in Config for differential measurements
+    bestCandMela(iConfig.getUntrackedParameter<bool>("bestCandMela")),  // set it false in Config for differential measurements
     doMela(iConfig.getUntrackedParameter<bool>("doMela",true)),
     GENbestM4l(iConfig.getUntrackedParameter<bool>("GENbestM4l",false)),
     GENdoMela(iConfig.getUntrackedParameter<bool>("GENdoMela",true)),  // for GEN branches of mela based vairables
@@ -1318,11 +1319,12 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
     //if(year == 2018)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v5/RoccoR2018.txt";
     if(year == 2018)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v5/RoccoR2018UL.txt";
     //if(year == 2017)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v3/RoccoR2017.txt";
-    //if(year == 2017)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v5/RoccoR2017.txt";
+    //if(year == 2017)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v5/RoccoR2017_rereco.txt";
     if(year == 2017)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v5/RoccoR2017UL.txt";
     //if(year == 2016)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v3/RoccoR2016.txt";
     if(year == 20165)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v5/RoccoR2016bUL.txt"; // for post VFP
     if(year == 20160)    DATAPATH+="/src/UFHZZAnalysisRun2/KalmanMuonCalibrationsProducer/data/roccor.Run2.v5/RoccoR2016aUL.txt"; // for pre VFP 
+    cout <<"Rochester year: "<<year<< "         DATAPATH : " <<DATAPATH<<endl;
     calibrator = new RoccoR(DATAPATH);
     
 }
@@ -4764,15 +4766,21 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                 if (lep_Hindex[l]==Z2_lepindex[1]) foundZ22 = true;
             }
             same4l = (foundZ11 && foundZ12 && foundZ21 && foundZ22);
+            cout<<"bestCandMela: "<<bestCandMela<<endl;
             
             if (signalRegion) { // Signal Region has priority
                 
                 if (!foundSRCandidate) same4l=false;
                 
                 if ( (bestCandMela && ((!same4l && D_bkg_kin_tmp>max_D_bkg_kin_SR) || (same4l && Z1DeltaM<=minZ1DeltaM_SR)))
-                    || (!bestCandMela && Z1DeltaM<=minZ1DeltaM_SR) ) {
+                    || (!bestCandMela && Z1DeltaM<=minZ1DeltaM_SR) ) {    
+//                if ( (same4l && Z1DeltaM<=minZ1DeltaM_SR) || (!bestCandMela && Z1DeltaM<=minZ1DeltaM_SR )) {
                     //if ( (!same4l && D_bkg_kin_tmp>max_D_bkg_kin_SR) || (same4l && Z1DeltaM<=minZ1DeltaM_SR) ) {
-                    
+		    if (bestCandMela){
+	                if (!same4l && D_bkg_kin_tmp>max_D_bkg_kin_SR) { cout<<"passed 1(a) || condition in && with bestCandMela"<<endl; } 
+                        else if ((same4l && Z1DeltaM<=minZ1DeltaM_SR)) { cout<<"passed 1(b) || condition in && with bestCandMela"<<endl; }} 
+                    else { cout<<"passed second condition:   !bestCandMela && Z1DeltaM<=minZ1DeltaM_SR "<<endl; }
+
                     max_D_bkg_kin_SR = D_bkg_kin_tmp;
                     minZ1DeltaM_SR = Z1DeltaM;
                     
@@ -4791,7 +4799,11 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                     
                     Z1Vec = Z1; Z2Vec = Z2; HVec = Z1+Z2;
                     massZ1 = Z1Vec.M(); massZ2 = Z2Vec.M(); mass4l = HVec.M();
-                    
+		    cout<<"Run: "<<Run<<"Event:  "<<Event<<endl;
+                    cout<<"bestCandMela: "<<bestCandMela<<endl;
+                    cout<<"Z2SumPt: "<<Z2SumPt<<endl;
+                    cout<<"pT of Z2: "<<Z2Vec.Pt()<<endl;
+                    cout<<"mass of Z2: "<<Z2Vec.M()<<endl;
                     if (verbose) cout<<" new best candidate SR: mass4l: "<<HVec.M()<<endl;
                     if (HVec.M()>m4lLowCut)  { //m4lLowCut move forward
                         foundHiggsCandidate=true;
@@ -4803,7 +4815,8 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                 
                 
                 if ( (bestCandMela && ((!same4l && D_bkg_kin_tmp>max_D_bkg_kin_CR) || (same4l && Z1DeltaM<=minZ1DeltaM_CR)))
-                    || (!bestCandMela && Z1DeltaM<=minZ1DeltaM_CR) ) {
+                    || (!bestCandMela && Z1DeltaM<=minZ1DeltaM_CR) ) {   
+//                if ((same4l && Z1DeltaM<=minZ1DeltaM_CR) || (!bestCandMela && Z1DeltaM<=minZ1DeltaM_CR) ) {
                     //if ( (!same4l && D_bkg_kin_tmp>max_D_bkg_kin_CR) || (same4l && Z1DeltaM<=minZ1DeltaM_CR) ) {
                     
                     max_D_bkg_kin_CR = D_bkg_kin_tmp;
