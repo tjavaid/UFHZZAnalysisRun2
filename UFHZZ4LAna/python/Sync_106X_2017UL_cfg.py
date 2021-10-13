@@ -9,6 +9,9 @@ date = now.strftime("%d%m%Y")
 
 run_events=-1
 #run_events=1500
+#mela=''
+mela='bestCandMelaTrue'
+#mela='bestCandMelaFalse'
 process = cms.Process("UFHZZ4LAnalysis")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
@@ -23,8 +26,8 @@ process.load('Configuration.StandardSequences.Services_cff')
 #process.GlobalTag.globaltag='94X_mc2017_realistic_v17'
 #process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16'
 #process.GlobalTag.globaltag='106X_upgrade2018_realistic_v16_L1v1'
-#process.GlobalTag.globaltag='106X_mc2017_realistic_v9'
-process.GlobalTag.globaltag='106X_mc2017_realistic_v6'
+#process.GlobalTag.globaltag='106X_mc2017_realistic_v9' # MiniAODv2
+process.GlobalTag.globaltag='106X_mc2017_realistic_v6'  ## nanoAOD, miniAOD
 
 process.Timing = cms.Service("Timing",
                              summaryOnly = cms.untracked.bool(True)
@@ -38,6 +41,7 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(run_events) 
 myfilelist = cms.untracked.vstring(
 #'/store/mc/RunIIFall17MiniAODv2/VBF_HToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/3450B123-E8BF-E811-B895-FA163E9604CF.root',
 '/store/mc/RunIISummer20UL17MiniAOD/GluGluHToZZTo4L_M125_TuneCP5_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/106X_mc2017_realistic_v6-v2/270000/794448BF-6D5B-7149-90C7-2F7D0F3E1DA6.root',
+#'794448BF-6D5B-7149-90C7-2F7D0F3E1DA6.root',
 )
 
 print myfilelist
@@ -48,7 +52,8 @@ process.source = cms.Source("PoolSource",fileNames = myfilelist,
 process.TFileService = cms.Service("TFileService",
                                    #fileName = cms.string("Sync_102X_2017_v2.root")
                                    #fileName = cms.string("Sync_106X_2017UL.root")
-				   fileName = cms.string("Sync_106X_2017UL_"+date+"_"+str(run_events)+".root")##
+				   #fileName = cms.string("Sync_106X_2017UL_"+date+"_"+str(run_events)+".root")##
+				   fileName = cms.string("Sync_106X_2017UL_"+date+"_"+str(run_events)+mela+".root")##
 )
 
 # clean muons by segments 
@@ -83,9 +88,11 @@ process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService
 
 from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 setupEgammaPostRecoSeq(process,
+                       #runEnergyCorrections=True,
                        runEnergyCorrections=False,
                        runVID=True,
 		       eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff','RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff'],   
+		       #eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff'],   
                        phoIDModules=['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V2_cff'],
                        #era='2017-Nov17ReReco')
                        era='2017-UL')
@@ -104,9 +111,9 @@ from CondCore.DBCommon.CondDBSetup_cfi import *
 #era = "Fall17_17Nov2017_V32_94X_MC"
 era = "Summer19UL17_V5_MC"
 # for HPC
-#dBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
+dBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 # for crab
-dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
+#dBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/"+era+".db"
 process.jec = cms.ESSource("PoolDBESSource",
                            CondDBSetup,
                            connect = cms.string("sqlite_file:"+dBFile),
@@ -220,9 +227,9 @@ process.es_prefer_jer = cms.ESPrefer('PoolDBESSource', 'jer')
 process.load("CondCore.CondDB.CondDB_cfi")
 qgDatabaseVersion = 'cmssw8020_v2'
 # for hpc
-#QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
+QGdBFile = os.environ.get('CMSSW_BASE')+"/src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 # for crab
-QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
+#QGdBFile = "src/UFHZZAnalysisRun2/UFHZZ4LAna/data/QGL_"+qgDatabaseVersion+".db"
 process.QGPoolDBESSource = cms.ESSource("PoolDBESSource",
       DBParameters = cms.PSet(messageLevel = cms.untracked.int32(1)),
       timetype = cms.string('runnumber'),
@@ -344,7 +351,8 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               verbose = cms.untracked.bool(False),              
                               skimLooseLeptons = cms.untracked.int32(4),              
                               skimTightLeptons = cms.untracked.int32(4),              
-			      bestCandMela = cms.untracked.bool(False),   # for differential measurements
+			      #bestCandMela = cms.untracked.bool(False),   # for differential measurements
+			      bestCandMela = cms.untracked.bool(True),   # for mass and width measurements
 #                              verbose = cms.untracked.bool(True),              
                               year = cms.untracked.int32(2017)
                              )

@@ -9,6 +9,9 @@ date = now.strftime("%d%m%Y")
 
 #run_events=-1
 run_events=1500
+#mela=''
+#mela='bestCandMelaTrue'
+mela='bestCandMelaFalse'
 process = cms.Process("UFHZZ4LAnalysis")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
@@ -49,7 +52,8 @@ process.source = cms.Source("PoolSource",fileNames = myfilelist,
 process.TFileService = cms.Service("TFileService",
                                    #fileName = cms.string("Sync_102X_2017_v2.root")
                                    #fileName = cms.string("Sync_106X_2017UL.root")
-				   fileName = cms.string("Sync_106X_2017UL_"+date+"_"+str(run_events)+".root")##
+				   #fileName = cms.string("Sync_106X_2017UL_"+date+"_"+str(run_events)+".root")##
+				   fileName = cms.string("Sync_106X_2017UL_"+date+"_"+str(run_events)+mela+".root")##
 )
 
 # clean muons by segments 
@@ -88,6 +92,7 @@ setupEgammaPostRecoSeq(process,
                        runEnergyCorrections=False,
                        runVID=True,
 		       eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff','RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff'],   
+		       #eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff'],   
                        phoIDModules=['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V2_cff'],
                        #era='2017-Nov17ReReco')
                        era='2017-UL')
@@ -347,6 +352,7 @@ process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               skimLooseLeptons = cms.untracked.int32(4),              
                               skimTightLeptons = cms.untracked.int32(4),              
 			      bestCandMela = cms.untracked.bool(False),   # for differential measurements
+			      #bestCandMela = cms.untracked.bool(True),   # for mass and width measurements
 #                              verbose = cms.untracked.bool(True),              
                               year = cms.untracked.int32(2017)
                              )

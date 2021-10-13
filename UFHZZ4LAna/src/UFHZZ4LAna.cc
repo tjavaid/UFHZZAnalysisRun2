@@ -1044,7 +1044,6 @@ _EnergyWgt
     bool reweightForPU;
     std::string PUVersion;
     bool doFsrRecovery,bestCandMela, doMela, GENbestM4l, GENdoMela;
-    //    bool GENdoMela;
     bool doPUJetID;
     int jetIDLevel;
     bool doJER;
@@ -1195,10 +1194,6 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
     kinZfitter_singleBS = new KinZfitter(!isMC, year);
     kinZfitter_vtx = new KinZfitter(!isMC, year);
     kinZfitter_vtx_BS = new KinZfitter(!isMC, year);
-//test
-//    GENmela = new Mela(13.0, 125.0, TVar::SILENT);  
-//    GENmela->setCandidateDecayMode(TVar::CandidateDecay_ZZ);
-// test init
 //    if(isCode4l && doMela){
     if(isCode4l && doMela && GENdoMela){
         //     if(doMela){
@@ -1207,28 +1202,6 @@ UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
     }
     int YEAR = year - 2016;
     if(year == 20165 || year == 20160)	YEAR = 0;
-/*
-// UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA using splines
-    TFile *gConstant_g4 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g4.root");
-    TSpline *spline_g4 = (TSpline*) gConstant_g4->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g4");
-    gConstant_g4->Close();
-    delete gConstant_g4;
-
-    TFile *gConstant_g2 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_g2.root");
-    TSpline *spline_g2 = (TSpline*) gConstant_g2->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_g2");
-    gConstant_g2->Close();
-    delete gConstant_g2;
-
-    TFile *gConstant_L1 = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1.root");
-    TSpline *spline_L1 = (TSpline*) gConstant_L1->Get("sp_tgfinal_HZZ2e2mu_SM_over_tgfinal_HZZ2e2mu_L1");
-    gConstant_L1->Close();
-    delete gConstant_L1;
-
-    TFile *gConstant_L1Zgs = new TFile("UFHZZAnalysisRun2/UFHZZ4LAna/data/CoupleConstantsForMELA/gConstant_HZZ2e2mu_L1Zgs.root");
-    TSpline *spline_L1Zgs = (TSpline*) gConstant_L1Zgs->Get("sp_tgfinal_HZZ2e2mu_SM_photoncut_over_tgfinal_HZZ2e2mu_L1Zgs");
-    gConstant_L1Zgs->Close();
-    delete gConstant_L1Zgs;
-*/
     
     //string elec_scalefac_Cracks_name_161718[3] = {"egammaEffi.txt_EGM2D_cracks.root", "egammaEffi.txt_EGM2D_Moriond2018v1_gap.root", "egammaEffi.txt_EGM2D_Moriond2019_v1_gap.root"};
     string elec_scalefac_Cracks_name_161718[3] = {"ElectronSF_Legacy_2016_Gap.root", "ElectronSF_Legacy_2017_Gap.root", "ElectronSF_Legacy_2018_Gap.root"};
@@ -2731,7 +2704,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 if (verbose) cout<<"sorted lepton "<<i<<" pt "<<lep_ptreco[i]<<" id "<<lep_ptid[i]<<" index "<<lep_ptindex[i]<<endl;
                 
                 if (abs(lep_ptid[i])==11) {
-                    
+                    const double elec_mass = 0.000510991;   // electron pdg mass 
                     if(n_lep_e < 2 && !isCode4l){
                         if(helper.passTight_BDT_Id(recoElectronsUnS[lep_ptindex[i]],year)){
                             if(helper.pfIso03(recoElectrons[lep_ptindex[i]],elRho) < isoCutEl){
@@ -2787,7 +2760,8 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     lep_pterr.push_back(pterr);
                     lep_eta.push_back(recoElectrons[lep_ptindex[i]].eta());
                     lep_phi.push_back(recoElectrons[lep_ptindex[i]].phi());
-                    lep_mass.push_back(recoElectrons[lep_ptindex[i]].mass());
+                    //lep_mass.push_back(recoElectrons[lep_ptindex[i]].mass());
+                    lep_mass.push_back(elec_mass);  // hard coded
                     lepFSR_pt.push_back(recoElectrons[lep_ptindex[i]].pt());
                     lepFSR_eta.push_back(recoElectrons[lep_ptindex[i]].eta());
                     lepFSR_phi.push_back(recoElectrons[lep_ptindex[i]].phi());
@@ -4766,6 +4740,8 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                 if (lep_Hindex[l]==Z2_lepindex[1]) foundZ22 = true;
             }
             same4l = (foundZ11 && foundZ12 && foundZ21 && foundZ22);
+	    cout<<"same4l: "<<same4l<<endl;
+
             cout<<"bestCandMela: "<<bestCandMela<<endl;
             
             if (signalRegion) { // Signal Region has priority
@@ -4781,10 +4757,11 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                         else if ((same4l && Z1DeltaM<=minZ1DeltaM_SR)) { cout<<"passed 1(b) || condition in && with bestCandMela"<<endl; }} 
                     else { cout<<"passed second condition:   !bestCandMela && Z1DeltaM<=minZ1DeltaM_SR "<<endl; }
 
-                    max_D_bkg_kin_SR = D_bkg_kin_tmp;
+                    // max_D_bkg_kin_SR = D_bkg_kin_tmp;  // shifted below if condition
                     minZ1DeltaM_SR = Z1DeltaM;
                     
                     if (!bestCandMela && Z_Hindex[0]==Z1index && Z2SumPt<maxZ2SumPt_SR) continue;
+                    max_D_bkg_kin_SR = D_bkg_kin_tmp;
                     
                     Z_Hindex[0] = Z1index;
                     lep_Hindex[0] = Z1_lepindex[0];
@@ -4800,10 +4777,11 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                     Z1Vec = Z1; Z2Vec = Z2; HVec = Z1+Z2;
                     massZ1 = Z1Vec.M(); massZ2 = Z2Vec.M(); mass4l = HVec.M();
 		    cout<<"Run: "<<Run<<"Event:  "<<Event<<endl;
-                    cout<<"bestCandMela: "<<bestCandMela<<endl;
+                    cout<<"bestCandMela (SR): "<<bestCandMela<<endl;
                     cout<<"Z2SumPt: "<<Z2SumPt<<endl;
                     cout<<"pT of Z2: "<<Z2Vec.Pt()<<endl;
                     cout<<"mass of Z2: "<<Z2Vec.M()<<endl;
+		    cout<<"no. of lepton:  "<<lep_pt.size()<<endl;
                     if (verbose) cout<<" new best candidate SR: mass4l: "<<HVec.M()<<endl;
                     if (HVec.M()>m4lLowCut)  { //m4lLowCut move forward
                         foundHiggsCandidate=true;
@@ -4819,10 +4797,11 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
 //                if ((same4l && Z1DeltaM<=minZ1DeltaM_CR) || (!bestCandMela && Z1DeltaM<=minZ1DeltaM_CR) ) {
                     //if ( (!same4l && D_bkg_kin_tmp>max_D_bkg_kin_CR) || (same4l && Z1DeltaM<=minZ1DeltaM_CR) ) {
                     
-                    max_D_bkg_kin_CR = D_bkg_kin_tmp;
+                    //max_D_bkg_kin_CR = D_bkg_kin_tmp;  // shifted below if condition
                     minZ1DeltaM_CR = Z1DeltaM;
                     
                     if (!bestCandMela && Z_Hindex[0]==Z1index && Z2SumPt<maxZ2SumPt_CR) continue;
+                    max_D_bkg_kin_CR = D_bkg_kin_tmp;
                     
                     Z_Hindex[0] = Z1index;
                     lep_Hindex[0] = Z1_lepindex[0];
@@ -4836,6 +4815,8 @@ UFHZZ4LAna::findHiggsCandidate(std::vector< pat::Muon > &selectedMuons, std::vec
                     Z1Vec = Z1; Z2Vec = Z2; HVec = Z1+Z2;
                     massZ1 = Z1Vec.M(); massZ2 = Z2Vec.M(); mass4l = HVec.M();
                     
+                    cout<<"bestCandMela  (CR): "<<bestCandMela<<endl;
+		    cout<<"no. of lepton:  "<<lep_pt.size()<<endl;
                     if (verbose) cout<<" new best candidate CR: mass4l: "<<HVec.M()<<endl;
                     if (HVec.M()>m4lLowCut){//m4lLowCut move forward
                         foundHiggsCandidate=true;
@@ -8197,13 +8178,14 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                 }
             } // Dressed leptons loop
             if (verbose) cout<<"gen lep pt "<<genPart->pt()<< " dressed pt: " << lep_dressed.Pt()<<endl;
-            
+            const double elec_mass = 0.000510991;   // electron pdg mass 
             GENlep_id.push_back( genPart->pdgId() );
             GENlep_status.push_back(genPart->status());
             GENlep_pt.push_back( lep_dressed.Pt() );
             GENlep_eta.push_back( lep_dressed.Eta() );
             GENlep_phi.push_back( lep_dressed.Phi() );
-            GENlep_mass.push_back( lep_dressed.M() );
+//            GENlep_mass.push_back( lep_dressed.M() );
+            (abs(genPart->pdgId()==11)) ? GENlep_mass.push_back(elec_mass):GENlep_mass.push_back( lep_dressed.M() );   //hard coded
             GENlep_MomId.push_back(genAna.MotherID(&prunedgenParticles->at(j)));
             GENlep_MomMomId.push_back(genAna.MotherMotherID(&prunedgenParticles->at(j)));
             
