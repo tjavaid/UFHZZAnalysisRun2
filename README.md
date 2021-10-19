@@ -22,13 +22,15 @@ git cms-addpkg GeneratorInterface/RivetInterface
 
 git cms-addpkg SimDataFormats/HTXS
 
-git cms-addpkg RecoEgamma/EgammaTools
-
 git cms-addpkg RecoEgamma/PhotonIdentification
 
 git cms-addpkg RecoEgamma/ElectronIdentification
 
 git cms-merge-topic cms-egamma:EgammaPostRecoTools
+
+git cms-addpkg RecoEgamma/EgammaTools
+
+git clone https://github.com/cms-egamma/EgammaPostRecoTools.git
 
 mv EgammaPostRecoTools/python/EgammaPostRecoTools.py RecoEgamma/EgammaTools/python/.
 

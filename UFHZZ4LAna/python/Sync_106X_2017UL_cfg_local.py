@@ -88,20 +88,18 @@ process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService
 
 from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 setupEgammaPostRecoSeq(process,
-                       #runEnergyCorrections=True,
-                       runEnergyCorrections=False,
+                       runEnergyCorrections=True,
+                       #runEnergyCorrections=False,
                        runVID=True,
 		       eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff','RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff'],   
-		       #eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Summer17UL_ID_ISO_cff'],   
                        phoIDModules=['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V2_cff'],
-                       #era='2017-Nov17ReReco')
                        era='2017-UL')
-
+'''
 process.load("RecoEgamma.EgammaTools.calibratedEgammas_cff")
 #process.calibratedPatElectrons.correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc"  # 
 process.calibratedPatElectrons.correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_24Feb2020_runEtaR9Gain_v2"  # 
 process.calibratedPatElectrons.src = cms.InputTag("slimmedElectrons")
-
+'''
 # FSR Photons
 process.load('UFHZZAnalysisRun2.FSRPhotons.fsrPhotons_cff')
 
@@ -292,7 +290,7 @@ process.rivetProducerHZZFid = cms.EDProducer('HZZRivetProducer',
 process.Ana = cms.EDAnalyzer('UFHZZ4LAna',
                               photonSrc    = cms.untracked.InputTag("slimmedPhotons"),
                               electronUnSSrc  = cms.untracked.InputTag("slimmedElectrons"),
-                              electronSrc  = cms.untracked.InputTag("calibratedPatElectrons"),
+#                              electronSrc  = cms.untracked.InputTag("calibratedPatElectrons"),
                               muonSrc      = cms.untracked.InputTag("calibratedMuons"),
                               tauSrc      = cms.untracked.InputTag("slimmedTaus"),
                               jetSrc       = cms.untracked.InputTag("slimmedJetsJEC"),
@@ -363,7 +361,7 @@ process.p = cms.Path(process.fsrPhotonSequence*
                      process.egmGsfElectronIDSequence*
                      process.egmPhotonIDSequence*
                      process.egammaPostRecoSeq*
-                     process.calibratedPatElectrons*
+#                     process.calibratedPatElectrons*  
                      process.jetCorrFactors*
                      process.pileupJetIdUpdated*
                      process.slimmedJetsJEC*

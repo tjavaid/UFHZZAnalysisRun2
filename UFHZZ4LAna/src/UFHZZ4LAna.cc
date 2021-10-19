@@ -991,7 +991,7 @@ _EnergyWgt
     std::map<std::string,TH1F*> histContainer_;
     
     //Input edm
-    edm::EDGetTokenT<edm::View<pat::Electron> > elecSrc_;
+//    edm::EDGetTokenT<edm::View<pat::Electron> > elecSrc_;  //TJ
     edm::EDGetTokenT<edm::View<pat::Electron> > elecUnSSrc_;
     edm::EDGetTokenT<edm::View<pat::Muon> > muonSrc_;
     edm::EDGetTokenT<edm::View<pat::Tau> > tauSrc_;
@@ -1078,7 +1078,7 @@ _EnergyWgt
 
 UFHZZ4LAna::UFHZZ4LAna(const edm::ParameterSet& iConfig) :
     histContainer_(),
-    elecSrc_(consumes<edm::View<pat::Electron> >(iConfig.getUntrackedParameter<edm::InputTag>("electronSrc"))),
+//    elecSrc_(consumes<edm::View<pat::Electron> >(iConfig.getUntrackedParameter<edm::InputTag>("electronSrc"))), 
     elecUnSSrc_(consumes<edm::View<pat::Electron> >(iConfig.getUntrackedParameter<edm::InputTag>("electronUnSSrc"))),
     muonSrc_(consumes<edm::View<pat::Muon> >(iConfig.getUntrackedParameter<edm::InputTag>("muonSrc"))),
     tauSrc_(consumes<edm::View<pat::Tau> >(iConfig.getUntrackedParameter<edm::InputTag>("tauSrc"))),
@@ -1399,8 +1399,9 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     
     // electron collection
     edm::Handle<edm::View<pat::Electron> > electrons;
-    iEvent.getByToken(elecSrc_,electrons);
-    if (verbose) cout<<electrons->size()<<" total electrons in the collection"<<endl;
+    iEvent.getByToken(elecUnSSrc_,electrons);   // try, must be changed to next line
+//    iEvent.getByToken(elecSrc_,electrons);
+    if (verbose) cout<<electrons->size()<<" total electrons in the collection"<<endl; 
     
     // electron before scale/smearing corrections
     edm::Handle<edm::View<pat::Electron> > electronsUnS;
@@ -2630,9 +2631,13 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         vector<pat::Electron> AllElectrons; vector<pat::Muon> AllMuons;
         vector<pat::Electron> AllElectronsUnS;////uncorrected electron
         vector<pat::Tau> AllTaus; vector<pat::Photon> AllPhotons;
-        //                  AllElectrons = helper.goodLooseElectrons2012(electrons,electronsUnS,_elecPtCut);
-        AllElectrons = helper.goodLooseElectrons2012(electrons,_elecPtCut);
-        AllElectronsUnS = helper.goodLooseElectrons2012(electrons,electronsUnS,_elecPtCut);
+//                          AllElectrons = helper.goodLooseElectrons2012(electrons,electronsUnS,_elecPtCut);
+
+        //AllElectrons = helper.goodLooseElectrons2012(electrons,_elecPtCut);   
+        //AllElectronsUnS = helper.goodLooseElectrons2012(electrons,electronsUnS,_elecPtCut);   
+        AllElectrons = helper.goodLooseElectrons2012(electrons,_elecPtCut,true);   
+        AllElectronsUnS = helper.goodLooseElectrons2012(electrons,_elecPtCut,false);   
+
         AllMuons = helper.goodLooseMuons2012(muons,_muPtCut);
         AllTaus = helper.goodLooseTaus2015(taus,_tauPtCut);
         AllPhotons = helper.goodLoosePhotons2015(photons,_phoPtCut);
@@ -2700,11 +2705,13 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
             int n_lep_mu = 0;
             
             for(unsigned int i = 0; i < lep_ptreco.size(); i++) {
-                
+                  
                 if (verbose) cout<<"sorted lepton "<<i<<" pt "<<lep_ptreco[i]<<" id "<<lep_ptid[i]<<" index "<<lep_ptindex[i]<<endl;
                 
                 if (abs(lep_ptid[i])==11) {
-                    const double elec_mass = 0.000510991;   // electron pdg mass 
+		    //float corr_factor= recoElectronsUnS[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr") / recoElectronsUnS[lep_ptindex[i]].energy();
+//		    float corr_factor = recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr") / recoElectrons[lep_ptindex[i]].energy();
+//		    const double elec_mass = 0.000510999;   // electron pdg mass    https://pdg.lbl.gov/2021/tables/rpp2021-sum-leptons.pdf
                     if(n_lep_e < 2 && !isCode4l){
                         if(helper.passTight_BDT_Id(recoElectronsUnS[lep_ptindex[i]],year)){
                             if(helper.pfIso03(recoElectrons[lep_ptindex[i]],elRho) < isoCutEl){
@@ -2722,7 +2729,8 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     lep_p.push_back(recoElectrons[lep_ptindex[i]].p());
                     lep_ecalEnergy.push_back(recoElectrons[lep_ptindex[i]].correctedEcalEnergy());
                     lep_id.push_back(recoElectrons[lep_ptindex[i]].pdgId());
-                    lep_pt.push_back(recoElectrons[lep_ptindex[i]].pt());
+                    //lep_pt.push_back(recoElectrons[lep_ptindex[i]].pt()*corr_factor);  //TJ
+                    lep_pt.push_back(recoElectrons[lep_ptindex[i]].pt());  
                     lep_pterrold.push_back(recoElectrons[lep_ptindex[i]].p4Error(reco::GsfElectron::P4_COMBINATION));
                     lep_pt_FromMuonBestTrack.push_back(-999);
                     lep_eta_FromMuonBestTrack.push_back(-999);
@@ -2760,12 +2768,15 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     lep_pterr.push_back(pterr);
                     lep_eta.push_back(recoElectrons[lep_ptindex[i]].eta());
                     lep_phi.push_back(recoElectrons[lep_ptindex[i]].phi());
-                    //lep_mass.push_back(recoElectrons[lep_ptindex[i]].mass());
-                    lep_mass.push_back(elec_mass);  // hard coded
+                    //lep_mass.push_back(recoElectrons[lep_ptindex[i]].mass()*corr_factor);  //TJ 
+                    lep_mass.push_back(recoElectrons[lep_ptindex[i]].mass());  // 
+                    //lep_mass.push_back(elec_mass);  // hard coded
+                    //lepFSR_pt.push_back(recoElectrons[lep_ptindex[i]].pt()*corr_factor);//TJ
                     lepFSR_pt.push_back(recoElectrons[lep_ptindex[i]].pt());
                     lepFSR_eta.push_back(recoElectrons[lep_ptindex[i]].eta());
                     lepFSR_phi.push_back(recoElectrons[lep_ptindex[i]].phi());
-                    lepFSR_mass.push_back(recoElectrons[lep_ptindex[i]].mass());
+                    //lepFSR_mass.push_back(recoElectrons[lep_ptindex[i]].mass()*corr_factor);  //TJ
+                    lepFSR_mass.push_back(recoElectrons[lep_ptindex[i]].mass());  
                     lepFSR_ID.push_back(11);
                     if (isoConeSizeEl==0.4) {
                         lep_RelIso.push_back(helper.pfIso(recoElectrons[lep_ptindex[i]],elRho));
@@ -8178,14 +8189,14 @@ void UFHZZ4LAna::setGENVariables(edm::Handle<reco::GenParticleCollection> pruned
                 }
             } // Dressed leptons loop
             if (verbose) cout<<"gen lep pt "<<genPart->pt()<< " dressed pt: " << lep_dressed.Pt()<<endl;
-            const double elec_mass = 0.000510991;   // electron pdg mass 
+//            const double elec_mass = 0.000510999;   // electron pdg mass    https://pdg.lbl.gov/2021/tables/rpp2021-sum-leptons.pdf
             GENlep_id.push_back( genPart->pdgId() );
             GENlep_status.push_back(genPart->status());
             GENlep_pt.push_back( lep_dressed.Pt() );
             GENlep_eta.push_back( lep_dressed.Eta() );
             GENlep_phi.push_back( lep_dressed.Phi() );
-//            GENlep_mass.push_back( lep_dressed.M() );
-            (abs(genPart->pdgId()==11)) ? GENlep_mass.push_back(elec_mass):GENlep_mass.push_back( lep_dressed.M() );   //hard coded
+            GENlep_mass.push_back( lep_dressed.M() );
+//            (abs(genPart->pdgId()==11)) ? GENlep_mass.push_back(elec_mass):GENlep_mass.push_back( lep_dressed.M() );   //hard coded
             GENlep_MomId.push_back(genAna.MotherID(&prunedgenParticles->at(j)));
             GENlep_MomMomId.push_back(genAna.MotherMotherID(&prunedgenParticles->at(j)));
             
