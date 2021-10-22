@@ -2633,7 +2633,7 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         vector<pat::Tau> AllTaus; vector<pat::Photon> AllPhotons;
 //                          AllElectrons = helper.goodLooseElectrons2012(electrons,electronsUnS,_elecPtCut);
 
-        AllElectrons = helper.goodLooseElectrons2012(electrons,_elecPtCut);   
+        AllElectrons = helper.goodLooseElectrons2012(electrons,_elecPtCut);  //still unsmearred 
         AllElectronsUnS = helper.goodLooseElectrons2012(electrons,electronsUnS,_elecPtCut);   
 //        AllElectrons = helper.goodLooseElectrons2012(electrons,_elecPtCut,true);   
 //        AllElectronsUnS = helper.goodLooseElectrons2012(electrons,_elecPtCut,false);   
@@ -2645,8 +2645,10 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         helper.cleanOverlappingLeptons(AllMuons,AllElectrons,PV);
         helper.cleanOverlappingLeptons(AllMuons,AllElectronsUnS,PV);
         recoMuons = helper.goodMuons2015_noIso_noPf(AllMuons,_muPtCut,PV,sip3dCut);
-        recoElectrons = helper.goodElectrons2015_noIso_noBdt(AllElectrons,_elecPtCut,elecID,PV,iEvent,sip3dCut);
-        recoElectronsUnS = helper.goodElectrons2015_noIso_noBdt(AllElectronsUnS,_elecPtCut,elecID,PV,iEvent,sip3dCut);
+//        recoElectrons = helper.goodElectrons2015_noIso_noBdt(AllElectrons,_elecPtCut,elecID,PV,iEvent,sip3dCut);  // pass IP cuts
+//        recoElectronsUnS = helper.goodElectrons2015_noIso_noBdt(AllElectronsUnS,_elecPtCut,elecID,PV,iEvent,sip3dCut);
+	recoElectrons = helper.goodElectrons2015_noIso_noBdt(AllElectrons,_elecPtCut,elecID,PV,iEvent,sip3dCut, true);
+        recoElectronsUnS = helper.goodElectrons2015_noIso_noBdt(AllElectronsUnS,_elecPtCut,elecID,PV,iEvent,sip3dCut, false);
         helper.cleanOverlappingTaus(recoMuons,recoElectrons,AllTaus,isoCutMu,isoCutEl,muRho,elRho);
         recoTaus = helper.goodTaus2015(AllTaus,_tauPtCut);
         recoPhotons = helper.goodPhotons2015(AllPhotons,_phoPtCut,year);
@@ -2685,18 +2687,19 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
             if (verbose) cout<<"adding electrons to sorted list"<<endl;
             for(unsigned int i = 0; i < recoElectrons.size(); i++) {
 //                float corr_factor = recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr") / recoElectrons[lep_ptindex[i]].energy();
-                //if (lep_ptreco.size()==0 || recoElectrons[i].pt()<lep_ptreco[lep_ptreco.size()-1]) {
-                if (lep_ptreco.size()==0 || (recoElectrons[i].pt()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy())<lep_ptreco[lep_ptreco.size()-1]) {    // corr_applied
-                    lep_ptreco.push_back(recoElectrons[i].pt()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());
+                if (lep_ptreco.size()==0 || recoElectrons[i].pt()<lep_ptreco[lep_ptreco.size()-1]) {
+                //if (lep_ptreco.size()==0 || (recoElectrons[i].pt()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy())<lep_ptreco[lep_ptreco.size()-1]) {    // corr_applied
+                    lep_ptreco.push_back(recoElectrons[i].pt());
+                    //lep_ptreco.push_back(recoElectrons[i].pt()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());
                     lep_ptid.push_back(recoElectrons[i].pdgId());
                     lep_ptindex.push_back(i);
                     continue;
                 }
                 for (unsigned int j=0; j<lep_ptreco.size(); j++) {
-                    //if (recoElectrons[i].pt()>lep_ptreco[j]) {
-                    if ((recoElectrons[i].pt()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy())>lep_ptreco[j]) {
-                        //lep_ptreco.insert(lep_ptreco.begin()+j,recoElectrons[i].pt());
-                        lep_ptreco.insert(lep_ptreco.begin()+j,(recoElectrons[i].pt())*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());
+                    if (recoElectrons[i].pt()>lep_ptreco[j]) {
+                    //if ((recoElectrons[i].pt()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy())>lep_ptreco[j]) {
+                        lep_ptreco.insert(lep_ptreco.begin()+j,recoElectrons[i].pt());
+                        //lep_ptreco.insert(lep_ptreco.begin()+j,(recoElectrons[i].pt())*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());
                         lep_ptid.insert(lep_ptid.begin()+j,recoElectrons[i].pdgId());
                         lep_ptindex.insert(lep_ptindex.begin()+j,i);
                         break;
@@ -2734,8 +2737,8 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     lep_ecalEnergy.push_back(recoElectrons[lep_ptindex[i]].correctedEcalEnergy());
                     lep_id.push_back(recoElectrons[lep_ptindex[i]].pdgId());
                     //lep_pt.push_back(recoElectrons[lep_ptindex[i]].pt()*corr_factor);  //TJ
-                    lep_pt.push_back(recoElectrons[lep_ptindex[i]].pt()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());  //TJ
-                    //lep_pt.push_back(recoElectrons[lep_ptindex[i]].pt());  
+                    //lep_pt.push_back(recoElectrons[lep_ptindex[i]].pt()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());  //TJ
+                    lep_pt.push_back(recoElectrons[lep_ptindex[i]].pt());  
                     lep_pterrold.push_back(recoElectrons[lep_ptindex[i]].p4Error(reco::GsfElectron::P4_COMBINATION));
                     lep_pt_FromMuonBestTrack.push_back(-999);
                     lep_eta_FromMuonBestTrack.push_back(-999);
@@ -2774,17 +2777,17 @@ UFHZZ4LAna::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     lep_eta.push_back(recoElectrons[lep_ptindex[i]].eta());
                     lep_phi.push_back(recoElectrons[lep_ptindex[i]].phi());
                     //lep_mass.push_back(recoElectrons[lep_ptindex[i]].mass()*corr_factor);  //TJ 
-                    lep_mass.push_back(recoElectrons[lep_ptindex[i]].mass()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());  //TJ 
-                    //lep_mass.push_back(recoElectrons[lep_ptindex[i]].mass());  // 
+                    //lep_mass.push_back(recoElectrons[lep_ptindex[i]].mass()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());  //TJ 
+                    lep_mass.push_back(recoElectrons[lep_ptindex[i]].mass());  // 
                     //lep_mass.push_back(elec_mass);  // hard coded
                     //lepFSR_pt.push_back(recoElectrons[lep_ptindex[i]].pt()*corr_factor);//TJ
-                    lepFSR_pt.push_back(recoElectrons[lep_ptindex[i]].pt()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());//TJ
-                    //lepFSR_pt.push_back(recoElectrons[lep_ptindex[i]].pt());
+                    //lepFSR_pt.push_back(recoElectrons[lep_ptindex[i]].pt()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());//TJ
+                    lepFSR_pt.push_back(recoElectrons[lep_ptindex[i]].pt());
                     lepFSR_eta.push_back(recoElectrons[lep_ptindex[i]].eta());
                     lepFSR_phi.push_back(recoElectrons[lep_ptindex[i]].phi());
                     //lepFSR_mass.push_back(recoElectrons[lep_ptindex[i]].mass()*corr_factor);  //TJ
-                    lepFSR_mass.push_back(recoElectrons[lep_ptindex[i]].mass()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());  //TJ
-                    //lepFSR_mass.push_back(recoElectrons[lep_ptindex[i]].mass());  
+                    //lepFSR_mass.push_back(recoElectrons[lep_ptindex[i]].mass()*recoElectrons[lep_ptindex[i]].userFloat("ecalTrkEnergyPostCorr")/recoElectrons[lep_ptindex[i]].energy());  //TJ
+                    lepFSR_mass.push_back(recoElectrons[lep_ptindex[i]].mass());  
                     lepFSR_ID.push_back(11);
                     if (isoConeSizeEl==0.4) {
                         lep_RelIso.push_back(helper.pfIso(recoElectrons[lep_ptindex[i]],elRho));
